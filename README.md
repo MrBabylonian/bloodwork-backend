@@ -87,4 +87,4 @@ Ensures consistent logging across modules
 📈 Scalable: Supports large PDFs, multiple endpoints, and growth
 
 📌 Status
-🛠 In active development. Prototype-ready and extendable.
+🛠 In active development.
