@@ -1,5 +1,3 @@
-import logging
-
 import fitz  # PyMuPDF
 from pathlib import Path
 

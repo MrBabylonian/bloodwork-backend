@@ -1,8 +1,6 @@
 from fastapi import HTTPException
-
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import JSONResponse
-import logging
 
 from app.services import pdf_analysis_service
 from app.utils.logger_utils import Logger
