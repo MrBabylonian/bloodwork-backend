@@ -67,7 +67,7 @@ async def analyze_uploaded_pdf_file(file: UploadFile) -> dict:
 		model_response = await vision_inference_service.run_remote_inference(
 			image_file_paths = image_path_list,  # noqa
 			diagnostic_prompt = prompt,
-			model_name = "llava:7b",
+			model_name = "gemma3:27b",
 		)
 		logger.info("Vision model inference completed")
 	except Exception as vision_model_inference_error:
