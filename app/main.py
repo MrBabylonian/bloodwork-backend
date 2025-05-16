@@ -1,28 +1,31 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.routers import analysis_router
-
 from app.utils.logger_utils import Logger
 
-Logger.setup_logging()
+# Initialize the application logger
+logger = Logger.setup_logging().getChild("main")
 
-logger = Logger.setup_logging().getChild("bloodwork.main")
+# Create the FastAPI app instance
+app = FastAPI(
+	title="Veterinary Bloodwork Analyzer",
+	description="API for processing veterinary PDF blood test reports via vision model",
+	version="1.0.0",
+)
 
-try:
-	# Create a FastAPI instance
-	app = FastAPI(
-		title = "Blood Work Analysis Backend",
-		description = "API for analyzing veterinary blood test PDFs using a "
-					  "vision model ",
-		version = "0.1.0",
-	)
-	logger.info("FastAPI app initialized successfully.")
+# CORS configuration to allow frontend access from Vite (localhost:5173)
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["http://localhost:5173"],  # Frontend dev server
+	allow_credentials=True,
+	allow_methods=["*"],  # Allow GET, POST, etc.
+	allow_headers=["*"],  # Allow custom headers like Content-Type
+)
 
-	# Include the router that handles PDF upload and analysis
-	# This keeps our endpoint modular and easier to maintain
-	app.include_router(
-		analysis_router.router, prefix = "/analysis", tags = ["PDF Analysis"]
-	)
-	logger.info("Router for PDF analysis included successfully.")
-except Exception as error:
-	logger.exception("Failed to initialize FastAPI app: %s", error)
-	raise
+# Mount the router for analysis functionality
+app.include_router(analysis_router.router, prefix="/analysis")
+
+# Optional: log app startup
+@app.on_event("startup")
+async def startup_event():
+	logger.info("FastAPI application has started.")
