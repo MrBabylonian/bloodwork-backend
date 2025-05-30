@@ -15,46 +15,58 @@ with open(prompt_file_path, "r", encoding = "utf-8") as prompt_file:
 
 def remove_ansi_escape_sequences(text: str) -> str:
 	"""
-	Cleans up model output by removing ANSI escape sequences
-	and fixing common character encoding issues that appear
-	in terminal output or subprocess results.
-
-	This includes:
-	- Removing terminal control codes
-	- Replacing broken UTF-8 artifacts (e.g., Âµ → μ)
-	- Stripping spinner icons (â ™, â ¸, etc.)
+	Cleans up model output by:
+	- Removing ANSI escape sequences
+	- Fixing broken UTF-8 characters
+	- Replacing escaped \n and \t with real newlines and tabs
+	- Normalizing problematic Markdown-breaking characters
 	"""
+
 	try:
-		# Remove ANSI terminal control codes
-		ansi_escape_pattern = re.compile(
+		# Remove ANSI terminal escape sequences
+		ansi_escape_pattern: re.Pattern = re.compile(
 			r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
 		)
-		cleaned_text = ansi_escape_pattern.sub('', text)
+		cleaned_text: str = ansi_escape_pattern.sub('', text)
 
 		# Fix common UTF-8 encoding artifacts
-		replacements = {
+		replacements: dict[str, str] = {
 			"Âµ": "μ",  # micro symbol
 			"â€“": "–",  # en dash
 			"â€”": "—",  # em dash
-			"â€˜": "‘",  # opening single quote
-			"â€™": "’",  # closing single quote
-			"â€œ": "“",  # opening double quote
-			"â€�": "”",  # closing double quote
+			"â€˜": "‘",  # single quote
+			"â€™": "’",  # single quote
+			"â€œ": "“",  # double quote
+			"â€�": "”",  # double quote
 			"â€¢": "•",  # bullet
 			"â€¦": "…",  # ellipsis
-			"â€": "\"",  # malformed quote
 			"â„¢": "™",  # trademark
-			"âˆ’": "−",  # minus sign
-			"â": "",  # catch-all for malformed spinner characters
+			"âˆ’": "−",  # minus
+			"â€": "\"",  # generic quote
+			"â": "",  # remove unknown remnants
 		}
 
 		for bad, good in replacements.items():
 			cleaned_text = cleaned_text.replace(bad, good)
-		logger.info(f"Model response cleaned successfully")
-		return cleaned_text.strip()
+
+		# Replace escaped characters with real formatting
+		cleaned_text = cleaned_text.replace("\\n", "\n")
+		cleaned_text = cleaned_text.replace("\\t", "\t")
+		cleaned_text = cleaned_text.replace("\\r",
+											"")  # remove carriage returns
+		cleaned_text = cleaned_text.replace("*", "")
+
+		# Normalize stray backslashes that may break Markdown tables
+		cleaned_text = cleaned_text.replace("\\", "")
+
+		# Strip extra whitespace from start/end
+		cleaned_text = cleaned_text.strip()
+
+		logger.info("Model response cleaned successfully")
+		return cleaned_text
+
 	except Exception as regex_error:
-		logger.exception(
-			f"Error cleaning ANSI sequences: {regex_error}")
+		logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
 		raise
 
 
@@ -66,7 +78,7 @@ class RemoveVisionInferenceService:
 
 	async def run_remote_inference(
 			self, image_file_paths: list[Path],
-			model_name: str = "llava:7b",
+			model_name: str = "gemma3:27b",
 			diagnostic_prompt: str = prompt,
 	) -> str:
 		"""
