@@ -1,1 +1,0 @@
-{"result":"Non posso eseguire analisi su file multimedia."}

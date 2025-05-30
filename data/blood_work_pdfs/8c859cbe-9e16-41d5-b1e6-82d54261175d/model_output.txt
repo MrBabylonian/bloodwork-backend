@@ -1,1 +1,0 @@
-{"result":"1. Tabella dei parametri:\n\nParametro | Valore misurato | Unità | Range di riferimento | Evidenziazione:\n| --- | --- | --- | --- |\n| BUN/Creatinina | N.D. | / | / |"}
