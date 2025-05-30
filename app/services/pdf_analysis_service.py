@@ -59,21 +59,21 @@ async def analyze_uploaded_pdf_file_background(
 		upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
 		upload_folder.mkdir(parents = True, exist_ok = True)
 
-		# Save uploaded PDF to disk
-		pdf_path: Path = upload_folder / file.filename
-		with NamedTemporaryFile(delete = False) as tmp:
-			copyfileobj(file.file, tmp)
-			tmp_path = Path(tmp.name)
-		tmp_path.replace(pdf_path)
+		with NamedTemporaryFile(delete = False, suffix = ".pdf") as tmp:
+			content = await file.read()
+			tmp.write(content)
+			tmp_path: Path = Path(tmp.name)
 
-		logger.info(f"PDF saved: {pdf_path}")
+		logger.info(f"Received PDF. Temporary file created at {tmp_path}")
 
 		image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
-			str(pdf_path),
+			str(tmp_path),
 			output_folder = upload_folder,
 			base_filename_prefix = pdf_uuid
 		)
 		logger.info(f"Converted to {len(image_path_list)} image(s)")
+
+		tmp_path.unlink(missing_ok = True)
 
 		background_tasks.add_task(call_inference_and_save_output,
 								  image_path_list, upload_folder, pdf_uuid)
@@ -87,3 +87,6 @@ async def analyze_uploaded_pdf_file_background(
 		logger.error(f"Failed to process PDF: {error}")
 		raise HTTPException(status_code = 500,
 							detail = "Errore interno durante l'analisi")
+	finally:
+		if tmp_path.exists():
+			tmp_path.unlink(missing_ok = True)
