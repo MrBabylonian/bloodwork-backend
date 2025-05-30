@@ -1,0 +1,1 @@
+{"result":"1. Tabella dei parametri:\n\nParametro | Valore misurato | Unità | Range di riferimento | Evidenza:\n\nBUN/Creatinina | 🔶 | mg/dL | 0-30 |"}

@@ -44,8 +44,12 @@ async def get_analysis_result(uuid: str):
 	try:
 		result_file = Path(f"data/blood_work_pdfs/{uuid}/model_output.txt")
 		if not result_file.exists():
-			raise HTTPException(status_code = 404,
-								detail = "Risultato non trovato.")
+			logger.info(f"Model output not ready yet for {uuid}")
+			return JSONResponse(status_code = 202,
+								content = {"detail": "Risultato non ancora "
+													 "pronto"
+										   }
+								)
 
 		with open(result_file, "r", encoding = "utf-8") as f:
 			model_output = f.read()
