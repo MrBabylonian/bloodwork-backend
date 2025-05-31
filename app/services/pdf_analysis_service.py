@@ -2,8 +2,8 @@ from fastapi import UploadFile, HTTPException, BackgroundTasks
 from uuid import uuid4
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from shutil import copyfileobj
 import asyncio
+import json
 
 from app.utils.file_utils import FileConverter
 from app.utils.logger_utils import Logger
@@ -31,16 +31,18 @@ def call_inference_and_save_output(
 		loop = asyncio.new_event_loop()
 		asyncio.set_event_loop(loop)
 
-		model_response: str = loop.run_until_complete(
+		model_response: dict[str, str] = loop.run_until_complete(
 			remote_vision_inference_service.run_remote_inference(
 				image_file_paths = image_path_list,
 				model_name = "llava:7b"
 			)
 		)
 
-		model_output_path: Path = upload_folder / "model_output.txt"
+		output_data: dict[str, str] = model_response
+
+		model_output_path: Path = upload_folder / "model_output.json"
 		with open(model_output_path, "w", encoding = "utf-8") as f:
-			f.write(model_response)
+			json.dump(output_data, f, ensure_ascii = False)
 
 		logger.info(f"Model output saved to {model_output_path}")
 

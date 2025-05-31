@@ -1,6 +1,4 @@
-import subprocess
 from pathlib import Path
-from typing import Union
 import re
 import httpx
 
@@ -13,7 +11,7 @@ with open(prompt_file_path, "r", encoding = "utf-8") as prompt_file:
 	prompt: str = prompt_file.read()
 
 
-def remove_ansi_escape_sequences(text: str) -> str:
+def clean_model_response(model_response: dict[str, str]) -> dict[str, str]:
 	"""
 	Cleans up model output by:
 	- Removing ANSI escape sequences
@@ -23,11 +21,12 @@ def remove_ansi_escape_sequences(text: str) -> str:
 	"""
 
 	try:
+		logger.info(f"Cleaning model response for frontend")
+
 		# Remove ANSI terminal escape sequences
 		ansi_escape_pattern: re.Pattern = re.compile(
 			r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
 		)
-		cleaned_text: str = ansi_escape_pattern.sub('', text)
 
 		# Fix common UTF-8 encoding artifacts
 		replacements: dict[str, str] = {
@@ -46,24 +45,32 @@ def remove_ansi_escape_sequences(text: str) -> str:
 			"â": "",  # remove unknown remnants
 		}
 
-		for bad, good in replacements.items():
-			cleaned_text = cleaned_text.replace(bad, good)
+		for key in model_response:
+			if isinstance(model_response[key], str):
+				cleaned_text: str = ansi_escape_pattern.sub('', model_response[
+					key])
 
-		# Replace escaped characters with real formatting
-		cleaned_text = cleaned_text.replace("\\n", "\n")
-		cleaned_text = cleaned_text.replace("\\t", "\t")
-		cleaned_text = cleaned_text.replace("\\r",
-											"")  # remove carriage returns
-		cleaned_text = cleaned_text.replace("*", "")
+				for bad, good in replacements.items():
+					cleaned_text = cleaned_text.replace(bad, good)
 
-		# Normalize stray backslashes that may break Markdown tables
-		cleaned_text = cleaned_text.replace("\\", "")
+				# Replace escaped characters with real formatting
+				cleaned_text = cleaned_text.replace("\\n", "\n")
+				cleaned_text = cleaned_text.replace("\\t", "\t")
+				cleaned_text = cleaned_text.replace("\\r",
+													"")  # remove carriage returns
+				cleaned_text = cleaned_text.replace("*", "")
 
-		# Strip extra whitespace from start/end
-		cleaned_text = cleaned_text.strip()
+				# Normalize stray backslashes that may break Markdown tables
+				cleaned_text = cleaned_text.replace("\\", "")
+
+				# Strip extra whitespace from start/end
+				cleaned_text = cleaned_text.strip()
+
+				model_response[key] = cleaned_text
 
 		logger.info("Model response cleaned successfully")
-		return cleaned_text
+
+		return model_response
 
 	except Exception as regex_error:
 		logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
@@ -80,7 +87,7 @@ class RemoveVisionInferenceService:
 			self, image_file_paths: list[Path],
 			model_name: str = "llava:7b",
 			diagnostic_prompt: str = prompt,
-	) -> str:
+	) -> dict[str, str]:
 		"""
 
 		:param image_file_paths:
@@ -110,88 +117,12 @@ class RemoveVisionInferenceService:
 
 			response.raise_for_status()
 			logger.info("Inference completed successfully on remote server")
-			return remove_ansi_escape_sequences(response.text)
+
+			response_dict: dict[str, str] = clean_model_response(
+				response.json())
+
+			return clean_model_response(response_dict)
 		except Exception as remote_inference_error:
 			logger.exception(
 				f"Remote inference failed: {remote_inference_error}")
-			raise
-
-
-class OllamaVisionInferenceService:
-	"""
-	Encapsulates vision inference via Ollama
-	Provides methods to run inference and clean model output
-	"""
-
-	def __init__(self, model_name: str):
-		self.model_name = model_name
-		logger.info(
-			f"OllamaVisionInferenceService initialized with model: {model_name}")
-
-	def run_inference_on_images(self,
-								list_of_image_paths: list[
-									Union[str, Path]],
-								user_prompt: str = prompt
-								) -> str:
-		"""
-		Sends all page-level images from a PDF as a unified multimodal prompt
-		to a persistent Ollama vision model, running in server mode.
-
-		Each image is referenced in the prompt using Ollama's <image:path> syntax,
-		preserving full-document context during inference.
-
-		This approach assumes Ollama is actively running via `ollama serve` and
-		that the model is cached locally for rapid response.
-
-		:param list_of_image_paths: list of image paths (as Path or str)
-		:param user_prompt: prompt appended after the image tags
-		:return: model_output: textual model response
-		"""
-
-		try:
-
-			image_tags: list[str] = [
-				f"<image:{str(image_path)}>" for image_path in
-				list_of_image_paths
-			]
-			# Combines all image tags with the medical prompt. This becomes the
-			# complete instruction we send to the model.
-			full_prompt = "\n".join(image_tags) + "\n" + user_prompt
-			logger.info(
-				f"Build prompt with {len(image_tags)} images and user prompt")
-		except Exception as prompt_error:
-			logger.exception(f"Failed to build prompt {prompt_error}")
-
-		# Compose the command to send the prompt to the ollama model
-		ollama_command: list[str] = ["ollama", "run", self.model_name]
-
-		try:
-			logger.info(
-				f"Invoking ollama subprocess: {ollama_command}")
-			# Send prompt to ollama and capture model output
-			raw_output: str = subprocess.check_output(
-				ollama_command,
-				input = full_prompt,  # noqa
-				stderr = subprocess.STDOUT,
-				timeout = 180,
-				universal_newlines = True
-			)
-			logger.info(f"Ollama inference completed successfully")
-
-			model_output: str = raw_output.strip() if raw_output else "No output returned from the model"
-
-			return remove_ansi_escape_sequences(model_output)
-		except subprocess.CalledProcessError as called_process_error:
-			logger.exception(
-				f"Model inference failed with code {called_process_error.returncode}\n"
-				f"Ollama output:\n{called_process_error.output}"
-			)
-			raise
-		except subprocess.TimeoutExpired as timeout_expired_error:
-			logger.exception(
-				f"Inference timed out {timeout_expired_error}")
-			raise
-		except Exception as error:
-			logger.exception(f"Unexpected error during model execution:"
-							 f" {str(error)}")
 			raise

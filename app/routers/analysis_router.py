@@ -4,7 +4,6 @@ from pathlib import Path
 
 from app.services import pdf_analysis_service
 from app.utils.logger_utils import Logger
-from app.utils.file_utils import ModelOutputParserUtility
 
 logger = Logger.setup_logging().getChild("analysis_router")
 
@@ -43,24 +42,21 @@ async def analyze_pdf_file_endpoint(
 @router.get("/pdf_analysis_result/{uuid}")
 async def get_analysis_result(uuid: str, structured: bool = False):
 	try:
-		result_file = Path(f"data/blood_work_pdfs/{uuid}/model_output.txt")
+		result_file = Path(f"data/blood_work_pdfs/{uuid}/model_output.json")
 		if not result_file.exists():
 			logger.info(f"Model output not ready yet for {uuid}")
 			return JSONResponse(status_code = 202,
 								content = {"detail": "Risultato non ancora "
 													 "pronto"
 										   })
-		try:
-			parsed = ModelOutputParserUtility.parse_model_output_from_txt(
-				result_file)
-		except Exception as parsing_error:
-			logger.exception(
-				f"Error parsing structured output: {parsing_error}")
-			raise HTTPException(status_code = 500, detail = parsing_error)
+		with open(result_file, "r", encoding = "utf-8") as result_file:
+			result = result_file.read()
+
+		logger.info(f"Model output is successfully read from"
+					f" {result_file.name}")
 
 		return {
-			"uuid": uuid,
-			"parsed": parsed,
+			"result": result,
 		}
 
 	except Exception as error:
