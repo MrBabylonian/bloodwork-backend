@@ -34,7 +34,7 @@ def call_inference_and_save_output(
 		model_response: dict[str, str] = loop.run_until_complete(
 			remote_vision_inference_service.run_remote_inference(
 				image_file_paths = image_path_list,
-				model_name = "llava:7b"
+				model_name = "gemma3:27b"
 			)
 		)
 

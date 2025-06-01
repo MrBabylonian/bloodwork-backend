@@ -85,7 +85,7 @@ class RemoveVisionInferenceService:
 
 	async def run_remote_inference(
 			self, image_file_paths: list[Path],
-			model_name: str = "llava:7b",
+			model_name: str = "gemma3:27b",
 			diagnostic_prompt: str = prompt,
 	) -> dict[str, str]:
 		"""
