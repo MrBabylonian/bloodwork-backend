@@ -15,7 +15,7 @@ logger = Logger.setup_logging().getChild("pdf_analysis_service")
 PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
 PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents = True, exist_ok = True)
 
-VISION_SERVER_URL = "http://localhost:4000"
+VISION_SERVER_URL = "http://13.53.174.62:4000"
 remote_vision_inference_service = RemoveVisionInferenceService(
 	VISION_SERVER_URL)
 
