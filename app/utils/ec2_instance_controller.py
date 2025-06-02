@@ -26,9 +26,6 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 		if state == "running":
 			return  # Already running
 
-		if state in ["stopping", "shutting-down"]:
-			raise RuntimeError(f"Instance is shutting down ({state})")
-
 		if state in ["stopped", "stopping"]:
 			ec2.start_instances(InstanceIds = [INSTANCE_ID])
 			logger.info(f"Starting EC2 instance {INSTANCE_ID}...")
