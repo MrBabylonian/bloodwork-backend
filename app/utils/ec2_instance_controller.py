@@ -15,8 +15,9 @@ def is_inference_instance_running(timeout: int = 360) -> None:
 	if it is stopped. Waits until the instance is running or timeout occurs.
 	"""
 	ec2 = boto3.client("ec2", region_name = AWS_REGION)
+	have_to_loop = True
 	try:
-		while True:
+		while have_to_loop:
 			response = ec2.describe_instance_status(
 				InstanceIds = [INSTANCE_ID],
 				IncludeAllInstances = True
@@ -25,7 +26,7 @@ def is_inference_instance_running(timeout: int = 360) -> None:
 
 			if state == "running":
 				logger.info(f"EC2 instance {INSTANCE_ID} is already running.")
-				break
+				have_to_loop = False
 
 			while state in ["stopping"]:
 				logger.info(f"Waiting for EC2 inference instance to stop...")
@@ -59,11 +60,12 @@ def is_inference_instance_running(timeout: int = 360) -> None:
 				if state == "running" and system_status == "ok" and instance_status == "ok":
 					time.sleep(60)
 					logger.info("EC2 instance is fully initialized and ready.")
-					break
+					have_to_loop = False
 				time.sleep(5)
 				elapsed += 5
 
-				raise TimeoutError("Timeout: EC2 instance did not start in time.")
+				raise TimeoutError(
+					"Timeout: EC2 instance did not start in time.")
 
 	except (BotoCoreError, ClientError, IndexError) as error:
 		raise RuntimeError(f"Failed to start EC2 instance: {error}")
