@@ -9,42 +9,59 @@ INSTANCE_ID: str = "i-0476378924320e248"
 AWS_REGION: str = "eu-north-1"
 
 
-def is_inference_instance_running(timeout: int = 360) -> None:
-	"""
-	Checks the current state of the inference EC2 instance and starts it
-	if it is stopped. Waits until the instance is running or timeout occurs.
-	"""
-	ec2 = boto3.client("ec2", region_name = AWS_REGION)
-	have_to_loop = True
-	try:
-		while have_to_loop:
-			response = ec2.describe_instance_status(
-				InstanceIds = [INSTANCE_ID],
-				IncludeAllInstances = True
+class Ec2Controller:
+	def __init__(self, instance_id: str = INSTANCE_ID, aws_region: str = AWS_REGION) -> None:
+		self.instance_id = instance_id
+		self.aws_region = AWS_REGION
+		self.ec2 = boto3.client("ec2", region_name=aws_region)
+
+	def get_instance_status(self, include_all=True):
+		try:
+			response = self.ec2.describe_instance_status(
+				InstanceIds=[self.instance_id],
+				IncludeAllInstances=include_all
 			)
-			state = response["InstanceStatuses"][0]["InstanceState"]["Name"]
+			return response
+		except (BotoCoreError, ClientError) as error:
+			logger.error(f"Failed to get instance status: {error}")
+			return {"InstanceStatuses": []}
 
-			if state == "running":
-				logger.info(f"EC2 instance {INSTANCE_ID} is already running.")
-				have_to_loop = False
+	def is_inference_instance_running(self, timeout: int = 360) -> None:
+		"""
+		Checks the current state of the inference EC2 instance and starts it
+		if it is stopped. Waits until the instance is running or timeout occurs.
+		"""
+		try:
+			response = self.get_instance_status()
+			instance_statuses = response.get("InstanceStatuses", [])
 
-			while state in ["stopping"]:
-				logger.info(f"Waiting for EC2 inference instance to stop...")
-				time.sleep(5)
+			if not instance_statuses:
+				logger.info(f"Instance status check failed. Attempting to start {INSTANCE_ID}...")
+			else:
+				state = instance_statuses[0]["InstanceState"]["Name"]
 
-			ec2.start_instances(InstanceIds = [INSTANCE_ID])
+				if state == "stopped":
+					logger.info(f"Instance {INSTANCE_ID} is stopped. Starting it...")
+				elif state == "running":
+					logger.info(f"EC2 instance {INSTANCE_ID} is already running.")
+					return
+				elif state in ["stopping"]:
+					logger.info(f"Waiting for EC2 inference instance to stop...")
+					while state in ["stopping"]:
+						time.sleep(5)
+						response = self.get_instance_status()
+						instance_statuses = response.get("InstanceStatuses", [])
+						state = instance_statuses[0]["InstanceState"]["Name"] if instance_statuses else None
+
+			self.ec2.start_instances(InstanceIds=[INSTANCE_ID])
 			logger.info(f"Starting EC2 instance {INSTANCE_ID}...")
 
 			elapsed = 0
 			while elapsed < timeout:
-				status = ec2.describe_instance_status(
-					InstanceIds = [INSTANCE_ID],
-					IncludeAllInstances = True
-				)
+				status = self.get_instance_status(include_all=True)
 				instance_statuses = status.get("InstanceStatuses", [])
 				if not instance_statuses:
-					logger.info(f"Instance status not available yet. "
-								f"Retrying...")
+					logger.info(f"Instance status not available yet. Retrying...")
 					time.sleep(5)
 					elapsed += 5
 					continue
@@ -54,18 +71,16 @@ def is_inference_instance_running(timeout: int = 360) -> None:
 				system_status = instance["SystemStatus"]["Status"]
 				instance_status = instance["InstanceStatus"]["Status"]
 
-				logger.info(f"State: {state} | System: {system_status} | "
-							f"Instance: {instance_status}")
+				logger.info(f"State: {state} | System: {system_status} | Instance: {instance_status}")
 
 				if state == "running" and system_status == "ok" and instance_status == "ok":
 					time.sleep(60)
 					logger.info("EC2 instance is fully initialized and ready.")
-					have_to_loop = False
+					return
 				time.sleep(5)
 				elapsed += 5
 
-				raise TimeoutError(
-					"Timeout: EC2 instance did not start in time.")
+			raise TimeoutError("Timeout: EC2 instance did not start in time.")
 
-	except (BotoCoreError, ClientError, IndexError) as error:
-		raise RuntimeError(f"Failed to start EC2 instance: {error}")
+		except (BotoCoreError, ClientError, IndexError) as error:
+			raise RuntimeError(f"Failed to start EC2 instance: {error}")
