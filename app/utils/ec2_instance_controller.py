@@ -15,6 +15,12 @@ class Ec2Controller:
 		self.aws_region = AWS_REGION
 		self.ec2 = boto3.client("ec2", region_name=aws_region)
 
+
+	def get_instance_public_ip(self, instance_id: str = INSTANCE_ID) -> str:
+		ec2 = self.ec2
+		response = ec2.describe_instances(InstanceIds=[instance_id])
+		return response["Reservations"][0]["Instances"][0]["PublicIpAddress"]
+
 	def get_instance_status(self, include_all=True):
 		try:
 			response = self.ec2.describe_instance_status(

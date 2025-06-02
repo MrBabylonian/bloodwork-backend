@@ -13,7 +13,9 @@ router = APIRouter()
 
 @router.post("/pdf_analysis")
 async def analyze_pdf_file_endpoint(
-		file: UploadFile = File(...)):
+		file: UploadFile = File(...),
+		background_tasks: BackgroundTasks = BackgroundTasks()
+):
 	logger.info(f"Received PDF analysis request: {file.filename}")
 	if file.content_type != "application/pdf":
 		logger.exception(
@@ -24,7 +26,6 @@ async def analyze_pdf_file_endpoint(
 	try:
 		ec2 = Ec2Controller()
 		ec2.is_inference_instance_running()
-		background_tasks = BackgroundTasks()
 		result = await pdf_analysis_service.analyze_uploaded_pdf_file_background(
 			file, background_tasks)
 		logger.info(

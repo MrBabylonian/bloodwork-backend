@@ -9,13 +9,14 @@ from app.utils.file_utils import FileConverter
 from app.utils.logger_utils import Logger
 from app.services.vision_model_inference_service import \
 	RemoveVisionInferenceService
+from app.utils.ec2_instance_controller import Ec2Controller
 
 logger = Logger.setup_logging().getChild("pdf_analysis_service")
 
 PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
 PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents = True, exist_ok = True)
 
-VISION_SERVER_URL = "http://13.53.174.62:4000"
+VISION_SERVER_URL = Ec2Controller().get_instance_public_ip()
 remote_vision_inference_service = RemoveVisionInferenceService(
 	VISION_SERVER_URL)
 
