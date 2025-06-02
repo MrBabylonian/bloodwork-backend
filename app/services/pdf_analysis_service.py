@@ -9,7 +9,6 @@ from app.utils.file_utils import FileConverter
 from app.utils.logger_utils import Logger
 from app.services.vision_model_inference_service import \
 	RemoveVisionInferenceService
-from app.utils.ec2_instance_controller import Ec2Controller
 
 logger = Logger.setup_logging().getChild("pdf_analysis_service")
 
