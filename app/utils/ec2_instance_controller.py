@@ -1,6 +1,6 @@
 import boto3
 import time
-from botocore.exceptions import BotoCoreError, ClientError
+from botocore.exceptions import BotoCoreError, ClientError  # noqa
 from app.utils.logger_utils import Logger
 
 logger = Logger.setup_logging().getChild("ec2_instance_controller")
@@ -26,35 +26,38 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 		if state == "running":
 			return  # Already running
 
-		if state in ["stopped", "stopping"]:
-			ec2.start_instances(InstanceIds = [INSTANCE_ID])
-			logger.info(f"Starting EC2 instance {INSTANCE_ID}...")
+		while state in ["stopping"]:
+			logger.info(f"Waiting for EC2 inference instance to stop...")
+			time.sleep(5)
 
-			elapsed = 0
-			while elapsed < timeout:
-				status = ec2.describe_instance_status(
-					InstanceIds = [INSTANCE_ID],
-					IncludeAllInstances = True
-				)
-				instance_statuses = status.get("InstanceStatuses", [])
-				if not instance_statuses:
-					logger.info(f"Instance status not available yet. "
-								f"Retrying...")
-					time.sleep(5)
-					elapsed += 5
-					continue
+		ec2.start_instances(InstanceIds = [INSTANCE_ID])
+		logger.info(f"Starting EC2 instance {INSTANCE_ID}...")
 
-				instance = instance_statuses[0]
-				state = instance["InstanceState"]["Name"]
-				system_status = instance["SystemStatus"]["Status"]
-				instance_status = instance["InstanceStatus"]["Status"]
+		elapsed = 0
+		while elapsed < timeout:
+			status = ec2.describe_instance_status(
+				InstanceIds = [INSTANCE_ID],
+				IncludeAllInstances = True
+			)
+			instance_statuses = status.get("InstanceStatuses", [])
+			if not instance_statuses:
+				logger.info(f"Instance status not available yet. "
+							f"Retrying...")
+				time.sleep(5)
+				elapsed += 5
+				continue
 
-				logger.info(f"State: {state} | System: {system_status} | "
-							f"Instance: {instance_status}")
+			instance = instance_statuses[0]
+			state = instance["InstanceState"]["Name"]
+			system_status = instance["SystemStatus"]["Status"]
+			instance_status = instance["InstanceStatus"]["Status"]
 
-				if state == "running" and system_status == "ok" and instance_status == "ok":
-					logger.info("EC2 instance is fully initialized and ready.")
-					return
+			logger.info(f"State: {state} | System: {system_status} | "
+						f"Instance: {instance_status}")
+
+			if state == "running" and system_status == "ok" and instance_status == "ok":
+				logger.info("EC2 instance is fully initialized and ready.")
+				return
 			time.sleep(5)
 			elapsed += 5
 
