@@ -63,7 +63,7 @@ def is_inference_instance_running(timeout: int = 360) -> None:
 				time.sleep(5)
 				elapsed += 5
 
-			raise TimeoutError("Timeout: EC2 instance did not start in time.")
+				raise TimeoutError("Timeout: EC2 instance did not start in time.")
 
 	except (BotoCoreError, ClientError, IndexError) as error:
 		raise RuntimeError(f"Failed to start EC2 instance: {error}")
