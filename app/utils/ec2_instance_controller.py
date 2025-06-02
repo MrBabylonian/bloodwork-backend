@@ -10,22 +10,17 @@ AWS_REGION: str = "eu-north-1"
 
 
 class Ec2Controller:
-	def __init__(self, instance_id: str = INSTANCE_ID, aws_region: str = AWS_REGION) -> None:
+	def __init__(self, instance_id: str = INSTANCE_ID,
+				 aws_region: str = AWS_REGION) -> None:
 		self.instance_id = instance_id
 		self.aws_region = AWS_REGION
-		self.ec2 = boto3.client("ec2", region_name=aws_region)
+		self.ec2 = boto3.client("ec2", region_name = aws_region)
 
-
-	def get_instance_public_ip(self, instance_id: str = INSTANCE_ID) -> str:
-		ec2 = self.ec2
-		response = ec2.describe_instances(InstanceIds=[instance_id])
-		return response["Reservations"][0]["Instances"][0]["PublicIpAddress"]
-
-	def get_instance_status(self, include_all=True):
+	def get_instance_status(self, include_all = True):
 		try:
 			response = self.ec2.describe_instance_status(
-				InstanceIds=[self.instance_id],
-				IncludeAllInstances=include_all
+				InstanceIds = [self.instance_id],
+				IncludeAllInstances = include_all
 			)
 			return response
 		except (BotoCoreError, ClientError) as error:
@@ -42,32 +37,39 @@ class Ec2Controller:
 			instance_statuses = response.get("InstanceStatuses", [])
 
 			if not instance_statuses:
-				logger.info(f"Instance status check failed. Attempting to start {INSTANCE_ID}...")
+				logger.info(
+					f"Instance status check failed. Attempting to start {INSTANCE_ID}...")
 			else:
 				state = instance_statuses[0]["InstanceState"]["Name"]
 
 				if state == "stopped":
-					logger.info(f"Instance {INSTANCE_ID} is stopped. Starting it...")
+					logger.info(
+						f"Instance {INSTANCE_ID} is stopped. Starting it...")
 				elif state == "running":
-					logger.info(f"EC2 instance {INSTANCE_ID} is already running.")
+					logger.info(
+						f"EC2 instance {INSTANCE_ID} is already running.")
 					return True
 				elif state in ["stopping"]:
-					logger.info(f"Waiting for EC2 inference instance to stop...")
+					logger.info(
+						f"Waiting for EC2 inference instance to stop...")
 					while state in ["stopping"]:
 						time.sleep(5)
 						response = self.get_instance_status()
-						instance_statuses = response.get("InstanceStatuses", [])
-						state = instance_statuses[0]["InstanceState"]["Name"] if instance_statuses else None
+						instance_statuses = response.get("InstanceStatuses",
+														 [])
+						state = instance_statuses[0]["InstanceState"][
+							"Name"] if instance_statuses else None
 
-			self.ec2.start_instances(InstanceIds=[INSTANCE_ID])
+			self.ec2.start_instances(InstanceIds = [INSTANCE_ID])
 			logger.info(f"Starting EC2 instance {INSTANCE_ID}...")
 
 			elapsed = 0
 			while elapsed < timeout:
-				status = self.get_instance_status(include_all=True)
+				status = self.get_instance_status(include_all = True)
 				instance_statuses = status.get("InstanceStatuses", [])
 				if not instance_statuses:
-					logger.info(f"Instance status not available yet. Retrying...")
+					logger.info(
+						f"Instance status not available yet. Retrying...")
 					time.sleep(5)
 					elapsed += 5
 					continue
@@ -77,7 +79,8 @@ class Ec2Controller:
 				system_status = instance["SystemStatus"]["Status"]
 				instance_status = instance["InstanceStatus"]["Status"]
 
-				logger.info(f"State: {state} | System: {system_status} | Instance: {instance_status}")
+				logger.info(
+					f"State: {state} | System: {system_status} | Instance: {instance_status}")
 
 				if state == "running" and system_status == "ok" and instance_status == "ok":
 					time.sleep(60)
