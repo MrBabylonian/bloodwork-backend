@@ -56,6 +56,7 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 						f"Instance: {instance_status}")
 
 			if state == "running" and system_status == "ok" and instance_status == "ok":
+				time.sleep(60)
 				logger.info("EC2 instance is fully initialized and ready.")
 				return
 			time.sleep(5)
