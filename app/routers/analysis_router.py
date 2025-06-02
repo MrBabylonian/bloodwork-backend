@@ -3,8 +3,7 @@ from fastapi.responses import JSONResponse
 from pathlib import Path
 
 from app.services import pdf_analysis_service
-from app.utils.ec2_instance_controller import \
-	is_inference_instance_running
+from app.utils.ec2_instance_controller import Ec2Controller
 from app.utils.logger_utils import Logger
 
 logger = Logger.setup_logging().getChild("analysis_router")
@@ -25,8 +24,8 @@ async def analyze_pdf_file_endpoint(
 							detail = "Solo file PDF sono accettati.")
 
 	try:
-		while not is_inference_instance_running(): pass
-
+		ec2 = Ec2Controller()
+		ec2.ensure_inference_instance_is_running()
 		result = await pdf_analysis_service.analyze_uploaded_pdf_file_background(
 			file, background_tasks)
 		logger.info(
