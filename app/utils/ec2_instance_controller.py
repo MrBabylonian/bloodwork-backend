@@ -39,14 +39,29 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 					InstanceIds = [INSTANCE_ID],
 					IncludeAllInstances = True
 				)
-				state = status["InstanceStatuses"][0]["InstanceState"]["Name"]
-				if state == "running":
-					logger.info("Instance is now running.")
-					return
-				time.sleep(5)
-				elapsed += 5
+				instance_statuses = status.get("InstanceStatuses", [])
+				if not instance_statuses:
+					logger.info(f"Instance status not available yet. "
+								f"Retrying...")
+					time.sleep(5)
+					elapsed += 5
+					continue
 
-			raise TimeoutError("Timeout: EC2 instance did not start in time.")
+				instance = instance_statuses[0]
+				state = instance["InstanceState"]["Name"]
+				system_status = instance["SystemStatus"]["Status"]
+				instance_status = instance["InstanceStatus"]["Status"]
+
+				logger.info(f"State: {state} | System: {system_status} | "
+							f"Instance: {instance_status}")
+
+				if state == "running" and system_status == "ok" and instance_status == "ok":
+					logger.info("EC2 instance is fully initialized and ready.")
+					return
+			time.sleep(5)
+			elapsed += 5
+
+		raise TimeoutError("Timeout: EC2 instance did not start in time.")
 
 	except (BotoCoreError, ClientError, IndexError) as error:
 		raise RuntimeError(f"Failed to start EC2 instance: {error}")
