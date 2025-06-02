@@ -26,7 +26,7 @@ class Ec2Controller:
 			logger.error(f"Failed to get instance status: {error}")
 			return {"InstanceStatuses": []}
 
-	def ensure_inference_instance_is_running(self, timeout: int = 360) -> None:
+	def is_inference_instance_running(self, timeout: int = 360) -> bool:
 		"""
 		Checks the current state of the inference EC2 instance and starts it
 		if it is stopped. Waits until the instance is running or timeout occurs.
@@ -44,7 +44,7 @@ class Ec2Controller:
 					logger.info(f"Instance {INSTANCE_ID} is stopped. Starting it...")
 				elif state == "running":
 					logger.info(f"EC2 instance {INSTANCE_ID} is already running.")
-					return
+					return True
 				elif state in ["stopping"]:
 					logger.info(f"Waiting for EC2 inference instance to stop...")
 					while state in ["stopping"]:
@@ -76,7 +76,7 @@ class Ec2Controller:
 				if state == "running" and system_status == "ok" and instance_status == "ok":
 					time.sleep(60)
 					logger.info("EC2 instance is fully initialized and ready.")
-					return
+					return True
 				time.sleep(5)
 				elapsed += 5
 
