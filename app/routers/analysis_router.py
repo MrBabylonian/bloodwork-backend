@@ -4,7 +4,7 @@ from pathlib import Path
 
 from app.services import pdf_analysis_service
 from app.utils.ec2_instance_controller import \
-	ensure_inference_instance_is_running
+	is_inference_instance_running
 from app.utils.logger_utils import Logger
 
 logger = Logger.setup_logging().getChild("analysis_router")
@@ -25,7 +25,7 @@ async def analyze_pdf_file_endpoint(
 							detail = "Solo file PDF sono accettati.")
 
 	try:
-		ensure_inference_instance_is_running()
+		while not is_inference_instance_running(): pass
 
 		result = await pdf_analysis_service.analyze_uploaded_pdf_file_background(
 			file, background_tasks)

@@ -9,13 +9,13 @@ INSTANCE_ID: str = "i-0476378924320e248"
 AWS_REGION: str = "eu-north-1"
 
 
-def ensure_inference_instance_is_running(timeout: int = 360) -> None:
+def is_inference_instance_running(timeout: int = 360) -> bool:
 	"""
 	Checks the current state of the inference EC2 instance and starts it
 	if it is stopped. Waits until the instance is running or timeout occurs.
 	"""
 	ec2 = boto3.client("ec2", region_name = AWS_REGION)
-
+	is_running = False
 	try:
 		response = ec2.describe_instance_status(
 			InstanceIds = [INSTANCE_ID],
@@ -24,7 +24,8 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 		state = response["InstanceStatuses"][0]["InstanceState"]["Name"]
 
 		if state == "running":
-			return  # Already running
+			is_running = True
+			return is_running  # Already running
 
 		while state in ["stopping"]:
 			logger.info(f"Waiting for EC2 inference instance to stop...")
@@ -58,7 +59,8 @@ def ensure_inference_instance_is_running(timeout: int = 360) -> None:
 			if state == "running" and system_status == "ok" and instance_status == "ok":
 				time.sleep(60)
 				logger.info("EC2 instance is fully initialized and ready.")
-				return
+				is_running = True
+				return is_running
 			time.sleep(5)
 			elapsed += 5
 
