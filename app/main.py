@@ -16,9 +16,9 @@ app = FastAPI(
 # CORS configuration to allow frontend access
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=["*"],
+	allow_origins=["https://main.d1wrcuj3ftjjx5.amplifyapp.com"],
 	allow_credentials=True,
-	allow_methods=["*"],  # Allow GET, POST, etc.
+	allow_methods=["GET, POST"],  # Allow GET, POST, etc.
 	allow_headers=["*"],  # Allow custom headers like Content-Type
 )
 
