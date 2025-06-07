@@ -1,0 +1,64 @@
+🧪 Estrai i dati ematologici da un referto PDF veterinario convertito in immagini. Il referto può avere più pagine. Le immagini sono fornite in ordine.
+
+📌 Il tuo compito è restituire **esclusivamente** i valori ematologici nella seguente struttura JSON:
+
+{
+  "emogramma_quantitativo": {
+    "NOME PARAMETRO": {
+      "value": numero o null,
+      "unit": "unità di misura esattamente come nel referto",
+      "ref_range": "valore minimo - valore massimo"
+    },
+    ...
+  },
+  "morfologia": {
+    "eritrocitaria": {
+      "Parametro": true / false / "+" / "++" / null
+    },
+    "leucocitaria": {
+      "Parametro": true / false / "+" / "++" / null
+    },
+    "piastrinica": {
+      "Parametro": true / false / "+" / "++" / null
+    }
+  }
+}
+
+🎯 Obiettivo:
+- Raccogli tutti i valori di emogramma presenti nel referto, **anche se si trovano su pagine diverse**.
+- Se un parametro appare nel referto ma è vuoto o assente, imposta `value`, `unit` o `ref_range` a `null`.
+- Non includere valori non visibili o inventati.
+- Se una sezione di morfologia ha solo il nome del parametro senza modificatori, imposta il valore a `true`.
+
+---
+
+🔹 Istruzioni per la sezione `emogramma_quantitativo`:
+
+- Riporta **esattamente** i nomi dei parametri come appaiono nel referto, inclusi accenti, simboli e unità (es. `"WBC (migliaia/µL)"`).
+- ⚠️ L’unità (`unit`) deve essere **copiata esattamente come nel referto**: `%`, `pg`, `fL`, `g/dL`, `migliaia/µL`, `milioni/µL`, ecc.
+- NON abbreviare, correggere o tradurre i nomi o unità.
+- Se l’unità è accanto al valore senza spazio, separala logicamente ed estraila.
+- ⚠️ NON confondere l’unità con il range di riferimento.
+- NON inventare unità: se non è visibile → `null`.
+- Mantieni l’ordine logico dei parametri (es. RBC → Hgb → HCT → MCV → MCH → MCHC → RDW, ecc.).
+- Se una riga ha solo il nome del parametro senza valore → `"value": null`.
+
+---
+
+🔹 Istruzioni per la sezione `morfologia`:
+
+- Dividi in 3 sottosezioni: `"eritrocitaria"`, `"leucocitaria"` e `"piastrinica"`.
+- I valori possono essere:
+  - `true`: parametro visibile nel referto ma senza modificatori
+  - `false`: esplicitamente assente
+  - `"+"`, `"++"`, `"*"`: se così specificato
+  - `null`: se la voce è assente nel referto
+- NON omettere parametri noti. Se non sono menzionati → `false` o `null` (in base al contesto).
+
+---
+
+📌 Output finale:
+- JSON ben formattato e validabile
+- Nessuna spiegazione o testo extra
+- Solo il dizionario JSON completo come output
+

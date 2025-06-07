@@ -8,87 +8,96 @@ import json
 from app.utils.file_utils import FileConverter
 from app.utils.logger_utils import Logger
 from app.services.vision_model_inference_service import \
-	RemoveVisionInferenceService
+    RemoveVisionInferenceService
+from app.services.openai_data_extracting_service import extract_emogramma_from_image
 
 logger = Logger.setup_logging().getChild("pdf_analysis_service")
 
 PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
-PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents = True, exist_ok = True)
+PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents=True, exist_ok=True)
 
 VISION_SERVER_URL = "http://51.21.18.6:4000"
 remote_vision_inference_service = RemoveVisionInferenceService(
-	VISION_SERVER_URL)
+    VISION_SERVER_URL)
 
 
 def call_inference_and_save_output(
-		image_path_list: list[Path],
-		upload_folder: Path,
-		pdf_uuid: str
+    extracted_bloodwork_values: str,
+    upload_folder: Path,
+    pdf_uuid: str
 ) -> None:
-	try:
-		logger.info(f"Running inference on images for UUID {pdf_uuid}...")
+    try:
+        logger.info(
+            f"Running inference using extracted blood work values for UUID {pdf_uuid}...")
 
-		loop = asyncio.new_event_loop()
-		asyncio.set_event_loop(loop)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
-		model_response: dict[str, str] = loop.run_until_complete(
-			remote_vision_inference_service.run_remote_inference(
-				image_file_paths = image_path_list,
-				model_name = "gemma3:27b"
-			)
-		)
+        model_response: dict[str, str] = loop.run_until_complete(
+            remote_vision_inference_service.run_remote_inference(
+                bloodwork_values=extracted_bloodwork_values,
+                model_name="gemma3:27b"
+            )
+        )
 
-		output_data: dict[str, str] = model_response
+        output_data: dict[str, str] = model_response
 
-		model_output_path: Path = upload_folder / "model_output.json"
-		with open(model_output_path, "w", encoding = "utf-8") as f:
-			json.dump(output_data, f, ensure_ascii = False)
+        model_output_path: Path = upload_folder / "model_output.json"
+        with open(model_output_path, "w", encoding="utf-8") as f:
+            json.dump(output_data, f, ensure_ascii=False)
 
-		logger.info(f"Model output saved to {model_output_path}")
+        logger.info(f"Model output saved to {model_output_path}")
 
-	except Exception as error:
-		logger.exception(
-			f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
-		raise
+    except Exception as error:
+        logger.exception(
+            f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
+        raise
 
 
 async def analyze_uploaded_pdf_file_background(
-		file: UploadFile,
-		background_tasks: BackgroundTasks
+    file: UploadFile,
+    background_tasks: BackgroundTasks
 ) -> dict[str, str]:
-	try:
-		pdf_uuid: str = str(uuid4())
-		upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
-		upload_folder.mkdir(parents = True, exist_ok = True)
+    try:
+        pdf_uuid: str = str(uuid4())
+        upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
+        upload_folder.mkdir(parents=True, exist_ok=True)
 
-		with NamedTemporaryFile(delete = False, suffix = ".pdf") as tmp:
-			content = await file.read()
-			tmp.write(content)
-			tmp_path: Path = Path(tmp.name)
+        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            content = await file.read()
+            tmp.write(content)
+            tmp_path: Path = Path(tmp.name)
 
-		logger.info(f"Received PDF. Temporary file created at {tmp_path}")
+        logger.info(f"Received PDF. Temporary file created at {tmp_path}")
 
-		image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
-			str(tmp_path),
-			output_folder = upload_folder,
-			base_filename_prefix = pdf_uuid
-		)
-		logger.info(f"Converted to {len(image_path_list)} image(s)")
+        image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
+            str(tmp_path),
+            output_folder=upload_folder,
+            base_filename_prefix=pdf_uuid
+        )
+        logger.info(f"Converted to {len(image_path_list)} image(s)")
 
-		tmp_path.unlink(missing_ok = True)
+        tmp_path.unlink(missing_ok=True)
 
-		background_tasks.add_task(call_inference_and_save_output,
-								  image_path_list, upload_folder, pdf_uuid)
+        extracted_bloodwork_values = extract_emogramma_from_image(
+            image_path_list)
 
-		return {
-			"pdf_uuid": pdf_uuid,
-			"message": "Analisi in corso. Torna più tardi per vedere i risultati."
-		}
+        logger.info("Extracting blood work values via OpenAI API")
 
-	except Exception as error:
-		logger.error(f"Failed to process PDF: {error}")
-		raise HTTPException(status_code = 500,
-							detail = "Errore interno durante l'analisi")
-	finally:
-		if tmp_path.exists():
-			tmp_path.unlink(missing_ok = True)
+        background_tasks.add_task(call_inference_and_save_output,
+                                  extracted_bloodwork_values,
+                                  upload_folder,
+                                  pdf_uuid)
+
+        return {
+            "pdf_uuid": pdf_uuid,
+            "message": "Analisi in corso. Torna più tardi per vedere i risultati."
+        }
+
+    except Exception as error:
+        logger.error(f"Failed to process PDF: {error}")
+        raise HTTPException(status_code=500,
+                            detail="Errore interno durante l'analisi")
+    finally:
+        if tmp_path.exists():
+            tmp_path.unlink(missing_ok=True)
