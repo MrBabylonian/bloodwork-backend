@@ -59,12 +59,3 @@ def extract_emogramma_from_image(image_paths: list[Path], prompt_path: Path = pr
     )
 
     return response.json()["choices"][0]["message"]["content"].strip()
-
-
-image_paths: list[Path] = [
-    "data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_1.png",
-    "data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_2.png",
-    "data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_3.png", "data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_4.png"]
-prompt_path: Path = Path("app/services/openai_prompt.txt")
-
-print(extract_emogramma_from_image(image_paths))
