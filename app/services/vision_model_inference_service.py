@@ -96,7 +96,7 @@ class RemoveVisionInferenceService:
     :param model_name: Name of the model to use
     :return: Dictionary with inference results
         """
-        form_fields = {
+        form_data = {
             "prompt": diagnostic_prompt,
             "model_name": model_name,
             "bloodwork_values": bloodwork_values
@@ -109,7 +109,7 @@ class RemoveVisionInferenceService:
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     url=self.inference_service_endpoint,
-                    json=form_fields,
+                    data=form_data,
                     timeout=300,
                 )
 
