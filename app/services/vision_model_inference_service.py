@@ -85,7 +85,7 @@ class RemoveVisionInferenceService:
 
     async def run_remote_inference(
         self, bloodwork_values: str,
-        model_name: str = "gemma3:27b",
+        model_name: str = "deepseek-r1:32b",
         diagnostic_prompt: str = prompt,
     ) -> dict[str, str]:
         """

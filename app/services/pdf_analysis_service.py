@@ -36,7 +36,7 @@ def call_inference_and_save_output(
         model_response: dict[str, str] = loop.run_until_complete(
             remote_vision_inference_service.run_remote_inference(
                 bloodwork_values=extracted_bloodwork_values,
-                model_name="gemma3:27b"
+                model_name="deepseek-r1:32b"
             )
         )
 

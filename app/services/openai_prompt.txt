@@ -26,6 +26,7 @@
 
 🎯 Obiettivo:
 - Raccogli tutti i valori di emogramma presenti nel referto, **anche se si trovano su pagine diverse**.
+- ⚠️ Includi SOLO i test dell'emogramma visibili nelle immagini. NON aggiungere altri test che non compaiono nel referto, anche se comuni o standard.
 - Se un parametro appare nel referto ma è vuoto o assente, imposta `value`, `unit` o `ref_range` a `null`.
 - Non includere valori non visibili o inventati.
 - Se una sezione di morfologia ha solo il nome del parametro senza modificatori, imposta il valore a `true`.
@@ -35,12 +36,12 @@
 🔹 Istruzioni per la sezione `emogramma_quantitativo`:
 
 - Riporta **esattamente** i nomi dei parametri come appaiono nel referto, inclusi accenti, simboli e unità (es. `"WBC (migliaia/µL)"`).
-- ⚠️ L’unità (`unit`) deve essere **copiata esattamente come nel referto**: `%`, `pg`, `fL`, `g/dL`, `migliaia/µL`, `milioni/µL`, ecc.
+- ⚠️ L'unità (`unit`) deve essere **copiata esattamente come nel referto**: `%`, `pg`, `fL`, `g/dL`, `migliaia/µL`, `milioni/µL`, ecc.
 - NON abbreviare, correggere o tradurre i nomi o unità.
-- Se l’unità è accanto al valore senza spazio, separala logicamente ed estraila.
-- ⚠️ NON confondere l’unità con il range di riferimento.
+- Se l'unità è accanto al valore senza spazio, separala logicamente ed estraila.
+- ⚠️ NON confondere l'unità con il range di riferimento.
 - NON inventare unità: se non è visibile → `null`.
-- Mantieni l’ordine logico dei parametri (es. RBC → Hgb → HCT → MCV → MCH → MCHC → RDW, ecc.).
+- Mantieni l'ordine logico dei parametri (es. RBC → Hgb → HCT → MCV → MCH → MCHC → RDW, ecc.).
 - Se una riga ha solo il nome del parametro senza valore → `"value": null`.
 
 ---
@@ -61,4 +62,3 @@
 - JSON ben formattato e validabile
 - Nessuna spiegazione o testo extra
 - Solo il dizionario JSON completo come output
-
