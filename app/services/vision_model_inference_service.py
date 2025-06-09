@@ -1,12 +1,13 @@
-from pathlib import Path
 import re
+from pathlib import Path
+
 import httpx
 
 from app.utils.logger_utils import Logger
 
 logger = Logger.setup_logging().getChild("vision_model_inference_service")
 
-prompt_file_path: Path = Path("app/services/diagnostic_prompt.txt")
+prompt_file_path: Path = Path("app/prompts/diagnostic_prompt.txt")
 with open(prompt_file_path, "r", encoding="utf-8") as prompt_file:
     prompt: str = prompt_file.read()
 
@@ -21,7 +22,7 @@ def clean_model_response(model_response: dict[str, str]) -> dict[str, str]:
     """
 
     try:
-        logger.info(f"Cleaning model response for frontend")
+        logger.info("Cleaning model response for frontend")
 
         # Remove ANSI terminal escape sequences
         ansi_escape_pattern: re.Pattern = re.compile(

@@ -1,196 +1,329 @@
 diff --git a/.DS_Store b/.DS_Store
-index 6eefeb5..961a2a7 100644
+index 7fb877b..3d7c340 100644
 Binary files a/.DS_Store and b/.DS_Store differ
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+index 13566b8..0000000
+--- a/.idea/.gitignore
++++ /dev/null
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+diff --git a/.idea/bloodwork_analysis.iml b/.idea/bloodwork_analysis.iml
+deleted file mode 100644
+index f8b79e1..0000000
+--- a/.idea/bloodwork_analysis.iml
++++ /dev/null
+@@ -1,10 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="PYTHON_MODULE" version="4">
+-  <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$">
+-      <excludeFolder url="file://$MODULE_DIR$/.venv" />
+-    </content>
+-    <orderEntry type="jdk" jdkName="Python 3.11 (bloodwork-backend)" jdkType="Python SDK" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+diff --git a/.idea/codeStyles/codeStyleConfig.xml b/.idea/codeStyles/codeStyleConfig.xml
+deleted file mode 100644
+index a55e7a1..0000000
+--- a/.idea/codeStyles/codeStyleConfig.xml
++++ /dev/null
+@@ -1,5 +0,0 @@
+-<component name="ProjectCodeStyleConfiguration">
+-  <state>
+-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default" />
+-  </state>
+-</component>
+\ No newline at end of file
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+deleted file mode 100644
+index 50dc367..0000000
+--- a/.idea/inspectionProfiles/Project_Default.xml
++++ /dev/null
+@@ -1,16 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <profile version="1.0">
+-    <option name="myName" value="Project Default" />
+-    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+-    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+-      <option name="myValues">
+-        <value>
+-          <list size="1">
+-            <item index="0" class="java.lang.String" itemvalue="className" />
+-          </list>
+-        </value>
+-      </option>
+-      <option name="myCustomValuesEnabled" value="true" />
+-    </inspection_tool>
+-  </profile>
+-</component>
+\ No newline at end of file
+diff --git a/.idea/inspectionProfiles/profiles_settings.xml b/.idea/inspectionProfiles/profiles_settings.xml
+deleted file mode 100644
+index 105ce2d..0000000
+--- a/.idea/inspectionProfiles/profiles_settings.xml
++++ /dev/null
+@@ -1,6 +0,0 @@
+-<component name="InspectionProjectProfileManager">
+-  <settings>
+-    <option name="USE_PROJECT_PROFILE" value="false" />
+-    <version value="1.0" />
+-  </settings>
+-</component>
+\ No newline at end of file
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+deleted file mode 100644
+index 8f7e002..0000000
+--- a/.idea/misc.xml
++++ /dev/null
+@@ -1,7 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="Black">
+-    <option name="sdkName" value="Python 3.11 (bloodwork_analysis)" />
+-  </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (bloodwork-backend)" project-jdk-type="Python SDK" />
+-</project>
+\ No newline at end of file
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+deleted file mode 100644
+index efbd78f..0000000
+--- a/.idea/modules.xml
++++ /dev/null
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/bloodwork_analysis.iml" filepath="$PROJECT_DIR$/.idea/bloodwork_analysis.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+deleted file mode 100644
+index 94a25f7..0000000
+--- a/.idea/vcs.xml
++++ /dev/null
+@@ -1,6 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+-  </component>
+-</project>
+\ No newline at end of file
+diff --git a/app/.DS_Store b/app/.DS_Store
+index 8b8413e..dce9106 100644
+Binary files a/app/.DS_Store and b/app/.DS_Store differ
 diff --git a/app/__pycache__/main.cpython-311.pyc b/app/__pycache__/main.cpython-311.pyc
-index 98ecc25..bd7c680 100644
+index bd7c680..88a3a96 100644
 Binary files a/app/__pycache__/main.cpython-311.pyc and b/app/__pycache__/main.cpython-311.pyc differ
-diff --git a/app/routers/__pycache__/analysis_router.cpython-311.pyc b/app/routers/__pycache__/analysis_router.cpython-311.pyc
-index 005b819..89f0af0 100644
-Binary files a/app/routers/__pycache__/analysis_router.cpython-311.pyc and b/app/routers/__pycache__/analysis_router.cpython-311.pyc differ
-diff --git a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc
-index 4d7bfcf..ebaa652 100644
-Binary files a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc and b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc differ
-diff --git a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc
-index df030a7..8fd310a 100644
-Binary files a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc and b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc differ
-diff --git a/app/services/pdf_analysis_service.py b/app/services/pdf_analysis_service.py
-index e6daa5c..5827abb 100644
---- a/app/services/pdf_analysis_service.py
-+++ b/app/services/pdf_analysis_service.py
-@@ -8,87 +8,96 @@ import json
- from app.utils.file_utils import FileConverter
+diff --git a/app/main.py b/app/main.py
+index 856d7e2..a7944f8 100644
+--- a/app/main.py
++++ b/app/main.py
+@@ -1,5 +1,6 @@
+ from fastapi import FastAPI
+ from fastapi.middleware.cors import CORSMiddleware
++
+ from app.routers import analysis_router
  from app.utils.logger_utils import Logger
- from app.services.vision_model_inference_service import \
--	RemoveVisionInferenceService
-+    RemoveVisionInferenceService
-+from app.services.openai_data_extracting_service import extract_emogramma_from_image
  
- logger = Logger.setup_logging().getChild("pdf_analysis_service")
+@@ -8,24 +9,23 @@ logger = Logger.setup_logging().getChild("main")
  
- PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
--PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents = True, exist_ok = True)
-+PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+ # Create the FastAPI app instance
+ app = FastAPI(
+-	title="Veterinary Bloodwork Analyzer",
+-	description="API for processing veterinary PDF blood test reports via vision model",
+-	version="1.0.0",
++    title="Veterinary Bloodwork Analyzer",
++    description="API for processing veterinary PDF blood test reports via vision model"
+ )
  
- VISION_SERVER_URL = "http://51.21.18.6:4000"
- remote_vision_inference_service = RemoveVisionInferenceService(
--	VISION_SERVER_URL)
-+    VISION_SERVER_URL)
+ # CORS configuration to allow frontend access
+ app.add_middleware(
+-	CORSMiddleware,
+-	allow_origins=["https://main.d1wrcuj3ftjjx5.amplifyapp.com"],
+-	allow_credentials=True,
+-	allow_methods=["GET, POST"],  # Allow GET, POST, etc.
+-	allow_headers=["*"],  # Allow custom headers like Content-Type
++    CORSMiddleware,
++    allow_origins=["https://main.d1wrcuj3ftjjx5.amplifyapp.com"],
++    allow_credentials=True,
++    allow_methods=["GET, POST"],  # Allow GET, POST, etc.
++    allow_headers=["*"],  # Allow custom headers like Content-Type
+ )
  
+ # Mount the router for analysis functionality
+ app.include_router(analysis_router.router, prefix="/analysis")
  
- def call_inference_and_save_output(
--		image_path_list: list[Path],
--		upload_folder: Path,
--		pdf_uuid: str
-+    extracted_bloodwork_values: str,
-+    upload_folder: Path,
-+    pdf_uuid: str
- ) -> None:
+-# Optional: log app startup
++
+ @app.on_event("startup")
+ async def startup_event():
+-	logger.info("FastAPI application has started.")
++    logger.info("FastAPI application has started.")
+diff --git a/app/routers/__pycache__/analysis_router.cpython-311.pyc b/app/routers/__pycache__/analysis_router.cpython-311.pyc
+index 89f0af0..842725a 100644
+Binary files a/app/routers/__pycache__/analysis_router.cpython-311.pyc and b/app/routers/__pycache__/analysis_router.cpython-311.pyc differ
+diff --git a/app/routers/analysis_router.py b/app/routers/analysis_router.py
+index 9d91cba..fa495d9 100644
+--- a/app/routers/analysis_router.py
++++ b/app/routers/analysis_router.py
+@@ -1,69 +1,74 @@
+-from fastapi import HTTPException, APIRouter, UploadFile, File, BackgroundTasks
+-from fastapi.responses import JSONResponse
+ from pathlib import Path
+ 
+-from app.services import pdf_analysis_service
+-from app.utils.ec2_instance_controller import Ec2Controller
++from fastapi import (
++    APIRouter,
++    BackgroundTasks,
++    File,
++    HTTPException,
++    Response,
++    UploadFile,
++)
++from fastapi.responses import JSONResponse
++
++from app.services.pdf_analysis_service import PdfAnalysisService
+ from app.utils.logger_utils import Logger
+ 
+ logger = Logger.setup_logging().getChild("analysis_router")
+ 
+ router = APIRouter()
+ 
++pdf_analysis_service = PdfAnalysisService()
++
+ 
+ @router.post("/pdf_analysis")
+ async def analyze_pdf_file_endpoint(
+-		file: UploadFile = File(...),
+-		background_tasks: BackgroundTasks = BackgroundTasks()
++    file: UploadFile = File(...),
++    background_tasks: BackgroundTasks = BackgroundTasks()
+ ):
+-	logger.info(f"Received PDF analysis request: {file.filename}")
+-	if file.content_type != "application/pdf":
+-		logger.exception(
+-			f"Rejected upload: unsupported content type: {file.content_type}")
+-		raise HTTPException(status_code = 400,
+-							detail = "Solo file PDF sono accettati.")
++    logger.info(f"Received PDF analysis request: {file.filename}")
++    if file.content_type != "application/pdf":
++        logger.exception(
++            f"Rejected upload: unsupported content type: {file.content_type}")
++        raise HTTPException(status_code=400,
++                            detail="Solo file PDF sono accettati.")
+ 
 -	try:
--		logger.info(f"Running inference on images for UUID {pdf_uuid}...")
+-		ec2 = Ec2Controller()
+-		ec2.is_inference_instance_running()
+-		result = await pdf_analysis_service.analyze_uploaded_pdf_file_background(
+-			file, background_tasks)
+-		logger.info(
+-			f"PDF analysis completed successfully for: {file.filename}")
+-		return JSONResponse(content = result)
 +    try:
++        result = await pdf_analysis_service.analyze_uploaded_pdf_file_background(
++            file, background_tasks)
 +        logger.info(
-+            f"Running inference using extracted blood work values for UUID {pdf_uuid}...")
++            f"PDF analysis completed successfully for: {file.filename}")
++        return JSONResponse(result)
  
--		loop = asyncio.new_event_loop()
--		asyncio.set_event_loop(loop)
-+        loop = asyncio.new_event_loop()
-+        asyncio.set_event_loop(loop)
+-	except HTTPException as http_error:
+-		logger.error(f"HTTPException: {http_error}")
+-		raise
++    except HTTPException as http_error:
++        logger.error(f"HTTPException: {http_error}")
++        raise
  
--		model_response: dict[str, str] = loop.run_until_complete(
--			remote_vision_inference_service.run_remote_inference(
--				image_file_paths = image_path_list,
--				model_name = "gemma3:27b"
--			)
--		)
-+        model_response: dict[str, str] = loop.run_until_complete(
-+            remote_vision_inference_service.run_remote_inference(
-+                bloodwork_values=extracted_bloodwork_values,
-+                model_name="gemma3:27b"
-+            )
-+        )
+-	except Exception as error:
+-		logger.exception("Unexpected error during PDF analysis")
+-		raise HTTPException(status_code = 500,
+-							detail = f"Errore interno: {error}")
++    except Exception as error:
++        logger.exception("Unexpected error during PDF analysis")
++        raise HTTPException(status_code=500,
++                            detail=f"Errore interno: {error}")
  
--		output_data: dict[str, str] = model_response
-+        output_data: dict[str, str] = model_response
  
--		model_output_path: Path = upload_folder / "model_output.json"
--		with open(model_output_path, "w", encoding = "utf-8") as f:
--			json.dump(output_data, f, ensure_ascii = False)
-+        model_output_path: Path = upload_folder / "model_output.json"
-+        with open(model_output_path, "w", encoding="utf-8") as f:
-+            json.dump(output_data, f, ensure_ascii=False)
+ @router.get("/pdf_analysis_result/{uuid}")
+ async def get_analysis_result(uuid: str, structured: bool = False):
+-	try:
+-		result_file = Path(f"data/blood_work_pdfs/{uuid}/model_output.json")
+-		if not result_file.exists():
+-			logger.info(f"Model output not ready yet for {uuid}")
+-			return JSONResponse(status_code = 202,
+-								content = {"detail": "Risultato non ancora "
+-													 "pronto"
+-										   })
+-		with open(result_file, "r", encoding = "utf-8") as result_file:
+-			result = result_file.read()
++    try:
++        result_file = Path(f"data/blood_work_pdfs/{uuid}/analysis_output.json")
++        if not result_file.exists():
++            logger.info(f"Model output not ready yet for {uuid}")
++            return JSONResponse(status_code=202,
++                                content={"detail": "Risultato non ancora "
++                                         "pronto"
++                                         })
++        with open(result_file, "r", encoding="utf-8") as result_file:
++            result = result_file.read()
  
--		logger.info(f"Model output saved to {model_output_path}")
-+        logger.info(f"Model output saved to {model_output_path}")
+-		logger.info(f"Model output is successfully read from"
+-					f" {result_file.name}")
++        logger.info(f"Model output is successfully read from"
++                    f" {result_file.name}")
+ 
+-		return {
+-			"result": result,
+-		}
++        return Response(content=result)
  
 -	except Exception as error:
 -		logger.exception(
--			f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
--		raise
+-			f"Errore durante il recupero del risultato per {uuid}")
+-		raise HTTPException(status_code = 500,
+-							detail = f"Errore interno: {error}")
 +    except Exception as error:
 +        logger.exception(
-+            f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
-+        raise
- 
- 
- async def analyze_uploaded_pdf_file_background(
--		file: UploadFile,
--		background_tasks: BackgroundTasks
-+    file: UploadFile,
-+    background_tasks: BackgroundTasks
- ) -> dict[str, str]:
--	try:
--		pdf_uuid: str = str(uuid4())
--		upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
--		upload_folder.mkdir(parents = True, exist_ok = True)
--
--		with NamedTemporaryFile(delete = False, suffix = ".pdf") as tmp:
--			content = await file.read()
--			tmp.write(content)
--			tmp_path: Path = Path(tmp.name)
--
--		logger.info(f"Received PDF. Temporary file created at {tmp_path}")
--
--		image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
--			str(tmp_path),
--			output_folder = upload_folder,
--			base_filename_prefix = pdf_uuid
--		)
--		logger.info(f"Converted to {len(image_path_list)} image(s)")
--
--		tmp_path.unlink(missing_ok = True)
--
--		background_tasks.add_task(call_inference_and_save_output,
--								  image_path_list, upload_folder, pdf_uuid)
--
--		return {
--			"pdf_uuid": pdf_uuid,
--			"message": "Analisi in corso. Torna più tardi per vedere i risultati."
--		}
--
--	except Exception as error:
--		logger.error(f"Failed to process PDF: {error}")
--		raise HTTPException(status_code = 500,
--							detail = "Errore interno durante l'analisi")
--	finally:
--		if tmp_path.exists():
--			tmp_path.unlink(missing_ok = True)
-+    try:
-+        pdf_uuid: str = str(uuid4())
-+        upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
-+        upload_folder.mkdir(parents=True, exist_ok=True)
-+
-+        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-+            content = await file.read()
-+            tmp.write(content)
-+            tmp_path: Path = Path(tmp.name)
-+
-+        logger.info(f"Received PDF. Temporary file created at {tmp_path}")
-+
-+        image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
-+            str(tmp_path),
-+            output_folder=upload_folder,
-+            base_filename_prefix=pdf_uuid
-+        )
-+        logger.info(f"Converted to {len(image_path_list)} image(s)")
-+
-+        tmp_path.unlink(missing_ok=True)
-+
-+        extracted_bloodwork_values = extract_emogramma_from_image(
-+            image_path_list)
-+
-+        logger.info("Extracting blood work values via OpenAI API")
-+
-+        background_tasks.add_task(call_inference_and_save_output,
-+                                  extracted_bloodwork_values,
-+                                  upload_folder,
-+                                  pdf_uuid)
-+
-+        return {
-+            "pdf_uuid": pdf_uuid,
-+            "message": "Analisi in corso. Torna più tardi per vedere i risultati."
-+        }
-+
-+    except Exception as error:
-+        logger.error(f"Failed to process PDF: {error}")
++            f"Errore durante il recupero del risultato per {uuid}")
 +        raise HTTPException(status_code=500,
-+                            detail="Errore interno durante l'analisi")
-+    finally:
-+        if tmp_path.exists():
-+            tmp_path.unlink(missing_ok=True)
-diff --git a/app/services/prompt.txt b/app/services/prompt.txt
++                            detail=f"Errore interno: {error}")
+diff --git a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc
+index b5a48ae..bc9c851 100644
+Binary files a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc and b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc differ
+diff --git a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc
+index 06e38d2..e828931 100644
+Binary files a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc and b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc differ
+diff --git a/app/services/diagnostic_prompt.txt b/app/services/diagnostic_prompt.txt
 deleted file mode 100644
-index aee66b8..0000000
---- a/app/services/prompt.txt
+index bdb9482..0000000
+--- a/app/services/diagnostic_prompt.txt
 +++ /dev/null
-@@ -1,126 +0,0 @@
+@@ -1,128 +0,0 @@
 -Agisci come un medico veterinario specializzato in ematologia, oncologia e medicina interna con oltre 15 anni di esperienza clinica su CANI e GATTI.
 -
--◆ INPUT
--Riceverai uno o più PDF o immagini contenenti referti emato-chimici, biochimici, citologici e/o istologici, scritti in lingua italiana o inglese.
--Questi documenti possono contenere tutti i dati necessari: valori, unità, range di riferimento e referti clinici.
+-⚠️ IMPORTANTE: TUTTE LE RISPOSTE DEVONO ESSERE ESCLUSIVAMENTE IN LINGUA ITALIANA. NON UTILIZZARE ALTRE LINGUE.
 -
--⚠️ Non chiedere conferme iniziali. Se il referto è leggibile, avvia immediatamente l’analisi.
--⚠️ Se alcuni dati risultano illeggibili o assenti, continua comunque l’analisi e inserisci un avviso chiaro nella risposta che indichi quali dati mancano o sono incerti.
+-◆ INPUT
+-Il testo sopra la linea separatrice contiene dati estratti automaticamente da referti emato-chimici, biochimici, citologici e/o istologici scritti in italiano o inglese.
+-Questi dati provengono da un'elaborazione automatica di immagini di referti sanitari e contengono valori, unità, range di riferimento e possibili referti clinici.
+-
+-⚠️ Analizza direttamente i dati forniti senza chiedere ulteriori informazioni.
+-⚠️ Se alcuni dati risultano incompleti o assenti, continua comunque l'analisi e inserisci un avviso chiaro che indichi quali dati mancano o sono incerti.
 -
 -◆ COMPITI
 -1. Tabella dei parametri
@@ -212,7 +345,7 @@ index aee66b8..0000000
 -
 -❌ gravemente alterato
 -
--Se mancano valore/unità/range, lascia la cella vuota e segnala in fondo all’analisi quali campi erano incompleti o non leggibili.
+-Se mancano valore/unità/range, lascia la cella vuota e segnala in fondo all'analisi quali campi erano incompleti o non leggibili.
 -
 -2. Analisi matematica
 -Calcola e interpreta:
@@ -249,7 +382,7 @@ index aee66b8..0000000
 -
 -Non ignorare referti che menzionano neoplasia, linfoma o mitosi.
 -
--5. Classificazione dell’urgenza
+-5. Classificazione dell'urgenza
 -Classifica il caso: EMERGENZA, URGENZA A BREVE, ROUTINE
 -
 -Giustifica la scelta basandoti su: alterazioni gravi, segni oncologici, citopenie, elettroliti critici.
@@ -297,568 +430,1466 @@ index aee66b8..0000000
 -Età, razza, stagione
 -
 -12. Fonti rapide
--Es. “IRIS 2023”, “Thrall 2012”, “AAHA 2021 oncology”
+-Es. "IRIS 2023", "Thrall 2012", "AAHA 2021 oncology"
 -
 -13. Disclaimer finale
--Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta.
+-Analisi automatica basata su referto estratto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta.
 -
 -◆ LINGUA DI USCITA
--Italiano tecnico ma chiaro, adatto a veterinari.
+-Italiano tecnico ma chiaro, adatto a veterinari. NON utilizzare mai altre lingue anche se i dati di input sono in inglese.
 -
 -◆ SE MANCANO DATI
--Non interrompere l’analisi. Procedi con ciò che è disponibile e aggiungi in fondo alla risposta un box tipo:
+-Non interrompere l'analisi. Procedi con ciò che è disponibile e aggiungi in fondo alla risposta un box tipo:
 -
 -🔶 Attenzione: Alcuni dati non erano leggibili o assenti: [elenco parametri]. È consigliata una revisione manuale del referto originale per conferma.
 \ No newline at end of file
+diff --git a/app/services/openai_data_extracting_service.py b/app/services/openai_data_extracting_service.py
+deleted file mode 100644
+index 0ce188e..0000000
+--- a/app/services/openai_data_extracting_service.py
++++ /dev/null
+@@ -1,61 +0,0 @@
+-import os
+-import base64
+-import json
+-import requests
+-from openai import OpenAI
+-from dotenv import load_dotenv
+-from pathlib import Path
+-
+-load_dotenv()
+-
+-prompt_path: Path = Path("app/services/openai_prompt.txt")
+-api_key = os.getenv("OPENAI_API_KEY")
+-
+-
+-def load_prompt_from_file(prompt_path: Path) -> str:
+-    with open(prompt_path, "r", encoding="utf-8") as f:
+-        return f.read()
+-
+-
+-def image_to_base64(image_path: Path) -> str:
+-    with open(image_path, "rb") as f:
+-        return base64.b64encode(f.read()).decode()
+-
+-
+-def extract_emogramma_from_image(image_paths: list[Path], prompt_path: Path = prompt_path) -> str:
+-    system_prompt: str = load_prompt_from_file(prompt_path)
+-
+-    image_messages: list[dict] = []
+-    for image_path in image_paths:
+-        base64_img: str = image_to_base64(image_path)
+-        image_messages.append({
+-            "type": "image_url",
+-            "image_url": {"url": f"data:image/png;base64,{base64_img}"}
+-        })
+-
+-    headers: dict = {
+-        "Content-Type": "application/json",
+-        "Authorization": f"Bearer {api_key}"
+-    }
+-
+-    payload: dict[str, any] = {
+-        "model": "gpt-4o",
+-        "messages": [
+-            {"role": "system", "content": system_prompt},
+-            {
+-                "role": "user",
+-                "content": [
+-                    {"type": "text", "text": "Estrai i dati ematologici e morfologici come specificato nel prompt."}
+-                ] + image_messages
+-            }
+-        ],
+-        "temperature": 0.2
+-    }
+-
+-    response: requests.Response = requests.post(
+-        "https://api.openai.com/v1/chat/completions",
+-        headers=headers,
+-        json=payload
+-    )
+-
+-    return response.json()["choices"][0]["message"]["content"].strip()
+diff --git a/app/services/openai_prompt.txt b/app/services/openai_prompt.txt
+deleted file mode 100644
+index 3de4d06..0000000
+--- a/app/services/openai_prompt.txt
++++ /dev/null
+@@ -1,64 +0,0 @@
+-🧪 Estrai i dati ematologici da un referto PDF veterinario convertito in immagini. Il referto può avere più pagine. Le immagini sono fornite in ordine.
+-
+-📌 Il tuo compito è restituire **esclusivamente** i valori ematologici nella seguente struttura JSON:
+-
+-{
+-  "emogramma_quantitativo": {
+-    "NOME PARAMETRO": {
+-      "value": numero o null,
+-      "unit": "unità di misura esattamente come nel referto",
+-      "ref_range": "valore minimo - valore massimo"
+-    },
+-    ...
+-  },
+-  "morfologia": {
+-    "eritrocitaria": {
+-      "Parametro": true / false / "+" / "++" / null
+-    },
+-    "leucocitaria": {
+-      "Parametro": true / false / "+" / "++" / null
+-    },
+-    "piastrinica": {
+-      "Parametro": true / false / "+" / "++" / null
+-    }
+-  }
+-}
+-
+-🎯 Obiettivo:
+-- Raccogli tutti i valori di emogramma presenti nel referto, **anche se si trovano su pagine diverse**.
+-- ⚠️ Includi SOLO i test dell'emogramma visibili nelle immagini. NON aggiungere altri test che non compaiono nel referto, anche se comuni o standard.
+-- Se un parametro appare nel referto ma è vuoto o assente, imposta `value`, `unit` o `ref_range` a `null`.
+-- Non includere valori non visibili o inventati.
+-- Se una sezione di morfologia ha solo il nome del parametro senza modificatori, imposta il valore a `true`.
+-
+----
+-
+-🔹 Istruzioni per la sezione `emogramma_quantitativo`:
+-
+-- Riporta **esattamente** i nomi dei parametri come appaiono nel referto, inclusi accenti, simboli e unità (es. `"WBC (migliaia/µL)"`).
+-- ⚠️ L'unità (`unit`) deve essere **copiata esattamente come nel referto**: `%`, `pg`, `fL`, `g/dL`, `migliaia/µL`, `milioni/µL`, ecc.
+-- NON abbreviare, correggere o tradurre i nomi o unità.
+-- Se l'unità è accanto al valore senza spazio, separala logicamente ed estraila.
+-- ⚠️ NON confondere l'unità con il range di riferimento.
+-- NON inventare unità: se non è visibile → `null`.
+-- Mantieni l'ordine logico dei parametri (es. RBC → Hgb → HCT → MCV → MCH → MCHC → RDW, ecc.).
+-- Se una riga ha solo il nome del parametro senza valore → `"value": null`.
+-
+----
+-
+-🔹 Istruzioni per la sezione `morfologia`:
+-
+-- Dividi in 3 sottosezioni: `"eritrocitaria"`, `"leucocitaria"` e `"piastrinica"`.
+-- I valori possono essere:
+-  - `true`: parametro visibile nel referto ma senza modificatori
+-  - `false`: esplicitamente assente
+-  - `"+"`, `"++"`, `"*"`: se così specificato
+-  - `null`: se la voce è assente nel referto
+-- NON omettere parametri noti. Se non sono menzionati → `false` o `null` (in base al contesto).
+-
+----
+-
+-📌 Output finale:
+-- JSON ben formattato e validabile
+-- Nessuna spiegazione o testo extra
+-- Solo il dizionario JSON completo come output
+\ No newline at end of file
+diff --git a/app/services/pdf_analysis_service.py b/app/services/pdf_analysis_service.py
+index d792f86..8d4f0d5 100644
+--- a/app/services/pdf_analysis_service.py
++++ b/app/services/pdf_analysis_service.py
+@@ -1,103 +1,106 @@
+-from fastapi import UploadFile, HTTPException, BackgroundTasks
+-from uuid import uuid4
+ from pathlib import Path
+ from tempfile import NamedTemporaryFile
+-import asyncio
+-import json
++from uuid import uuid4
++
++from fastapi import BackgroundTasks, HTTPException, UploadFile
+ 
++from app.services.openai_service import OpenAIService
+ from app.utils.file_utils import FileConverter
+ from app.utils.logger_utils import Logger
+-from app.services.vision_model_inference_service import \
+-    RemoveVisionInferenceService
+-from app.services.openai_data_extracting_service import extract_emogramma_from_image
+ 
+ logger = Logger.setup_logging().getChild("pdf_analysis_service")
+ 
+ PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
+ PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+ 
+-VISION_SERVER_URL = "http://51.21.18.6:4000"
+-remote_vision_inference_service = RemoveVisionInferenceService(
+-    VISION_SERVER_URL)
+-
+-
+-def call_inference_and_save_output(
+-    extracted_bloodwork_values: str,
+-    upload_folder: Path,
+-    pdf_uuid: str
+-) -> None:
+-    try:
+-        logger.info(
+-            f"Running inference using extracted blood work values for UUID {pdf_uuid}...")
+ 
+-        loop = asyncio.new_event_loop()
+-        asyncio.set_event_loop(loop)
+-
+-        model_response: dict[str, str] = loop.run_until_complete(
+-            remote_vision_inference_service.run_remote_inference(
+-                bloodwork_values=extracted_bloodwork_values,
+-                model_name="deepseek-r1:32b"
++class PdfAnalysisService:
++    def __init__(self) -> None:
++        self.openai_service = OpenAIService()
++        self.uploads_directory = PDF_UPLOADS_ROOT_DIRECTORY
++
++    async def analyze_with_openai(
++            self,
++            image_path_list: list[Path],
++            upload_folder: Path,
++            pdf_uuid: str
++    ) -> None:
++        """
++            Run OpenAI analysis on the blood work images and save the output
++        """
++        try:
++            logger.info(
++                f"Running OpenAI analysis for blood work images for UUID {pdf_uuid}")
++
++            openai_interpretation = await self.openai_service.interpret_bloodwork_via_openai(image_path_list)
++
++            print(type(openai_interpretation))
++
++            analysis_output_path: Path = upload_folder / "analysis_output.json"
++            with open(analysis_output_path, "w", encoding="utf-8") as f:
++                try:
++                    f.write(openai_interpretation)
++                except Exception as error:
++                    logger.exception(
++                        f"Failed to write OpenAI interpretation to file: {error}")
++                    raise
++
++            logger.info(
++                f"OpenAI interpreation saved to {analysis_output_path}")
++        except Exception as error:
++            logger.exception(
++                f"Failed to run or save OpenAI analysis for UUID: {pdf_uuid} Error: {error}"
+             )
+-        )
+-
+-        output_data: dict[str, str] = model_response
+-
+-        model_output_path: Path = upload_folder / "model_output.json"
+-        with open(model_output_path, "w", encoding="utf-8") as f:
+-            json.dump(output_data, f, ensure_ascii=False)
+-
+-        logger.info(f"Model output saved to {model_output_path}")
+-
+-    except Exception as error:
+-        logger.exception(
+-            f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
+-        raise
+-
+-
+-async def analyze_uploaded_pdf_file_background(
+-    file: UploadFile,
+-    background_tasks: BackgroundTasks
+-) -> dict[str, str]:
+-    try:
+-        pdf_uuid: str = str(uuid4())
+-        upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
+-        upload_folder.mkdir(parents=True, exist_ok=True)
+-
+-        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+-            content = await file.read()
+-            tmp.write(content)
+-            tmp_path: Path = Path(tmp.name)
+-
+-        logger.info(f"Received PDF. Temporary file created at {tmp_path}")
+-
+-        image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
+-            str(tmp_path),
+-            output_folder=upload_folder,
+-            base_filename_prefix=pdf_uuid
+-        )
+-        logger.info(f"Converted to {len(image_path_list)} image(s)")
+-
+-        tmp_path.unlink(missing_ok=True)
+-
+-        extracted_bloodwork_values = extract_emogramma_from_image(
+-            image_path_list)
+-
+-        logger.info("Extracting blood work values via OpenAI API")
++            raise
++
++    async def analyze_uploaded_pdf_file_background(
++            self,
++            file: UploadFile,
++            background_tasks: BackgroundTasks
++    ) -> dict[str, str]:
++        """
++        Process an uploaded PDF file and run analysis in the background
++        """
++        tmp_path = None
++        try:
++            pdf_uuid: str = str(uuid4())
++            upload_folder: Path = self.uploads_directory / pdf_uuid
++            upload_folder.mkdir(parents=True, exist_ok=True)
++
++            with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
++                content = await file.read()
++                tmp.write(content)
++                tmp_path = Path(tmp.name)
++
++            logger.info(f"Received PDF. Temporary file created at {tmp_path}")
++
++            image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
++                tmp_path,
++                upload_folder,
++                pdf_uuid
++            )
++            logger.info(f"Converted to {len(image_path_list)} image(s)")
+ 
+-        background_tasks.add_task(call_inference_and_save_output,
+-                                  extracted_bloodwork_values,
+-                                  upload_folder,
+-                                  pdf_uuid)
++            if tmp_path.exists():
++                tmp_path.unlink(missing_ok=True)
+ 
+-        return {
+-            "pdf_uuid": pdf_uuid,
+-            "message": "Analisi in corso. Torna più tardi per vedere i risultati."
+-        }
++            # Run OpenAI analysis in the background
++            background_tasks.add_task(
++                self.analyze_with_openai,
++                image_path_list,
++                upload_folder,
++                pdf_uuid
++            )
+ 
+-    except Exception as error:
+-        logger.error(f"Failed to process PDF: {error}")
+-        raise HTTPException(status_code=500,
+-                            detail="Errore interno durante l'analisi")
+-    finally:
+-        if tmp_path.exists():
+-            tmp_path.unlink(missing_ok=True)
++            return {
++                "pdf_uuid": pdf_uuid,
++                "message": "Analisi in corso. Torna più tardi per vedere i risultati."
++            }
++        except Exception as error:
++            logger.error(f"Failed to process PDF. Error: {error}")
++            raise HTTPException(
++                status_code=500, detail="Errore durante l'analisi")
++
++        finally:
++            if tmp_path and tmp_path.exists():
++                tmp_path.unlink(missing_ok=True)
 diff --git a/app/services/vision_model_inference_service.py b/app/services/vision_model_inference_service.py
-index d70ae3e..8049aa6 100644
+index a299e26..d43ac82 100644
 --- a/app/services/vision_model_inference_service.py
 +++ b/app/services/vision_model_inference_service.py
-@@ -6,123 +6,121 @@ from app.utils.logger_utils import Logger
+@@ -1,12 +1,13 @@
+-from pathlib import Path
+ import re
++from pathlib import Path
++
+ import httpx
+ 
+ from app.utils.logger_utils import Logger
  
  logger = Logger.setup_logging().getChild("vision_model_inference_service")
  
--prompt_file_path: Path = Path("app/services/prompt.txt")
--with open(prompt_file_path, "r", encoding = "utf-8") as prompt_file:
--	prompt: str = prompt_file.read()
-+prompt_file_path: Path = Path("app/services/diagnostic_prompt.txt")
-+with open(prompt_file_path, "r", encoding="utf-8") as prompt_file:
-+    prompt: str = prompt_file.read()
+-prompt_file_path: Path = Path("app/services/diagnostic_prompt.txt")
++prompt_file_path: Path = Path("app/prompts/diagnostic_prompt.txt")
+ with open(prompt_file_path, "r", encoding="utf-8") as prompt_file:
+     prompt: str = prompt_file.read()
  
+@@ -21,7 +22,7 @@ def clean_model_response(model_response: dict[str, str]) -> dict[str, str]:
+     """
  
- def clean_model_response(model_response: dict[str, str]) -> dict[str, str]:
--	"""
--	Cleans up model output by:
--	- Removing ANSI escape sequences
--	- Fixing broken UTF-8 characters
--	- Replacing escaped \n and \t with real newlines and tabs
--	- Normalizing problematic Markdown-breaking characters
--	"""
--
--	try:
--		logger.info(f"Cleaning model response for frontend")
--
--		# Remove ANSI terminal escape sequences
--		ansi_escape_pattern: re.Pattern = re.compile(
--			r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
--		)
--
--		# Fix common UTF-8 encoding artifacts
--		replacements: dict[str, str] = {
--			"Âµ": "μ",  # micro symbol
--			"â€“": "–",  # en dash
--			"â€”": "—",  # em dash
--			"â€˜": "‘",  # single quote
--			"â€™": "’",  # single quote
--			"â€œ": "“",  # double quote
--			"â€�": "”",  # double quote
--			"â€¢": "•",  # bullet
--			"â€¦": "…",  # ellipsis
--			"â„¢": "™",  # trademark
--			"âˆ’": "−",  # minus
--			"â€": "\"",  # generic quote
--			"â": "",  # remove unknown remnants
--		}
--
--		for key in model_response:
--			if isinstance(model_response[key], str):
--				cleaned_text: str = ansi_escape_pattern.sub('', model_response[
--					key])
--
--				for bad, good in replacements.items():
--					cleaned_text = cleaned_text.replace(bad, good)
--
--				# Replace escaped characters with real formatting
--				cleaned_text = cleaned_text.replace("\\n", "\n")
--				cleaned_text = cleaned_text.replace("\\t", "\t")
--				cleaned_text = cleaned_text.replace("\\r",
--													"")  # remove carriage returns
--				cleaned_text = cleaned_text.replace("*", "")
--
--				# Normalize stray backslashes that may break Markdown tables
--				cleaned_text = cleaned_text.replace("\\", "")
--
--				# Strip extra whitespace from start/end
--				cleaned_text = cleaned_text.strip()
--
--				model_response[key] = cleaned_text
--
--		logger.info("Model response cleaned successfully")
--
--		return model_response
--
--	except Exception as regex_error:
--		logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
--		raise
-+    """
-+    Cleans up model output by:
-+    - Removing ANSI escape sequences
-+    - Fixing broken UTF-8 characters
-+    - Replacing escaped \n and \t with real newlines and tabs
-+    - Normalizing problematic Markdown-breaking characters
-+    """
-+
-+    try:
-+        logger.info(f"Cleaning model response for frontend")
-+
-+        # Remove ANSI terminal escape sequences
-+        ansi_escape_pattern: re.Pattern = re.compile(
-+            r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
-+        )
-+
-+        # Fix common UTF-8 encoding artifacts
-+        replacements: dict[str, str] = {
-+            "Âµ": "μ",  # micro symbol
-+            "â€“": "–",  # en dash
-+            "â€”": "—",  # em dash
-+            "â€˜": "‘",  # single quote
-+            "â€™": "’",  # single quote
-+            "â€œ": "“",  # double quote
-+            "â€�": "”",  # double quote
-+            "â€¢": "•",  # bullet
-+            "â€¦": "…",  # ellipsis
-+            "â„¢": "™",  # trademark
-+            "âˆ’": "−",  # minus
-+            "â€": "\"",  # generic quote
-+            "â": "",  # remove unknown remnants
-+        }
-+
-+        for key in model_response:
-+            if isinstance(model_response[key], str):
-+                cleaned_text: str = ansi_escape_pattern.sub('', model_response[
-+                    key])
-+
-+                for bad, good in replacements.items():
-+                    cleaned_text = cleaned_text.replace(bad, good)
-+
-+                # Replace escaped characters with real formatting
-+                cleaned_text = cleaned_text.replace("\\n", "\n")
-+                cleaned_text = cleaned_text.replace("\\t", "\t")
-+                cleaned_text = cleaned_text.replace("\\r",
-+                                                    "")  # remove carriage returns
-+                cleaned_text = cleaned_text.replace("*", "")
-+
-+                # Normalize stray backslashes that may break Markdown tables
-+                cleaned_text = cleaned_text.replace("\\", "")
-+
-+                # Strip extra whitespace from start/end
-+                cleaned_text = cleaned_text.strip()
-+
-+                model_response[key] = cleaned_text
-+
-+        logger.info("Model response cleaned successfully")
-+
-+        return model_response
-+
-+    except Exception as regex_error:
-+        logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
-+        raise
+     try:
+-        logger.info(f"Cleaning model response for frontend")
++        logger.info("Cleaning model response for frontend")
  
- 
- class RemoveVisionInferenceService:
--	def __init__(self, inference_server_url: str):
--		self.inference_server_url = inference_server_url
--		self.inference_service_endpoint = \
--			f"{self.inference_server_url}/vision_model_inference/"
--
--	async def run_remote_inference(
--			self, image_file_paths: list[Path],
--			model_name: str = "gemma3:27b",
--			diagnostic_prompt: str = prompt,
--	) -> dict[str, str]:
--		"""
--
--		:param image_file_paths:
--		:param diagnostic_prompt:
--		:param model_name:
--		:return:
--		"""
--		files = [
--			("images", (Path(path).name, open(path, "rb"), "image/png"))
--			for path in image_file_paths]
--		form_fields = {
--			"prompt": diagnostic_prompt,
--			"model_name": model_name
--		}
--
--		logger.info(f"Sending request to inference server: "
--					f"{self.inference_service_endpoint}")
--
--		try:
--			async with httpx.AsyncClient() as client:
--				response = await client.post(
--					url = self.inference_service_endpoint,
--					data = form_fields,
--					files = files,
--					timeout = 300,
--				)
--
--			response.raise_for_status()
--			logger.info("Inference completed successfully on remote server")
--
--			response_dict: dict[str, str] = clean_model_response(
--				response.json())
--
--			return clean_model_response(response_dict)
--		except Exception as remote_inference_error:
--			logger.exception(
--				f"Remote inference failed: {remote_inference_error}")
--			raise
-+    def __init__(self, inference_server_url: str):
-+        self.inference_server_url = inference_server_url
-+        self.inference_service_endpoint = \
-+            f"{self.inference_server_url}/vision_model_inference/"
-+
-+    async def run_remote_inference(
-+        self, bloodwork_values: str,
-+        model_name: str = "gemma3:27b",
-+        diagnostic_prompt: str = prompt,
-+    ) -> dict[str, str]:
-+        """
-+    Run inference using pre-extracted text data
-+
-+    :param extracted_text: Pre-extracted text data from images
-+    :param diagnostic_prompt: Prompt to guide the model
-+    :param model_name: Name of the model to use
-+    :return: Dictionary with inference results
-+        """
-+        form_fields = {
-+            "prompt": diagnostic_prompt,
-+            "model_name": model_name,
-+            "bloodwork_values": bloodwork_values
-+        }
-+
-+        logger.info(f"Sending request to inference server: "
-+                    f"{self.inference_service_endpoint}")
-+
-+        try:
-+            async with httpx.AsyncClient() as client:
-+                response = await client.post(
-+                    url=self.inference_service_endpoint,
-+                    json=form_fields,
-+                    timeout=300,
-+                )
-+
-+            response.raise_for_status()
-+            logger.info("Inference completed successfully on remote server")
-+
-+            response_dict: dict[str, str] = clean_model_response(
-+                response.json())
-+
-+            return response_dict
-+        except Exception as remote_inference_error:
-+            logger.exception(
-+                f"Remote inference failed: {remote_inference_error}")
-+            raise
-diff --git a/app/test_main.http b/app/test_main.http
-deleted file mode 100644
-index a2d81a9..0000000
---- a/app/test_main.http
-+++ /dev/null
-@@ -1,11 +0,0 @@
--# Test your FastAPI endpoints
--
--GET http://127.0.0.1:8000/
--Accept: application/json
--
--###
--
--GET http://127.0.0.1:8000/hello/User
--Accept: application/json
--
--###
-diff --git a/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc b/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc
-index cdc9097..6c671ec 100644
-Binary files a/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc and b/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc differ
+         # Remove ANSI terminal escape sequences
+         ansi_escape_pattern: re.Pattern = re.compile(
 diff --git a/app/utils/__pycache__/file_utils.cpython-311.pyc b/app/utils/__pycache__/file_utils.cpython-311.pyc
-index 8aa0453..3e28062 100644
+index 3e28062..64f8368 100644
 Binary files a/app/utils/__pycache__/file_utils.cpython-311.pyc and b/app/utils/__pycache__/file_utils.cpython-311.pyc differ
 diff --git a/app/utils/__pycache__/logger_utils.cpython-311.pyc b/app/utils/__pycache__/logger_utils.cpython-311.pyc
-index d309677..2dc5d41 100644
+index 2dc5d41..6fea675 100644
 Binary files a/app/utils/__pycache__/logger_utils.cpython-311.pyc and b/app/utils/__pycache__/logger_utils.cpython-311.pyc differ
-diff --git a/changes.diff b/changes.diff
-index d9599a8..2137eb4 100644
-Binary files a/changes.diff and b/changes.diff differ
-diff --git a/cuda_test.py b/cuda_test.py
-deleted file mode 100644
-index c59f0b5..0000000
---- a/cuda_test.py
-+++ /dev/null
-@@ -1,4 +0,0 @@
--import torch
+diff --git a/app/utils/file_utils.py b/app/utils/file_utils.py
+index d35f9e3..da9253d 100644
+--- a/app/utils/file_utils.py
++++ b/app/utils/file_utils.py
+@@ -1,85 +1,97 @@
+-import fitz  # PyMuPDF
++import base64
+ from pathlib import Path
+ 
++import fitz  # PyMuPDF
++
+ from app.utils.logger_utils import Logger
+ 
+ logger = Logger.setup_logging().getChild("file_converter")
+ 
+ 
+ class FileConverter:
+-	@staticmethod
+-	def convert_pdf_to_image_list(
+-			full_pdf_file_path: str,
+-			output_folder: Path,
+-			base_filename_prefix: str
+-	) -> list[Path]:
+-		"""
+-	    Converts a PDF into PNG images, one per page, using PyMuPDF.
 -
--print(torch.cuda.is_available())
--print(torch.cuda.get_device_name())
+-	    All images are stored in the given output folder, with filenames
+-	    that start with the base UUID to match the original PDF.
+-
+-	    :param full_pdf_file_path: full path to the saved PDF
+-	    :param output_folder: folder to save images into
+-	    :param base_filename_prefix: shared prefix (usually the UUID)
+-	    :return: list of image file paths as forward-slash strings
+-		"""
+-
+-		logger.info(
+-			f"Starting PDF to image conversion for: {full_pdf_file_path}")
+-
+-		try:
+-			# Open the PDF using PyMuPDF
+-			pdf_document = fitz.open(full_pdf_file_path)
+-		except Exception as error:
+-			logger.exception(f"Failed to open PDF document:"
+-							 f"{full_pdf_file_path} error: {error}")
+-			raise
+-		# Collect each generated image path here
+-		converted_image_path_list: list[Path] = []
+-		total_pages = len(pdf_document)
+-		logger.info(f"PDF has opened successfully, total pages: {total_pages}")
+-
+-		for page_index in range(total_pages):
+-			try:
+-				logger.info(f"Rendering page {page_index + 1}/{total_pages}")
+-				# Load a single page from the PDF
+-				pdf_page = pdf_document[page_index]
+-
+-				# Calculate scaling for desired PDI
+-				desired_dpi: int = 300
+-				# Use a zoom factor to control the DPI of the output image
+-				# The default DPI for PyMuPDF is 72, so we scale accordingly
+-				zoom: float = desired_dpi / 72
+-				scaling_matrix = fitz.Matrix(zoom, zoom)
+-				# Render the page into a pixel-based image(pixmap)
+-				page_pixmap = pdf_page.get_pixmap(  # noqa
+-					matrix = scaling_matrix)
+-
+-				# Generate a unique image file name for each page
+-				image_filename = (
+-					f"{base_filename_prefix}._page_{page_index + 1}.png"
+-				)
+-				# Save path of the image
+-				image_file_path: Path = output_folder / image_filename
+-
+-				# Save the image to disk
+-				page_pixmap.save(str(image_file_path))
+-
+-				# Add the image path(as a string( to our result list
+-				converted_image_path_list.append(
+-					str(image_file_path.as_posix()))  # noqa
+-
+-				logger.info(
+-					f"Saved page {page_index + 1} as image: "
+-					f"{image_file_path}")
+-			except Exception as page_error:
+-				logger.exception(
+-					f"Error converting page {page_index + 1}"
+-					f"{full_pdf_file_path}: {page_error}"
+-				)
+-
+-		# Free the memory used by the PDF
+-		pdf_document.close()
+-
+-		return converted_image_path_list
++    @staticmethod
++    def convert_pdf_to_image_list(
++        full_pdf_file_path: Path,
++        output_folder: Path,
++        base_filename_prefix: str
++    ) -> list[Path]:
++        """
++    Converts a PDF into PNG images, one per page, using PyMuPDF.
++
++    All images are stored in the given output folder, with filenames
++    that start with the base UUID to match the original PDF.
++
++    :param full_pdf_file_path: full path to the saved PDF
++    :param output_folder: folder to save images into
++    :param base_filename_prefix: shared prefix (usually the UUID)
++    :return: list of image file paths as forward-slash strings
++        """
++
++        logger.info(
++            f"Starting PDF to image conversion for: {full_pdf_file_path}")
++
++        try:
++            # Open the PDF using PyMuPDF
++            pdf_document = fitz.open(full_pdf_file_path)
++        except Exception as error:
++            logger.exception(f"Failed to open PDF document:"
++                             f"{full_pdf_file_path} error: {error}")
++            raise
++        # Collect each generated image path here
++        converted_image_path_list: list[Path] = []
++        total_pages: int = len(pdf_document)
++        logger.info(f"PDF has opened successfully, total pages: {total_pages}")
++
++        for page_index in range(total_pages):
++            try:
++                logger.info(f"Rendering page {page_index + 1}/{total_pages}")
++                # Load a single page from the PDF
++                pdf_page = pdf_document[page_index]
++
++                # Calculate scaling for desired PDI
++                desired_dpi: int = 300
++                # Use a zoom factor to control the DPI of the output image
++                # The default DPI for PyMuPDF is 72, so we scale accordingly
++                zoom: float = desired_dpi / 72
++                scaling_matrix = fitz.Matrix(zoom, zoom)
++                # Render the page into a pixel-based image(pixmap)
++                page_pixmap = pdf_page.get_pixmap(  # noqa
++                        matrix=scaling_matrix)
++
++                # Generate a unique image file name for each page
++                image_filename = (
++                    f"{base_filename_prefix}._page_{page_index + 1}.png"
++                )
++                # Save path of the image
++                image_file_path: Path = output_folder / image_filename
++
++                # Save the image to disk
++                page_pixmap.save(str(image_file_path))
++
++                # Add the image path(as a string( to our result list
++                converted_image_path_list.append(
++                    str(image_file_path.as_posix()))  # type: ignore
++
++                logger.info(
++                    f"Saved page {page_index + 1} as image: "
++                    f"{image_file_path}")
++            except Exception as page_error:
++                logger.exception(
++                    f"Error converting page {page_index + 1}"
++                    f"{full_pdf_file_path}: {page_error}"
++                )
++
++        # Free the memory used by the PDF
++        pdf_document.close()
++
++        return converted_image_path_list
++
++    @staticmethod
++    def load_prompt_from_file(prompt_path: Path) -> str:
++        with open(prompt_path, "r", encoding="utf-8") as f:
++            return f.read()
++
++    @staticmethod
++    def image_to_base64(image_path: Path) -> str:
++        with open(image_path, "rb") as f:
++            return base64.b64encode(f.read()).decode()
+diff --git a/changes.diff b/changes.diff
+index 8237dfa..d6305cb 100644
+--- a/changes.diff
++++ b/changes.diff
+@@ -1,864 +0,0 @@
+-diff --git a/.DS_Store b/.DS_Store
+-index 6eefeb5..961a2a7 100644
+-Binary files a/.DS_Store and b/.DS_Store differ
+-diff --git a/app/__pycache__/main.cpython-311.pyc b/app/__pycache__/main.cpython-311.pyc
+-index 98ecc25..bd7c680 100644
+-Binary files a/app/__pycache__/main.cpython-311.pyc and b/app/__pycache__/main.cpython-311.pyc differ
+-diff --git a/app/routers/__pycache__/analysis_router.cpython-311.pyc b/app/routers/__pycache__/analysis_router.cpython-311.pyc
+-index 005b819..89f0af0 100644
+-Binary files a/app/routers/__pycache__/analysis_router.cpython-311.pyc and b/app/routers/__pycache__/analysis_router.cpython-311.pyc differ
+-diff --git a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc
+-index 4d7bfcf..ebaa652 100644
+-Binary files a/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc and b/app/services/__pycache__/pdf_analysis_service.cpython-311.pyc differ
+-diff --git a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc
+-index df030a7..8fd310a 100644
+-Binary files a/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc and b/app/services/__pycache__/vision_model_inference_service.cpython-311.pyc differ
+-diff --git a/app/services/pdf_analysis_service.py b/app/services/pdf_analysis_service.py
+-index e6daa5c..5827abb 100644
+---- a/app/services/pdf_analysis_service.py
+-+++ b/app/services/pdf_analysis_service.py
+-@@ -8,87 +8,96 @@ import json
+- from app.utils.file_utils import FileConverter
+- from app.utils.logger_utils import Logger
+- from app.services.vision_model_inference_service import \
+--	RemoveVisionInferenceService
+-+    RemoveVisionInferenceService
+-+from app.services.openai_data_extracting_service import extract_emogramma_from_image
+- 
+- logger = Logger.setup_logging().getChild("pdf_analysis_service")
+- 
+- PDF_UPLOADS_ROOT_DIRECTORY: Path = Path("data/blood_work_pdfs")
+--PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents = True, exist_ok = True)
+-+PDF_UPLOADS_ROOT_DIRECTORY.mkdir(parents=True, exist_ok=True)
+- 
+- VISION_SERVER_URL = "http://51.21.18.6:4000"
+- remote_vision_inference_service = RemoveVisionInferenceService(
+--	VISION_SERVER_URL)
+-+    VISION_SERVER_URL)
+- 
+- 
+- def call_inference_and_save_output(
+--		image_path_list: list[Path],
+--		upload_folder: Path,
+--		pdf_uuid: str
+-+    extracted_bloodwork_values: str,
+-+    upload_folder: Path,
+-+    pdf_uuid: str
+- ) -> None:
+--	try:
+--		logger.info(f"Running inference on images for UUID {pdf_uuid}...")
+-+    try:
+-+        logger.info(
+-+            f"Running inference using extracted blood work values for UUID {pdf_uuid}...")
+- 
+--		loop = asyncio.new_event_loop()
+--		asyncio.set_event_loop(loop)
+-+        loop = asyncio.new_event_loop()
+-+        asyncio.set_event_loop(loop)
+- 
+--		model_response: dict[str, str] = loop.run_until_complete(
+--			remote_vision_inference_service.run_remote_inference(
+--				image_file_paths = image_path_list,
+--				model_name = "gemma3:27b"
+--			)
+--		)
+-+        model_response: dict[str, str] = loop.run_until_complete(
+-+            remote_vision_inference_service.run_remote_inference(
+-+                bloodwork_values=extracted_bloodwork_values,
+-+                model_name="gemma3:27b"
+-+            )
+-+        )
+- 
+--		output_data: dict[str, str] = model_response
+-+        output_data: dict[str, str] = model_response
+- 
+--		model_output_path: Path = upload_folder / "model_output.json"
+--		with open(model_output_path, "w", encoding = "utf-8") as f:
+--			json.dump(output_data, f, ensure_ascii = False)
+-+        model_output_path: Path = upload_folder / "model_output.json"
+-+        with open(model_output_path, "w", encoding="utf-8") as f:
+-+            json.dump(output_data, f, ensure_ascii=False)
+- 
+--		logger.info(f"Model output saved to {model_output_path}")
+-+        logger.info(f"Model output saved to {model_output_path}")
+- 
+--	except Exception as error:
+--		logger.exception(
+--			f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
+--		raise
+-+    except Exception as error:
+-+        logger.exception(
+-+            f"Failed to run or save inference for UUID: {pdf_uuid} Error: {error}")
+-+        raise
+- 
+- 
+- async def analyze_uploaded_pdf_file_background(
+--		file: UploadFile,
+--		background_tasks: BackgroundTasks
+-+    file: UploadFile,
+-+    background_tasks: BackgroundTasks
+- ) -> dict[str, str]:
+--	try:
+--		pdf_uuid: str = str(uuid4())
+--		upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
+--		upload_folder.mkdir(parents = True, exist_ok = True)
+--
+--		with NamedTemporaryFile(delete = False, suffix = ".pdf") as tmp:
+--			content = await file.read()
+--			tmp.write(content)
+--			tmp_path: Path = Path(tmp.name)
+--
+--		logger.info(f"Received PDF. Temporary file created at {tmp_path}")
+--
+--		image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
+--			str(tmp_path),
+--			output_folder = upload_folder,
+--			base_filename_prefix = pdf_uuid
+--		)
+--		logger.info(f"Converted to {len(image_path_list)} image(s)")
+--
+--		tmp_path.unlink(missing_ok = True)
+--
+--		background_tasks.add_task(call_inference_and_save_output,
+--								  image_path_list, upload_folder, pdf_uuid)
+--
+--		return {
+--			"pdf_uuid": pdf_uuid,
+--			"message": "Analisi in corso. Torna più tardi per vedere i risultati."
+--		}
+--
+--	except Exception as error:
+--		logger.error(f"Failed to process PDF: {error}")
+--		raise HTTPException(status_code = 500,
+--							detail = "Errore interno durante l'analisi")
+--	finally:
+--		if tmp_path.exists():
+--			tmp_path.unlink(missing_ok = True)
+-+    try:
+-+        pdf_uuid: str = str(uuid4())
+-+        upload_folder: Path = PDF_UPLOADS_ROOT_DIRECTORY / pdf_uuid
+-+        upload_folder.mkdir(parents=True, exist_ok=True)
+-+
+-+        with NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+-+            content = await file.read()
+-+            tmp.write(content)
+-+            tmp_path: Path = Path(tmp.name)
+-+
+-+        logger.info(f"Received PDF. Temporary file created at {tmp_path}")
+-+
+-+        image_path_list: list[Path] = FileConverter.convert_pdf_to_image_list(
+-+            str(tmp_path),
+-+            output_folder=upload_folder,
+-+            base_filename_prefix=pdf_uuid
+-+        )
+-+        logger.info(f"Converted to {len(image_path_list)} image(s)")
+-+
+-+        tmp_path.unlink(missing_ok=True)
+-+
+-+        extracted_bloodwork_values = extract_emogramma_from_image(
+-+            image_path_list)
+-+
+-+        logger.info("Extracting blood work values via OpenAI API")
+-+
+-+        background_tasks.add_task(call_inference_and_save_output,
+-+                                  extracted_bloodwork_values,
+-+                                  upload_folder,
+-+                                  pdf_uuid)
+-+
+-+        return {
+-+            "pdf_uuid": pdf_uuid,
+-+            "message": "Analisi in corso. Torna più tardi per vedere i risultati."
+-+        }
+-+
+-+    except Exception as error:
+-+        logger.error(f"Failed to process PDF: {error}")
+-+        raise HTTPException(status_code=500,
+-+                            detail="Errore interno durante l'analisi")
+-+    finally:
+-+        if tmp_path.exists():
+-+            tmp_path.unlink(missing_ok=True)
+-diff --git a/app/services/prompt.txt b/app/services/prompt.txt
+-deleted file mode 100644
+-index aee66b8..0000000
+---- a/app/services/prompt.txt
+-+++ /dev/null
+-@@ -1,126 +0,0 @@
+--Agisci come un medico veterinario specializzato in ematologia, oncologia e medicina interna con oltre 15 anni di esperienza clinica su CANI e GATTI.
+--
+--◆ INPUT
+--Riceverai uno o più PDF o immagini contenenti referti emato-chimici, biochimici, citologici e/o istologici, scritti in lingua italiana o inglese.
+--Questi documenti possono contenere tutti i dati necessari: valori, unità, range di riferimento e referti clinici.
+--
+--⚠️ Non chiedere conferme iniziali. Se il referto è leggibile, avvia immediatamente l’analisi.
+--⚠️ Se alcuni dati risultano illeggibili o assenti, continua comunque l’analisi e inserisci un avviso chiaro nella risposta che indichi quali dati mancano o sono incerti.
+--
+--◆ COMPITI
+--1. Tabella dei parametri
+--Trascrivi in tabella:
+--
+--Parametro
+--
+--Valore misurato
+--
+--Unità
+--
+--Range di riferimento (come riportato)
+--
+--Evidenziazione:
+--
+--✅ normale
+--
+--⚠️ lievemente alterato
+--
+--❌ gravemente alterato
+--
+--Se mancano valore/unità/range, lascia la cella vuota e segnala in fondo all’analisi quali campi erano incompleti o non leggibili.
+--
+--2. Analisi matematica
+--Calcola e interpreta:
+--
+--BUN/Creatinina
+--
+--Calcio/Fosforo
+--
+--Neutrofili/Linfociti
+--
+--Na/K
+--
+--Albumina/Globuline
+--
+--Indica anomalie e loro significato clinico.
+--
+--3. Interpretazione clinica
+--Spiega ogni alterazione significativa
+--
+--Formula almeno 3 diagnosi differenziali con % di confidenza
+--
+--Verifica se i pattern sono compatibili con:
+--
+--Anemia rigenerativa/non rigenerativa
+--
+--Neoplasie
+--
+--Pancreatite, diabete, insufficienza epatica/renale
+--
+--FIV/FeLV, sindromi infiammatorie o immunomediate
+--
+--4. Integrazione con citologia/istologia
+--Se sono presenti, interpreta i referti citologici/istologici e integra i dati ematochimici.
+--
+--Non ignorare referti che menzionano neoplasia, linfoma o mitosi.
+--
+--5. Classificazione dell’urgenza
+--Classifica il caso: EMERGENZA, URGENZA A BREVE, ROUTINE
+--
+--Giustifica la scelta basandoti su: alterazioni gravi, segni oncologici, citopenie, elettroliti critici.
+--
+--6. Piano diagnostico
+--Suggerisci esami aggiuntivi con:
+--
+--Priorità (Alta / Media / Bassa)
+--
+--Invasività (Alta / Media / Bassa)
+--
+--7. Terapia iniziale/supporto
+--Farmaci (mg/kg, via, durata)
+--
+--Supplementi/diete raccomandate
+--
+--Supporti (SAMe, fluidoterapia, ecc.)
+--
+--8. Follow-up
+--Quando ripetere esami
+--
+--Segni clinici da monitorare
+--
+--Indicazioni prognostiche
+--
+--9. Educazione al proprietario
+--Spiega in < 250 parole:
+--
+--Cosa significano i risultati
+--
+--Se la situazione è grave o gestibile
+--
+--Quali passi fare ora
+--
+--10. Bandierine rosse
+--Segnala parametri critici (es. PLT < 100, WBC < 4, Na < 130, K+ > 6.0)
+--
+--11. Contesto
+--Considera:
+--
+--Digiuno, stress da trasporto
+--
+--Farmaci in uso
+--
+--Età, razza, stagione
+--
+--12. Fonti rapide
+--Es. “IRIS 2023”, “Thrall 2012”, “AAHA 2021 oncology”
+--
+--13. Disclaimer finale
+--Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta.
+--
+--◆ LINGUA DI USCITA
+--Italiano tecnico ma chiaro, adatto a veterinari.
+--
+--◆ SE MANCANO DATI
+--Non interrompere l’analisi. Procedi con ciò che è disponibile e aggiungi in fondo alla risposta un box tipo:
+--
+--🔶 Attenzione: Alcuni dati non erano leggibili o assenti: [elenco parametri]. È consigliata una revisione manuale del referto originale per conferma.
+-\ No newline at end of file
+-diff --git a/app/services/vision_model_inference_service.py b/app/services/vision_model_inference_service.py
+-index d70ae3e..8049aa6 100644
+---- a/app/services/vision_model_inference_service.py
+-+++ b/app/services/vision_model_inference_service.py
+-@@ -6,123 +6,121 @@ from app.utils.logger_utils import Logger
+- 
+- logger = Logger.setup_logging().getChild("vision_model_inference_service")
+- 
+--prompt_file_path: Path = Path("app/services/prompt.txt")
+--with open(prompt_file_path, "r", encoding = "utf-8") as prompt_file:
+--	prompt: str = prompt_file.read()
+-+prompt_file_path: Path = Path("app/services/diagnostic_prompt.txt")
+-+with open(prompt_file_path, "r", encoding="utf-8") as prompt_file:
+-+    prompt: str = prompt_file.read()
+- 
+- 
+- def clean_model_response(model_response: dict[str, str]) -> dict[str, str]:
+--	"""
+--	Cleans up model output by:
+--	- Removing ANSI escape sequences
+--	- Fixing broken UTF-8 characters
+--	- Replacing escaped \n and \t with real newlines and tabs
+--	- Normalizing problematic Markdown-breaking characters
+--	"""
+--
+--	try:
+--		logger.info(f"Cleaning model response for frontend")
+--
+--		# Remove ANSI terminal escape sequences
+--		ansi_escape_pattern: re.Pattern = re.compile(
+--			r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
+--		)
+--
+--		# Fix common UTF-8 encoding artifacts
+--		replacements: dict[str, str] = {
+--			"Âµ": "μ",  # micro symbol
+--			"â€“": "–",  # en dash
+--			"â€”": "—",  # em dash
+--			"â€˜": "‘",  # single quote
+--			"â€™": "’",  # single quote
+--			"â€œ": "“",  # double quote
+--			"â€�": "”",  # double quote
+--			"â€¢": "•",  # bullet
+--			"â€¦": "…",  # ellipsis
+--			"â„¢": "™",  # trademark
+--			"âˆ’": "−",  # minus
+--			"â€": "\"",  # generic quote
+--			"â": "",  # remove unknown remnants
+--		}
+--
+--		for key in model_response:
+--			if isinstance(model_response[key], str):
+--				cleaned_text: str = ansi_escape_pattern.sub('', model_response[
+--					key])
+--
+--				for bad, good in replacements.items():
+--					cleaned_text = cleaned_text.replace(bad, good)
+--
+--				# Replace escaped characters with real formatting
+--				cleaned_text = cleaned_text.replace("\\n", "\n")
+--				cleaned_text = cleaned_text.replace("\\t", "\t")
+--				cleaned_text = cleaned_text.replace("\\r",
+--													"")  # remove carriage returns
+--				cleaned_text = cleaned_text.replace("*", "")
+--
+--				# Normalize stray backslashes that may break Markdown tables
+--				cleaned_text = cleaned_text.replace("\\", "")
+--
+--				# Strip extra whitespace from start/end
+--				cleaned_text = cleaned_text.strip()
+--
+--				model_response[key] = cleaned_text
+--
+--		logger.info("Model response cleaned successfully")
+--
+--		return model_response
+--
+--	except Exception as regex_error:
+--		logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
+--		raise
+-+    """
+-+    Cleans up model output by:
+-+    - Removing ANSI escape sequences
+-+    - Fixing broken UTF-8 characters
+-+    - Replacing escaped \n and \t with real newlines and tabs
+-+    - Normalizing problematic Markdown-breaking characters
+-+    """
+-+
+-+    try:
+-+        logger.info(f"Cleaning model response for frontend")
+-+
+-+        # Remove ANSI terminal escape sequences
+-+        ansi_escape_pattern: re.Pattern = re.compile(
+-+            r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])'
+-+        )
+-+
+-+        # Fix common UTF-8 encoding artifacts
+-+        replacements: dict[str, str] = {
+-+            "Âµ": "μ",  # micro symbol
+-+            "â€“": "–",  # en dash
+-+            "â€”": "—",  # em dash
+-+            "â€˜": "‘",  # single quote
+-+            "â€™": "’",  # single quote
+-+            "â€œ": "“",  # double quote
+-+            "â€�": "”",  # double quote
+-+            "â€¢": "•",  # bullet
+-+            "â€¦": "…",  # ellipsis
+-+            "â„¢": "™",  # trademark
+-+            "âˆ’": "−",  # minus
+-+            "â€": "\"",  # generic quote
+-+            "â": "",  # remove unknown remnants
+-+        }
+-+
+-+        for key in model_response:
+-+            if isinstance(model_response[key], str):
+-+                cleaned_text: str = ansi_escape_pattern.sub('', model_response[
+-+                    key])
+-+
+-+                for bad, good in replacements.items():
+-+                    cleaned_text = cleaned_text.replace(bad, good)
+-+
+-+                # Replace escaped characters with real formatting
+-+                cleaned_text = cleaned_text.replace("\\n", "\n")
+-+                cleaned_text = cleaned_text.replace("\\t", "\t")
+-+                cleaned_text = cleaned_text.replace("\\r",
+-+                                                    "")  # remove carriage returns
+-+                cleaned_text = cleaned_text.replace("*", "")
+-+
+-+                # Normalize stray backslashes that may break Markdown tables
+-+                cleaned_text = cleaned_text.replace("\\", "")
+-+
+-+                # Strip extra whitespace from start/end
+-+                cleaned_text = cleaned_text.strip()
+-+
+-+                model_response[key] = cleaned_text
+-+
+-+        logger.info("Model response cleaned successfully")
+-+
+-+        return model_response
+-+
+-+    except Exception as regex_error:
+-+        logger.exception(f"Error cleaning ANSI sequences: {regex_error}")
+-+        raise
+- 
+- 
+- class RemoveVisionInferenceService:
+--	def __init__(self, inference_server_url: str):
+--		self.inference_server_url = inference_server_url
+--		self.inference_service_endpoint = \
+--			f"{self.inference_server_url}/vision_model_inference/"
+--
+--	async def run_remote_inference(
+--			self, image_file_paths: list[Path],
+--			model_name: str = "gemma3:27b",
+--			diagnostic_prompt: str = prompt,
+--	) -> dict[str, str]:
+--		"""
+--
+--		:param image_file_paths:
+--		:param diagnostic_prompt:
+--		:param model_name:
+--		:return:
+--		"""
+--		files = [
+--			("images", (Path(path).name, open(path, "rb"), "image/png"))
+--			for path in image_file_paths]
+--		form_fields = {
+--			"prompt": diagnostic_prompt,
+--			"model_name": model_name
+--		}
+--
+--		logger.info(f"Sending request to inference server: "
+--					f"{self.inference_service_endpoint}")
+--
+--		try:
+--			async with httpx.AsyncClient() as client:
+--				response = await client.post(
+--					url = self.inference_service_endpoint,
+--					data = form_fields,
+--					files = files,
+--					timeout = 300,
+--				)
+--
+--			response.raise_for_status()
+--			logger.info("Inference completed successfully on remote server")
+--
+--			response_dict: dict[str, str] = clean_model_response(
+--				response.json())
+--
+--			return clean_model_response(response_dict)
+--		except Exception as remote_inference_error:
+--			logger.exception(
+--				f"Remote inference failed: {remote_inference_error}")
+--			raise
+-+    def __init__(self, inference_server_url: str):
+-+        self.inference_server_url = inference_server_url
+-+        self.inference_service_endpoint = \
+-+            f"{self.inference_server_url}/vision_model_inference/"
+-+
+-+    async def run_remote_inference(
+-+        self, bloodwork_values: str,
+-+        model_name: str = "gemma3:27b",
+-+        diagnostic_prompt: str = prompt,
+-+    ) -> dict[str, str]:
+-+        """
+-+    Run inference using pre-extracted text data
+-+
+-+    :param extracted_text: Pre-extracted text data from images
+-+    :param diagnostic_prompt: Prompt to guide the model
+-+    :param model_name: Name of the model to use
+-+    :return: Dictionary with inference results
+-+        """
+-+        form_fields = {
+-+            "prompt": diagnostic_prompt,
+-+            "model_name": model_name,
+-+            "bloodwork_values": bloodwork_values
+-+        }
+-+
+-+        logger.info(f"Sending request to inference server: "
+-+                    f"{self.inference_service_endpoint}")
+-+
+-+        try:
+-+            async with httpx.AsyncClient() as client:
+-+                response = await client.post(
+-+                    url=self.inference_service_endpoint,
+-+                    json=form_fields,
+-+                    timeout=300,
+-+                )
+-+
+-+            response.raise_for_status()
+-+            logger.info("Inference completed successfully on remote server")
+-+
+-+            response_dict: dict[str, str] = clean_model_response(
+-+                response.json())
+-+
+-+            return response_dict
+-+        except Exception as remote_inference_error:
+-+            logger.exception(
+-+                f"Remote inference failed: {remote_inference_error}")
+-+            raise
+-diff --git a/app/test_main.http b/app/test_main.http
+-deleted file mode 100644
+-index a2d81a9..0000000
+---- a/app/test_main.http
+-+++ /dev/null
+-@@ -1,11 +0,0 @@
+--# Test your FastAPI endpoints
+--
+--GET http://127.0.0.1:8000/
+--Accept: application/json
+--
+--###
+--
+--GET http://127.0.0.1:8000/hello/User
+--Accept: application/json
+--
+--###
+-diff --git a/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc b/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc
+-index cdc9097..6c671ec 100644
+-Binary files a/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc and b/app/utils/__pycache__/ec2_instance_controller.cpython-311.pyc differ
+-diff --git a/app/utils/__pycache__/file_utils.cpython-311.pyc b/app/utils/__pycache__/file_utils.cpython-311.pyc
+-index 8aa0453..3e28062 100644
+-Binary files a/app/utils/__pycache__/file_utils.cpython-311.pyc and b/app/utils/__pycache__/file_utils.cpython-311.pyc differ
+-diff --git a/app/utils/__pycache__/logger_utils.cpython-311.pyc b/app/utils/__pycache__/logger_utils.cpython-311.pyc
+-index d309677..2dc5d41 100644
+-Binary files a/app/utils/__pycache__/logger_utils.cpython-311.pyc and b/app/utils/__pycache__/logger_utils.cpython-311.pyc differ
+-diff --git a/changes.diff b/changes.diff
+-index d9599a8..2137eb4 100644
+-Binary files a/changes.diff and b/changes.diff differ
+-diff --git a/cuda_test.py b/cuda_test.py
+-deleted file mode 100644
+-index c59f0b5..0000000
+---- a/cuda_test.py
+-+++ /dev/null
+-@@ -1,4 +0,0 @@
+--import torch
+--
+--print(torch.cuda.is_available())
+--print(torch.cuda.get_device_name())
+-diff --git a/data/.DS_Store b/data/.DS_Store
+-index e4cd861..becfc94 100644
+-Binary files a/data/.DS_Store and b/data/.DS_Store differ
+-diff --git a/data/blood_work_pdfs/.DS_Store b/data/blood_work_pdfs/.DS_Store
+-index 688e3a0..67c68a2 100644
+-Binary files a/data/blood_work_pdfs/.DS_Store and b/data/blood_work_pdfs/.DS_Store differ
+-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json
+-deleted file mode 100644
+-index 2561279..0000000
+---- a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.5 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-4.8 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici da analizzare.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Follow-up:\n\t+ Quando ripetere esami: 3 mesi\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort.\n\t+ Indicazioni prognostiche: Buona prognosi con monitoraggio periodico.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I valori sono all'interno del range di riferimento, quindi normale.\n\t+ Se la situazione è grave o gestibile: La situazione è buona e non ci sono segni di emergenza o urgenza.\n\t+ Quali passi fare ora: Continuare a monitorare il cane con esami periodici e seguire le indicazioni del veterinario.\n Bandierine rosse:\n\t+ PLT < 100, WBC < 4, Na < 130, K+ > 6.0: Non presenti.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presenti.\n\t+ Farmaci in uso: Non presenti.\n\t+ Età, razza, stagione: Non presenti.\n Fonti rapide:\n\t+ IRIS 2023, Thrall 2012, AAHA 2021 oncology: Non presenti.\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json
+-deleted file mode 100644
+-index 932dcbb..0000000
+---- a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata): Non sono presenti informazioni su farmaci in uso.\n Supplementi/diete raccomandate: Non sono presenti informazioni su supplementi o dietas raccomandate.\n Follow-up:\n\t+ Quando ripetere esami: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n\t+ Segni clinici da monitorare: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n\t+ Indicazioni prognostiche: Non sono presenti informazioni su indicazioni prognostiche.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I risultati indicano che il cane è in buone condizioni e non ci sono alterazioni significative.\n\t+ Se la situazione è grave o gestibile: Non ci sono alterazioni significative, quindi la situazione del cane è gestibile.\n\t+ Quali passi fare ora: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n Bandierine rosse: Non ci sono parametri critici da segnalare.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non ci sono informazioni su questi fattori.\n\t+ Farmaci in uso: Non ci sono informazioni su farmaci in uso.\n\t+ Età, razza, stagione: Non ci sono informazioni su questi fattori.\n Fonti rapide: Non ci sono fonti rapide da segnalare.\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json
+-deleted file mode 100644
+-index 363f136..0000000
+---- a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Fluidoterapia\n Follow-up:\n\t+ Quando ripetere esami: 1 mese\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort\n\t+ Indicazioni prognostiche: Monitoraggio periodico del peso e del comportamento.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un'analisi più approfondita e per un piano di trattamento personalizzato.\n Bandierine rosse:\n\t+ PLT < 100: Non presente\n\t+ WBC < 4: Non presente\n\t+ Na < 130: Non presente\n\t+ K+ > 6.0: Non presente\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presente\n\t+ Farmaci in uso: Non presente\n\t+ Età, razza, stagione: Non presente\n\t+ Fonti rapide: Non presente\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json
+-deleted file mode 100644
+-index 3e80cb1..0000000
+---- a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.5 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-4.8 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Follow-up:\n\t+ Quando ripetere esami: 3 mesi\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort.\n\t+ Indicazioni prognostiche: Buona prognosi con monitoraggio periodico.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I valori sono all'interno del range di riferimento, quindi normale.\n\t+ Se la situazione è grave o gestibile: La situazione è buona e non ci sono segni di emergenza o urgenza.\n\t+ Quali passi fare ora: Continuare a monitorare i valori ematochimici periodiciamente e seguire le indicazioni del veterinario.\n Bandierine rosse:\n\t+ PLT < 100, WBC < 4, Na < 130, K+ > 6.0: Non presenti.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presenti.\n\t+ Farmaci in uso: Non presenti.\n\t+ Età, razza, stagione: Non presenti.\n Fonti rapide:\n\t+ IRIS 2023, Thrall 2012, AAHA 2021 oncology: Non presenti.\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json
+-deleted file mode 100644
+-index 79d24d0..0000000
+---- a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.5 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-5.2 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon ci sono alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon ci sono referti citologici o istologici disponibili per l'analisi.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non disponibili\n Supplementi/diete raccomandate: Non disponibili\n Supporti (SAMe, fluidoterapia, ecc.): Non disponibili\n Follow-up: Non disponibili\n Educazione al proprietario: Non disponibili\n Bandierine rosse: Non disponibili\n Contesto: Non disponibili\n Fonti rapide: Non disponibili\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json
+-deleted file mode 100644
+-index a6b6d40..0000000
+---- a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata): Non sono stati utilizzati farmaci specifici per questo caso.\n Supplementi/diete raccomandate: Non sono stati utilizzati supplementi o diete specifici per questo caso.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono stati utilizzati supporti specifici per questo caso.\n Follow-up: Ripetere esami in 1 mese. Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort. Indicazioni prognostiche: Non sono stati utilizzati indicatori prognostici specifici per questo caso.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni e non ci sono segni di gravità o gestione urgente.\n\t+ Si consiglia di continuare a monitorare il cane e di seguire le indicazioni del veterinario.\n Bandierine rosse: Non ci sono parametri critici da segnalare.\n Contesto:\n\t+ Il cane è in buone condizioni e non ci sono segni di digiuno, stress da trasporto o farmaci in uso che possano influire sui risultati ematochimici.\n\t+ Non ci sono informazioni specifiche sull'età, razza o stagione.\n Fonti rapide: Non ci sono fonti rapide utilizzate per questo caso.\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json
+-deleted file mode 100644
+-index abc281f..0000000
+---- a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative che indichino una patologia ematochimica o oncologica.\n La situazione è compatibile con un quadro di salute generale e non ci sono segni di anemia rigenerativa, neoplasie, pancreatite, diabete, insufficienza epatica/renale, FIV/FeLV, sindromi infiammatorie o immunomediate.\n\n4. Integrazione con citologia/istologia\n\n Non sono presenti referti citologici o istologici che menzionano neoplasia, linfoma o mitosi.\n\n5. Classificazione dell’urgenza\n\n La situazione è compatibile con una routine diagnostico.\n\n6. Piano diagnostico\n\n Non sono presenti dati per suggerire esami aggiuntivi.\n\n7. Terapia iniziale/supporto\n\n Non sono presenti informazioni su farmaci, supplementi o dietete raccomandate.\n\n8. Follow-up\n\n Non sono presenti indicazioni per ripetere esami.\n\n9. Educazione al proprietario\n\n I risultati indicano un quadro di salute generale e non ci sono segni di patologie ematochimiche o oncologiche. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per valutare il caso in modo approfondito.\n\n10. Bandierine rosse\n\n Non ci sono parametri critici da segnalare.\n\n11. Contesto\n\n Non ci sono dati per considerare digiuno, stress da trasporto, farmaci in uso, età, razza o stagione.\n\n12. Fonti rapide\n\n Non ci sono fonti rapide da segnalare.\n\n13. Disclaimer finale\n\n L'analisi automatica basata su referto non sostituisce una visita clinica veterinaria. Si consiglia valutazione medica diretta per un quadro di salute generale e non ci sono segni di patologie ematochimiche o oncologiche."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json
+-deleted file mode 100644
+-index 39fe8da..0000000
+---- a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon sono presenti alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non sono presenti informazioni su farmaci in uso.\n Supplementi/diete raccomandate: Non sono presenti informazioni su supplementi o diete raccomandate.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono presenti informazioni su supporti.\n Follow-up: Non sono presenti indicazioni per follow-up.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni e non ci sono segni di gravità o emergenza. Sebbene sia importante monitorare i valori dei parametri ematochimici, non ci sono indicazioni per esami aggiuntivi o terapia iniziale/supporto.\n\t+ Si consiglia una visita clinica veterinaria per un'analisi completa e personalizzata del cane."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json
+-deleted file mode 100644
+-index 71eaa99..0000000
+---- a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici da interpretare.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n\t+ Farmaci (mg/kg, via, durata): Non disponibili\n\t+ Supplementi/diete raccomandate: Non disponibili\n\t+ Supporti (SAMe, fluidoterapia, ecc.): Non disponibili\n\t+ Follow-up: Quando ripetere esami\n\t+ Segni clinici da monitorare: Non disponibili\n\t+ Indicazioni prognostiche: Non disponibili\n\t+ Educazione al proprietario: Non disponibili\n\t+ Bandierine rosse: Non disponibili\n\t+ Contesto: Non disponibili\n\t+ Fonti rapide: Non disponibili\n\t+ Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json
+-deleted file mode 100644
+-index 9b7cb51..0000000
+---- a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Fluidoterapia\n Follow-up:\n\t+ Quando ripetere esami: 1 mese\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort\n\t+ Indicazioni prognostiche: Monitoraggio periodico del peso e della condizione generale.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buona salute. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un'analisi più approfondita e per un piano di cura personalizzato.\n Bandierine rosse:\n\t+ PLT < 100: Non presente\n\t+ WBC < 4: Non presente\n\t+ Na < 130: Non presente\n\t+ K+ > 6.0: Non presente\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presente\n\t+ Farmaci in uso: Non presente\n\t+ Età, razza, stagione: Non presente\n\t+ Fonti rapide: Non presente\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-\ No newline at end of file
+-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png
+-deleted file mode 100644
+-index c12dfc0..0000000
+-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png
+-deleted file mode 100644
+-index bd9351e..0000000
+-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png
+-deleted file mode 100644
+-index 1eb3eb4..0000000
+-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png
+-deleted file mode 100644
+-index 33ae6c5..0000000
+-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png and /dev/null differ
+-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json
+-deleted file mode 100644
+-index 2e78eed..0000000
+---- a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.5 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon sono presenti alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non sono stati somministrati farmaci.\n Supplementi/diete raccomandate: Non sono stati raccomandati supplementi o diete.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono stati raccomandati supporti.\n Follow-up: Non è stato indicato un follow-up.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane ha valori ematochimici all'interno del range di riferimento, quindi non ci sono segni di anemia o alterazioni significative. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un esame completo e per eventuali ulteriori indagini.\n\t+ In caso di segni di discomfort o di altri problemi, si consiglia di controllare il cane con un esame medico diretto.\n\n7. Bandierine rosse\n\n PLT < 100: Non ci sono dati disponibili per valutare la presenza di piombo sanguigno (PLT) al di sotto dei 100.000/µL.\n WBC < 4: Non ci sono dati disponibili per valutare il numero di cellule bianche (WBC) al di sotto dei 4.000/µL.\n Na < 130: Non ci sono dati disponibili per valutare il sodio (Na) al di sotto dei 130 mEq/L.\n K+ > 6.0: Non ci sono dati disponibili per valutare il potassio (K+) al di sopra dei 6.0 mmol/L.\n\n8. Contesto\n\n Digiuno, stress da trasporto: Non ci sono dati disponibili per valutare la presenza di digiuno o stress da trasporto.\n Farmaci in uso: Non ci sono dati disponibili per valutare i farmaci in uso.\n Età, razza, stagione: Non ci sono dati disponibili per valutare l'età, la razza e la stagione.\n Fonti rapide: Non ci sono fonti rapide disponibili.\n\n9. Disclaimer finale\n\nL'analisi automatica basata su referto non sostituisce una visita clinica veterinaria. Si consiglia valutazione medica diretta per un esame completo e per eventuali ulteriori indagini."}
+-\ No newline at end of file
+-diff --git a/requirements.txt b/requirements.txt
+-index d25867f..87eab50 100644
+-Binary files a/requirements.txt and b/requirements.txt differ
 diff --git a/data/.DS_Store b/data/.DS_Store
-index e4cd861..becfc94 100644
+index becfc94..5008ddf 100644
 Binary files a/data/.DS_Store and b/data/.DS_Store differ
 diff --git a/data/blood_work_pdfs/.DS_Store b/data/blood_work_pdfs/.DS_Store
-index 688e3a0..67c68a2 100644
-Binary files a/data/blood_work_pdfs/.DS_Store and b/data/blood_work_pdfs/.DS_Store differ
-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png
+deleted file mode 100644
+index 67c68a2..0000000
+Binary files a/data/blood_work_pdfs/.DS_Store and /dev/null differ
+diff --git a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_1.png b/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_1.png
 deleted file mode 100644
 index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png
+Binary files a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_1.png and /dev/null differ
+diff --git a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_2.png b/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_2.png
 deleted file mode 100644
 index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png
+Binary files a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_2.png and /dev/null differ
+diff --git a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_3.png b/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_3.png
 deleted file mode 100644
 index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png
+Binary files a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_3.png and /dev/null differ
+diff --git a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_4.png b/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_4.png
 deleted file mode 100644
 index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/15cb51bd-2165-4458-ba1f-c41236c9235a._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json b/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json
+Binary files a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab._page_4.png and /dev/null differ
+diff --git a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/model_output.json b/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/model_output.json
 deleted file mode 100644
-index 2561279..0000000
---- a/data/blood_work_pdfs/15cb51bd-2165-4458-ba1f-c41236c9235a/model_output.json
+index d50b984..0000000
+--- a/data/blood_work_pdfs/9edbdb81-34fd-4a5a-9667-a33ad4e2c5ab/model_output.json
 +++ /dev/null
 @@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.5 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-4.8 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici da analizzare.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Follow-up:\n\t+ Quando ripetere esami: 3 mesi\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort.\n\t+ Indicazioni prognostiche: Buona prognosi con monitoraggio periodico.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I valori sono all'interno del range di riferimento, quindi normale.\n\t+ Se la situazione è grave o gestibile: La situazione è buona e non ci sono segni di emergenza o urgenza.\n\t+ Quali passi fare ora: Continuare a monitorare il cane con esami periodici e seguire le indicazioni del veterinario.\n Bandierine rosse:\n\t+ PLT < 100, WBC < 4, Na < 130, K+ > 6.0: Non presenti.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presenti.\n\t+ Farmaci in uso: Non presenti.\n\t+ Età, razza, stagione: Non presenti.\n Fonti rapide:\n\t+ IRIS 2023, Thrall 2012, AAHA 2021 oncology: Non presenti.\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
+-{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.5 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici da interpretare.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Fluidoterapia\n Follow-up:\n\t+ Quando ripetere esami: In 2 settimane\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort\n\t+ Indicazioni prognostiche: Buona prognosi\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I valori sono all'interno del range di riferimento e non ci sono alterazioni significative.\n\t+ Se la situazione è grave o gestibile: La situazione è normale e non ci sono segni di emergenza o urgenza.\n\t+ Quali passi fare ora: Non ci sono passi da fare ora.\n Bandierine rosse:\n\t+ PLT < 100, WBC < 4, Na < 130, K+ > 6.0: Non presenti.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non ci sono dati su questi parametri.\n\t+ Farmaci in uso: Non ci sono dati su questi parametri.\n\t+ Età, razza, stagione: Non ci sono dati su questi parametri.\n Fonti rapide:\n\t+ IRIS 2023, Thrall 2012, AAHA 2021 oncology: Non ci sono referenze a queste fonti.\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
 \ No newline at end of file
-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/28ded63e-ffed-47b4-a143-95f0812561ee._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json b/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json
-deleted file mode 100644
-index 932dcbb..0000000
---- a/data/blood_work_pdfs/28ded63e-ffed-47b4-a143-95f0812561ee/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata): Non sono presenti informazioni su farmaci in uso.\n Supplementi/diete raccomandate: Non sono presenti informazioni su supplementi o dietas raccomandate.\n Follow-up:\n\t+ Quando ripetere esami: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n\t+ Segni clinici da monitorare: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n\t+ Indicazioni prognostiche: Non sono presenti informazioni su indicazioni prognostiche.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I risultati indicano che il cane è in buone condizioni e non ci sono alterazioni significative.\n\t+ Se la situazione è grave o gestibile: Non ci sono alterazioni significative, quindi la situazione del cane è gestibile.\n\t+ Quali passi fare ora: In base alla situazione clinica del cane, ad esempio in caso di alterazioni significative o se ci sono segni oncologici.\n Bandierine rosse: Non ci sono parametri critici da segnalare.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non ci sono informazioni su questi fattori.\n\t+ Farmaci in uso: Non ci sono informazioni su farmaci in uso.\n\t+ Età, razza, stagione: Non ci sono informazioni su questi fattori.\n Fonti rapide: Non ci sono fonti rapide da segnalare.\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/39f3edf9-8ef5-4b6d-9aac-2891647b677a._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json b/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json
-deleted file mode 100644
-index 363f136..0000000
---- a/data/blood_work_pdfs/39f3edf9-8ef5-4b6d-9aac-2891647b677a/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Fluidoterapia\n Follow-up:\n\t+ Quando ripetere esami: 1 mese\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort\n\t+ Indicazioni prognostiche: Monitoraggio periodico del peso e del comportamento.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un'analisi più approfondita e per un piano di trattamento personalizzato.\n Bandierine rosse:\n\t+ PLT < 100: Non presente\n\t+ WBC < 4: Non presente\n\t+ Na < 130: Non presente\n\t+ K+ > 6.0: Non presente\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presente\n\t+ Farmaci in uso: Non presente\n\t+ Età, razza, stagione: Non presente\n\t+ Fonti rapide: Non presente\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/49bc2b07-81b1-456d-b74a-8fc316315590._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json b/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json
-deleted file mode 100644
-index 3e80cb1..0000000
---- a/data/blood_work_pdfs/49bc2b07-81b1-456d-b74a-8fc316315590/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.5 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-4.8 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Follow-up:\n\t+ Quando ripetere esami: 3 mesi\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort.\n\t+ Indicazioni prognostiche: Buona prognosi con monitoraggio periodico.\n Educazione al proprietario:\n\t+ Cosa significano i risultati: I valori sono all'interno del range di riferimento, quindi normale.\n\t+ Se la situazione è grave o gestibile: La situazione è buona e non ci sono segni di emergenza o urgenza.\n\t+ Quali passi fare ora: Continuare a monitorare i valori ematochimici periodiciamente e seguire le indicazioni del veterinario.\n Bandierine rosse:\n\t+ PLT < 100, WBC < 4, Na < 130, K+ > 6.0: Non presenti.\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presenti.\n\t+ Farmaci in uso: Non presenti.\n\t+ Età, razza, stagione: Non presenti.\n Fonti rapide:\n\t+ IRIS 2023, Thrall 2012, AAHA 2021 oncology: Non presenti.\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/76423b77-4169-40fd-ac3a-cbb922481f9a._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json b/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json
-deleted file mode 100644
-index 79d24d0..0000000
---- a/data/blood_work_pdfs/76423b77-4169-40fd-ac3a-cbb922481f9a/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-35 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.5 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 2.8-5.2 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon ci sono alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon ci sono referti citologici o istologici disponibili per l'analisi.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non disponibili\n Supplementi/diete raccomandate: Non disponibili\n Supporti (SAMe, fluidoterapia, ecc.): Non disponibili\n Follow-up: Non disponibili\n Educazione al proprietario: Non disponibili\n Bandierine rosse: Non disponibili\n Contesto: Non disponibili\n Fonti rapide: Non disponibili\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/ae838344-c706-4847-bc68-9adea1ff78c2._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json b/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json
-deleted file mode 100644
-index a6b6d40..0000000
---- a/data/blood_work_pdfs/ae838344-c706-4847-bc68-9adea1ff78c2/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell'urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata): Non sono stati utilizzati farmaci specifici per questo caso.\n Supplementi/diete raccomandate: Non sono stati utilizzati supplementi o diete specifici per questo caso.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono stati utilizzati supporti specifici per questo caso.\n Follow-up: Ripetere esami in 1 mese. Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort. Indicazioni prognostiche: Non sono stati utilizzati indicatori prognostici specifici per questo caso.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni e non ci sono segni di gravità o gestione urgente.\n\t+ Si consiglia di continuare a monitorare il cane e di seguire le indicazioni del veterinario.\n Bandierine rosse: Non ci sono parametri critici da segnalare.\n Contesto:\n\t+ Il cane è in buone condizioni e non ci sono segni di digiuno, stress da trasporto o farmaci in uso che possano influire sui risultati ematochimici.\n\t+ Non ci sono informazioni specifiche sull'età, razza o stagione.\n Fonti rapide: Non ci sono fonti rapide utilizzate per questo caso.\n Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/b2a6a985-155d-4852-92ea-9bfaa953b878._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json b/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json
-deleted file mode 100644
-index abc281f..0000000
---- a/data/blood_work_pdfs/b2a6a985-155d-4852-92ea-9bfaa953b878/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative che indichino una patologia ematochimica o oncologica.\n La situazione è compatibile con un quadro di salute generale e non ci sono segni di anemia rigenerativa, neoplasie, pancreatite, diabete, insufficienza epatica/renale, FIV/FeLV, sindromi infiammatorie o immunomediate.\n\n4. Integrazione con citologia/istologia\n\n Non sono presenti referti citologici o istologici che menzionano neoplasia, linfoma o mitosi.\n\n5. Classificazione dell’urgenza\n\n La situazione è compatibile con una routine diagnostico.\n\n6. Piano diagnostico\n\n Non sono presenti dati per suggerire esami aggiuntivi.\n\n7. Terapia iniziale/supporto\n\n Non sono presenti informazioni su farmaci, supplementi o dietete raccomandate.\n\n8. Follow-up\n\n Non sono presenti indicazioni per ripetere esami.\n\n9. Educazione al proprietario\n\n I risultati indicano un quadro di salute generale e non ci sono segni di patologie ematochimiche o oncologiche. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per valutare il caso in modo approfondito.\n\n10. Bandierine rosse\n\n Non ci sono parametri critici da segnalare.\n\n11. Contesto\n\n Non ci sono dati per considerare digiuno, stress da trasporto, farmaci in uso, età, razza o stagione.\n\n12. Fonti rapide\n\n Non ci sono fonti rapide da segnalare.\n\n13. Disclaimer finale\n\n L'analisi automatica basata su referto non sostituisce una visita clinica veterinaria. Si consiglia valutazione medica diretta per un quadro di salute generale e non ci sono segni di patologie ematochimiche o oncologiche."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/b43f3b5e-8086-4674-a13f-78f3192a1fa4._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json b/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json
-deleted file mode 100644
-index 39fe8da..0000000
---- a/data/blood_work_pdfs/b43f3b5e-8086-4674-a13f-78f3192a1fa4/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon sono presenti alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non sono presenti informazioni su farmaci in uso.\n Supplementi/diete raccomandate: Non sono presenti informazioni su supplementi o diete raccomandate.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono presenti informazioni su supporti.\n Follow-up: Non sono presenti indicazioni per follow-up.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buone condizioni e non ci sono segni di gravità o emergenza. Sebbene sia importante monitorare i valori dei parametri ematochimici, non ci sono indicazioni per esami aggiuntivi o terapia iniziale/supporto.\n\t+ Si consiglia una visita clinica veterinaria per un'analisi completa e personalizzata del cane."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/bbd74c69-cc51-4a69-88dc-baf48f7dc057._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json b/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json
-deleted file mode 100644
-index 71eaa99..0000000
---- a/data/blood_work_pdfs/bbd74c69-cc51-4a69-88dc-baf48f7dc057/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mg/dL | mg/dL | 2.0-4.0 mg/dL | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologica/istologica\n\n Non sono presenti referti citologici/istologici da interpretare.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n\t+ Farmaci (mg/kg, via, durata): Non disponibili\n\t+ Supplementi/diete raccomandate: Non disponibili\n\t+ Supporti (SAMe, fluidoterapia, ecc.): Non disponibili\n\t+ Follow-up: Quando ripetere esami\n\t+ Segni clinici da monitorare: Non disponibili\n\t+ Indicazioni prognostiche: Non disponibili\n\t+ Educazione al proprietario: Non disponibili\n\t+ Bandierine rosse: Non disponibili\n\t+ Contesto: Non disponibili\n\t+ Fonti rapide: Non disponibili\n\t+ Disclaimer finale: Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/c0db1b42-95a3-46aa-a127-b8c4e5db6056._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json b/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json
-deleted file mode 100644
-index 9b7cb51..0000000
---- a/data/blood_work_pdfs/c0db1b42-95a3-46aa-a127-b8c4e5db6056/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.0 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 150 mEq/L | mEq/L | 140-160 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi normale.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi normale.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi normale.\n Na/K: Valore all'interno del range di riferimento, quindi normale.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi normale.\n\n3. Interpretazione clinica\n\n Non sono presenti alterazioni significative.\n\n4. Interpretazione citologico-istologica\n\n Non sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\n Routine.\n\n6. Piano diagnostico\n\n Esami aggiuntivi:\n\t+ Priorità: Alta\n\t+ Invasività: Media\n Farmaci (mg/kg, via, durata):\n\t+ Supplementi raccomandati: SAMe, fluidoterapia, ecc.\n Supporti (SAMe, fluidoterapia, ecc.):\n\t+ Fluidoterapia\n Follow-up:\n\t+ Quando ripetere esami: 1 mese\n\t+ Segni clinici da monitorare: Peso, comportamento, sintomi di dolore o discomfort\n\t+ Indicazioni prognostiche: Monitoraggio periodico del peso e della condizione generale.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane è in buona salute. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un'analisi più approfondita e per un piano di cura personalizzato.\n Bandierine rosse:\n\t+ PLT < 100: Non presente\n\t+ WBC < 4: Non presente\n\t+ Na < 130: Non presente\n\t+ K+ > 6.0: Non presente\n Contesto:\n\t+ Digiuno, stress da trasporto: Non presente\n\t+ Farmaci in uso: Non presente\n\t+ Età, razza, stagione: Non presente\n\t+ Fonti rapide: Non presente\n Disclaimer finale:\n\t+ Analisi automatica basata su referto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta."}
-\ No newline at end of file
-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png
-deleted file mode 100644
-index c12dfc0..0000000
-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_1.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png
-deleted file mode 100644
-index bd9351e..0000000
-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_2.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png
-deleted file mode 100644
-index 1eb3eb4..0000000
-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_3.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png
-deleted file mode 100644
-index 33ae6c5..0000000
-Binary files a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/fafebc21-4a4b-40fc-b40a-b1406ad8ad22._page_4.png and /dev/null differ
-diff --git a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json b/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json
-deleted file mode 100644
-index 2e78eed..0000000
---- a/data/blood_work_pdfs/fafebc21-4a4b-40fc-b40a-b1406ad8ad22/model_output.json
-+++ /dev/null
-@@ -1 +0,0 @@
--{"result": "1. Tabella dei parametri\n\n| Parametro | Valore misurato | Unità | Range di riferimento | Evidenziazione |\n| --- | --- | --- | --- | --- |\n| BUN/Creatinina | 20 mg/dL | mg/dL | 15-30 mg/dL | ✅ normale |\n| Calcio/Fosforo | 2.5 mmol/L | mmol/L | 2.0-4.5 mmol/L | ✅ normale |\n| Neutrofili/Linfociti | 70% | % | 60-80% | ✅ normale |\n| Na/K | 135 mEq/L | mEq/L | 130-145 mEq/L | ✅ normale |\n| Albumina/Globuline | 3.5 g/dL | g/dL | 3.0-4.5 g/dL | ✅ normale |\n\n2. Analisi matematica\n\n BUN/Creatinina: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Calcio/Fosforo: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Neutrofili/Linfociti: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Na/K: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n Albumina/Globuline: Valore all'interno del range di riferimento, quindi non ci sono anomalie significative.\n\n3. Interpretazione clinica\n\nNon sono presenti alterazioni significative.\n\n4. Integrazione con citologia/istologia\n\nNon sono presenti referti citologici o istologici.\n\n5. Classificazione dell’urgenza\n\nRoutine.\n\n6. Piano diagnostico\n\n Priorità: Bassa\n Invasività: Bassa\n Farmaci (mg/kg, via, durata): Non sono stati somministrati farmaci.\n Supplementi/diete raccomandate: Non sono stati raccomandati supplementi o diete.\n Supporti (SAMe, fluidoterapia, ecc.): Non sono stati raccomandati supporti.\n Follow-up: Non è stato indicato un follow-up.\n Educazione al proprietario:\n\t+ I risultati indicano che il cane ha valori ematochimici all'interno del range di riferimento, quindi non ci sono segni di anemia o alterazioni significative. Se la situazione è grave o gestibile, si consiglia una visita clinica veterinaria per un esame completo e per eventuali ulteriori indagini.\n\t+ In caso di segni di discomfort o di altri problemi, si consiglia di controllare il cane con un esame medico diretto.\n\n7. Bandierine rosse\n\n PLT < 100: Non ci sono dati disponibili per valutare la presenza di piombo sanguigno (PLT) al di sotto dei 100.000/µL.\n WBC < 4: Non ci sono dati disponibili per valutare il numero di cellule bianche (WBC) al di sotto dei 4.000/µL.\n Na < 130: Non ci sono dati disponibili per valutare il sodio (Na) al di sotto dei 130 mEq/L.\n K+ > 6.0: Non ci sono dati disponibili per valutare il potassio (K+) al di sopra dei 6.0 mmol/L.\n\n8. Contesto\n\n Digiuno, stress da trasporto: Non ci sono dati disponibili per valutare la presenza di digiuno o stress da trasporto.\n Farmaci in uso: Non ci sono dati disponibili per valutare i farmaci in uso.\n Età, razza, stagione: Non ci sono dati disponibili per valutare l'età, la razza e la stagione.\n Fonti rapide: Non ci sono fonti rapide disponibili.\n\n9. Disclaimer finale\n\nL'analisi automatica basata su referto non sostituisce una visita clinica veterinaria. Si consiglia valutazione medica diretta per un esame completo e per eventuali ulteriori indagini."}
-\ No newline at end of file
-diff --git a/requirements.txt b/requirements.txt
-index d25867f..87eab50 100644
-Binary files a/requirements.txt and b/requirements.txt differ
