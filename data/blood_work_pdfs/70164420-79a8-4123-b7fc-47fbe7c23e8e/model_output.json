@@ -18,21 +18,23 @@
     {"parametro": "MCH", "valore": "15.0", "unita": "pg", "range": "13.0 - 18.0", "stato": "normale"},
     {"parametro": "MCHC", "valore": "30.8", "unita": "g/dL", "range": "30.0 - 36.0", "stato": "normale"},
     {"parametro": "CHCM", "valore": "30.4", "unita": "g/dL", "range": "28.0 - 34.0", "stato": "normale"},
-    {"parametro": "CH", "valore": "1.47", "unita": "10^12/L", "range": "1.10 - 1.75", "stato": "normale"},
-    {"parametro": "CHDW", "valore": "2.14", "unita": "pg", "range": "1.70 - 2.80", "stato": "normale"},
-    {"parametro": "RDW", "valore": "13.7", "unita": "%", "range": "14.0 - 17.0", "stato": "alterato_lieve"},
+    {"parametro": "CH", "valore": "1.47", "unita": "fL", "range": "1.10 - 1.75", "stato": "normale"},
+    {"parametro": "CHDW", "valore": "2.14", "unita": "fL", "range": "1.70 - 2.80", "stato": "normale"},
+    {"parametro": "RDW", "valore": "13.7", "unita": "%", "range": "14.0 - 17.0", "stato": "normale"},
     {"parametro": "HDW", "valore": "1.97", "unita": "g/dL", "range": "1.60 - 2.90", "stato": "normale"},
-    {"parametro": "Reticolociti", "valore": "0.10", "unita": "%", "range": "0.10 - 2.00", "stato": "normale"},
-    {"parametro": "Reticolociti", "valore": "9.0", "unita": "/uL", "range": "9.0 - 129.0", "stato": "normale"},
+    {"parametro": "Reticolociti (%)", "valore": "0.10", "unita": "%", "range": "0.10 - 2.00", "stato": "normale"},
+    {"parametro": "Reticolociti (uL)", "valore": "", "unita": "", "range": "9.0 - 129.0", "stato": "normale"},
+    {"parametro": "nRBC (100 WBC)", "valore": "0", "unita": "", "range": "0 - 3", "stato": "normale"},
     {"parametro": "WBC", "valore": "3.41", "unita": "migliaia/uL", "range": "5.00 - 18.00", "stato": "alterato_grave"},
     {"parametro": "Neutrofili segmentati", "valore": "36", "unita": "%", "range": "40 - 70", "stato": "alterato_grave"},
     {"parametro": "Linfociti", "valore": "55", "unita": "%", "range": "20 - 45", "stato": "alterato_lieve"},
     {"parametro": "Monociti", "valore": "3", "unita": "%", "range": "1 - 5", "stato": "normale"},
     {"parametro": "Eosinofili", "valore": "6", "unita": "%", "range": "0 - 12", "stato": "normale"},
-    {"parametro": "Basofili", "valore": "0", "unita": "%", "range": "0 - 1", "stato": "normale"},
+    {"parametro": "Basofili", "valore": "0", "unita": "%", "range": "0 - 0", "stato": "normale"},
     {"parametro": "PLT", "valore": "87", "unita": "migliaia/uL", "range": "200 - 500", "stato": "alterato_grave"},
-    {"parametro": "MPV", "valore": "24.6", "unita": "fL", "range": "5.0 - 20.0", "stato": "alterato_lieve"},
-    {"parametro": "PDW", "valore": "64.6", "unita": "", "range": "50.0 - 73.0", "stato": "normale"},
+    {"parametro": "MPV", "valore": "24.6", "unita": "fL", "range": "5.0 - 20.0", "stato": "alterato_grave"},
+    {"parametro": "PCT", "valore": "0.21", "unita": "%", "range": "0.20 - 0.80", "stato": "normale"},
+    {"parametro": "PDW", "valore": "64.6", "unita": "%", "range": "50.0 - 73.0", "stato": "normale"},
     {"parametro": "GOT-AST", "valore": "22", "unita": "IU/L", "range": "0 - 40", "stato": "normale"},
     {"parametro": "GPT-ALT", "valore": "41", "unita": "IU/L", "range": "0 - 70", "stato": "normale"},
     {"parametro": "Fosfatasi alcalina", "valore": "33", "unita": "IU/L", "range": "0 - 50", "stato": "normale"},
@@ -40,68 +42,68 @@
     {"parametro": "CPK", "valore": "155", "unita": "IU/L", "range": "50 - 490", "stato": "normale"},
     {"parametro": "Bilirubina totale", "valore": "0.15", "unita": "mg/dL", "range": "0.01 - 0.30", "stato": "normale"},
     {"parametro": "Proteine totali", "valore": "8.9", "unita": "g/dL", "range": "5.8 - 8.1", "stato": "alterato_grave"},
-    {"parametro": "Colesterolo", "valore": "121", "unita": "mg/dL", "range": "75 - 150", "stato": "normale"},
-    {"parametro": "Trigliceridi", "valore": "80", "unita": "mg/dL", "range": "25 - 100", "stato": "normale"},
+    {"parametro": "Colesterolo", "valore": "121", "unita": "mg/dl", "range": "75 - 150", "stato": "normale"},
+    {"parametro": "Trigliceridi", "valore": "80", "unita": "mg/dl", "range": "25 - 100", "stato": "normale"},
     {"parametro": "Amilasi", "valore": "808", "unita": "IU/L", "range": "200 - 1800", "stato": "normale"},
     {"parametro": "Lipasi DGGR", "valore": "133", "unita": "IU/L", "range": "10 - 350", "stato": "normale"},
-    {"parametro": "Azotemia", "valore": "54.0", "unita": "mg/dL", "range": "18.0 - 60.0", "stato": "normale"},
-    {"parametro": "Creatinina", "valore": "1.13", "unita": "mg/dL", "range": "0.60 - 1.80", "stato": "normale"},
-    {"parametro": "Fosforo", "valore": "3.8", "unita": "mg/dL", "range": "1.8 - 7.0", "stato": "normale"},
-    {"parametro": "Calcio", "valore": "8.8", "unita": "mg/dL", "range": "7.0 - 10.5", "stato": "normale"},
-    {"parametro": "Glucosio", "valore": "132", "unita": "mg/dL", "range": "65 - 130", "stato": "alterato_lieve"},
+    {"parametro": "Azotemia", "valore": "54.0", "unita": "mg/dl", "range": "18.0 - 60.0", "stato": "normale"},
+    {"parametro": "Creatinina", "valore": "1.13", "unita": "mg/dl", "range": "0.60 - 1.80", "stato": "normale"},
+    {"parametro": "Fosforo", "valore": "3.8", "unita": "mg/dl", "range": "1.8 - 7.0", "stato": "normale"},
+    {"parametro": "Calcio", "valore": "8.8", "unita": "mg/dl", "range": "7.0 - 10.5", "stato": "normale"},
+    {"parametro": "Cloro", "valore": "104", "unita": "mEq/L", "range": "100 - 120", "stato": "normale"},
     {"parametro": "Sodio", "valore": "136", "unita": "mEq/L", "range": "141 - 155", "stato": "alterato_grave"},
     {"parametro": "Potassio", "valore": "4.6", "unita": "mEq/L", "range": "3.6 - 5.5", "stato": "normale"},
     {"parametro": "Na/K", "valore": "29.6", "unita": "", "range": "> 28.0", "stato": "normale"},
-    {"parametro": "Magnesio", "valore": "2.3", "unita": "mg/dL", "range": "1.8 - 3.1", "stato": "normale"},
+    {"parametro": "Magnesio", "valore": "2.3", "unita": "mg/dl", "range": "1.8 - 3.1", "stato": "normale"},
     {"parametro": "Colinesterasi", "valore": "3218", "unita": "IU/L", "range": "1000 - 3500", "stato": "normale"},
     {"parametro": "Osmolarità", "valore": "279.58", "unita": "mOs/Kg", "range": "280.00 - 310.00", "stato": "alterato_grave"},
-    {"parametro": "Ferro", "valore": "45", "unita": "µg/dL", "range": "45 - 215", "stato": "normale"},
+    {"parametro": "Ferro", "valore": "45", "unita": "µg/dl", "range": "45 - 215", "stato": "normale"},
+    {"parametro": "Glucosio", "valore": "132", "unita": "mg/dl", "range": "65 - 130", "stato": "alterato_lieve"},
     {"parametro": "Albumina", "valore": "32.6", "unita": "%", "range": "42.2 - 61.3", "stato": "alterato_grave"},
-    {"parametro": "Gamma", "valore": "40.1", "unita": "%", "range": "5.4 - 22.0", "stato": "alterato_grave"}
+    {"parametro": "A/G", "valore": "0.48", "unita": "", "range": "0.67 - 1.23", "stato": "alterato_grave"}
   ],
   "analisi_matematica": {
     "bun_creatinina": {"valore": "47.79", "interpretazione": "normale"},
     "calcio_fosforo": {"valore": "2.32", "interpretazione": "normale"},
     "neutrofili_linfociti": {"valore": "0.65", "interpretazione": "alterato, possibile linfocitosi"},
     "na_k": {"valore": "29.57", "interpretazione": "normale"},
-    "albumina_globuline": {"valore": "0.48", "interpretazione": "alterato, possibile ipergammaglobulinemia"}
+    "albumina_globuline": {"valore": "0.48", "interpretazione": "alterato, possibile iperglobulinemia"}
   },
   "interpretazione_clinica": {
     "alterazioni": [
       "Leucopenia",
       "Trombocitopenia",
       "Iperproteinemia",
-      "Ipergammaglobulinemia",
       "Iposodiemia",
       "Ipoalbuminemia"
     ],
     "diagnosi_differenziali": [
       {"diagnosi": "Neoplasia maligna", "confidenza": "70%"},
-      {"diagnosi": "Infezione cronica", "confidenza": "50%"},
-      {"diagnosi": "Malattia autoimmune", "confidenza": "40%"}
+      {"diagnosi": "Infezione virale", "confidenza": "50%"},
+      {"diagnosi": "Malattia infiammatoria cronica", "confidenza": "40%"}
     ],
     "pattern_compatibili": {
       "anemia": "Non rigenerativa",
-      "neoplasie": "Compatibile con neoplasia maligna",
-      "patologie_metaboliche": "Possibile insufficienza renale lieve",
-      "patologie_infettive_immunomediate": "Compatibile con infezione cronica o malattia autoimmune"
+      "neoplasie": "Compatibile",
+      "patologie_metaboliche": "Possibile insufficienza renale",
+      "patologie_infettive_immunomediate": "Possibile"
     }
   },
-  "referto_citologico": "Indicativo di neoplasia maligna scarsamente differenziata, di origine epiteliale. Possibile linfoma atipico.",
+  "referto_citologico": "Indicativo di neoplasia maligna scarsamente differenziata, di presunta origine epiteliale. Possibile linfoma atipico.",
   "classificazione_urgenza": {
     "livello": "URGENZA A BREVE",
-    "motivazione": "Presenza di neoplasia maligna sospetta e alterazioni ematologiche significative."
+    "motivazione": "Presenza di neoplasia sospetta e alterazioni ematologiche significative."
   },
   "piano_diagnostico": [
     {"esame": "Biopsia istologica", "priorita": "Alta", "invasivita": "Alta"},
-    {"esame": "Ecografia addominale", "priorita": "Alta", "invasivita": "Bassa"},
-    {"esame": "Profilo immunologico", "priorita": "Media", "invasivita": "Bassa"}
+    {"esame": "Ecografia addominale", "priorita": "Media", "invasivita": "Bassa"},
+    {"esame": "Test FIV/FeLV", "priorita": "Alta", "invasivita": "Bassa"}
   ],
   "terapia": {
     "farmaci": [
       {"nome": "Prednisolone", "dosaggio": "1 mg/kg", "via": "orale", "durata": "7 giorni"}
     ],
-    "supplementi": ["SAMe"],
+    "supplementi": ["Dieta ipoproteica"],
     "supporti": ["Fluidoterapia"]
   },
   "follow_up": {
@@ -109,13 +111,27 @@
     "monitorare": ["Segni di anemia", "Linfadenopatia", "Perdita di peso"],
     "prognosi": "Riservata"
   },
-  "educazione_proprietario": "I risultati indicano la presenza di una possibile neoplasia maligna nel gatto, che richiede ulteriori indagini e un trattamento tempestivo. La situazione è seria ma gestibile con un intervento rapido. Si consiglia di procedere con una biopsia istologica per confermare la diagnosi e pianificare il trattamento adeguato.",
-  "bandierine_rosse": ["WBC < 4", "PLT < 100", "Na < 130"],
+  "educazione_proprietario": "I risultati indicano la presenza di una possibile neoplasia maligna. È importante procedere con ulteriori esami per confermare la diagnosi e stabilire un piano di trattamento adeguato. La situazione è seria ma gestibile con un intervento tempestivo.",
+  "bandierine_rosse": [
+    "WBC < 4",
+    "PLT < 100",
+    "Na < 130"
+  ],
   "contesto": {
-    "considerazioni": ["Stress da trasporto", "Età avanzata del gatto"]
+    "considerazioni": [
+      "Possibile stress da trasporto",
+      "Età avanzata del gatto"
+    ]
   },
-  "fonti": ["IRIS 2023", "Thrall 2012", "AAHA 2021 oncology"],
+  "fonti": [
+    "IRIS 2023",
+    "Thrall 2012",
+    "AAHA 2021 oncology"
+  ],
   "disclaimer": "Analisi automatica basata su referto estratto. Non sostituisce visita clinica veterinaria. Si consiglia valutazione medica diretta.",
-  "dati_mancanti": ["Peso", "Razza"]
+  "dati_mancanti": [
+    "Peso",
+    "Razza"
+  ]
 }
 ```
