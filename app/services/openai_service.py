@@ -93,7 +93,8 @@ class BloodworkAnalysisService:
 
         # Set default prompt path if not provided
         if diagnostic_prompt_path is None:
-            diagnostic_prompt_path = Path("app/prompts/diagnostic_prompt.txt")
+            diagnostic_prompt_path = Path(
+                "app/prompts/diagnostic_prompt_v2.txt")
 
         self._diagnostic_prompt_path = diagnostic_prompt_path
         self._diagnostic_prompt = self._load_diagnostic_prompt()

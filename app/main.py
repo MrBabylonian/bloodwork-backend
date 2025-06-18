@@ -10,6 +10,7 @@ Author: Bedirhan Gilgiler
 
 from fastapi import FastAPI
 
+from app.routers import auth_router, patient_router
 from app.routers.analysis_router import AnalysisRouter
 from app.utils.logger_utils import ApplicationLogger
 
@@ -44,22 +45,35 @@ class BloodworkAnalyzerApplication:
 
     def _configure_routers(self) -> None:
         """Configure and mount all application routers."""
+        # Legacy analysis router (original functionality)
         analysis_router = AnalysisRouter()
         self._app.include_router(
             analysis_router.get_router(),
-            prefix="/analysis"
+            prefix="/analysis",
+            tags=["Legacy Analysis (Deprecated)"],
         )
+
+        # Authentication and patient routers
+        self._app.include_router(auth_router.router)
+        self._app.include_router(patient_router.router)
 
     def _configure_events(self) -> None:
         """Configure application startup and shutdown events."""
         @self._app.on_event("startup")
         async def startup_event():
             """Handle application startup."""
+            from app.dependencies.auth_dependencies import get_database_service
+            db_service = get_database_service()
+            await db_service.connect()
+            await db_service.initialize_database()
             self._logger.info("FastAPI application has started successfully.")
 
         @self._app.on_event("shutdown")
         async def shutdown_event():
             """Handle application shutdown."""
+            from app.dependencies.auth_dependencies import get_database_service
+            db_service = get_database_service()
+            await db_service.disconnect()
             self._logger.info("FastAPI application is shutting down.")
 
     def get_app(self) -> FastAPI:
