@@ -1,12 +1,11 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-from app.auth.auth_service import AuthService
 from app.auth.auth_config import AuthConfig
+from app.auth.auth_service import AuthService
 from app.config.database_config import DatabaseConfig
 from app.models.database_models import UserRole
 from app.repositories import RepositoryFactory
 from app.services.database_service import DatabaseService
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 # Security scheme for token extraction
 security = HTTPBearer()
@@ -41,6 +40,7 @@ def get_auth_service(repo_factory: RepositoryFactory = Depends(get_repository_fa
         config = AuthConfig()
         _auth_service = AuthService(
             user_repo=repo_factory.user_repository,
+            admin_repo=repo_factory.admin_repository,
             refresh_token_repo=repo_factory.refresh_token_repository,
             config=config
         )
@@ -52,16 +52,26 @@ async def get_current_user(
     auth_service: AuthService = Depends(get_auth_service)
 ) -> dict:
     """Get current authenticated user from JWT token"""
+    from app.utils.logger_utils import ApplicationLogger
+    logger = ApplicationLogger.get_logger(__name__)
+
     token = credentials.credentials
+    logger.info(
+        f"Attempting to verify token: {token[:20]}..." if token else "No token provided")
+
     user_info = await auth_service.verify_access_token(token)
-    
+
     if not user_info:
+        logger.warning(
+            f"Token verification failed for token: {token[:20]}..." if token else "No token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
+    logger.info(
+        f"Token verified successfully for user: {user_info.get('username', 'unknown')}")
     return user_info
 
 
@@ -85,22 +95,38 @@ def require_role(required_role: UserRole):
     return role_checker
 
 
-# Pre-configured role dependencies  
+# Pre-configured role dependencies
 def require_veterinarian():
     return require_role(UserRole.VETERINARIAN)
 
+
 def require_technician():
     return require_role(UserRole.VETERINARY_TECHNICIAN)
+
 
 def require_admin_role():
     """Dependency that requires admin role"""
     async def admin_checker(current_user: dict = Depends(get_current_user)) -> dict:
         # Check if user has admin role or is actually an admin
         user_role = current_user.get("role")
-        if user_role not in ["admin", UserRole.VETERINARIAN]:  # Allow vets to have admin functions
+        # Allow vets to have admin functions
+        if user_role not in ["admin", UserRole.VETERINARIAN]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied. Admin privileges required."
             )
         return current_user
     return admin_checker
+
+
+def require_admin_or_veterinarian():
+    """Dependency that requires admin or veterinarian role"""
+    async def admin_or_vet_checker(current_user: dict = Depends(get_current_user)) -> dict:
+        user_role = current_user.get("role")
+        if user_role not in ["admin", UserRole.VETERINARIAN]:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Access denied. Only administrators and veterinarians can perform this action."
+            )
+        return current_user
+    return admin_or_vet_checker

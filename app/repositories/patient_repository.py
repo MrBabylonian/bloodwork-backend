@@ -1,11 +1,10 @@
 from datetime import datetime, timezone
 
-from bson import ObjectId
-from pymongo.errors import DuplicateKeyError
-
 from app.models.database_models import Patient
 from app.services.database_service import DatabaseService
 from app.utils.logger_utils import ApplicationLogger
+from bson import ObjectId
+from pymongo.errors import DuplicateKeyError
 
 
 class PatientRepository:
@@ -72,6 +71,33 @@ class PatientRepository:
 
         except Exception as e:
             self.logger.error(f"Error getting patients by user_id: {e}")
+            return []
+
+    async def get_all(self) -> list[Patient]:
+        """Get all active patients"""
+        try:
+            # Debug logging to see what database and collection we're using
+            database_name = self.db_service.database.name if self.db_service.database is not None else 'Unknown'
+            self.logger.info(f"Querying database: {database_name}")
+            self.logger.info(f"Querying collection: {self.collection.name}")
+
+            cursor = self.collection.find(
+                {"is_active": True}
+            ).sort("created_at", -1)
+
+            docs = await cursor.to_list(length=None)
+            self.logger.info(f"Found {len(docs)} patient documents")
+
+            # Debug: let's see what the first document looks like
+            if docs:
+                first_doc = docs[0]
+                self.logger.info(
+                    f"First document: patient_id={first_doc.get('patient_id')}, created_by={first_doc.get('created_by')}, assigned_to={first_doc.get('assigned_to')}")
+
+            return [Patient(**doc) for doc in docs]
+
+        except Exception as e:
+            self.logger.error(f"Error getting all patients: {e}")
             return []
 
     async def search_by_name(self, name: str) -> list[Patient]:

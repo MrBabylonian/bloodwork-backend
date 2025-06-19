@@ -8,11 +8,11 @@ Last updated: 2025-06-17
 Author: Bedirhan Gilgiler
 """
 
-from fastapi import FastAPI
-
 from app.routers import auth_router, patient_router
 from app.routers.analysis_router import AnalysisRouter
 from app.utils.logger_utils import ApplicationLogger
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class BloodworkAnalyzerApplication:
@@ -27,6 +27,7 @@ class BloodworkAnalyzerApplication:
         """Initialize the application with default configuration."""
         self._logger = ApplicationLogger.setup_logging().getChild("main")
         self._app = self._create_fastapi_instance()
+        self._configure_middleware()
         self._configure_routers()
         self._configure_events()
 
@@ -43,6 +44,18 @@ class BloodworkAnalyzerApplication:
             version="1.0.0"
         )
 
+    def _configure_middleware(self) -> None:
+        """Configure application middleware including CORS for development."""
+        # CORS configuration for development
+        self._app.add_middleware(
+            CORSMiddleware,
+            allow_origins="*",
+            allow_credentials=True,
+            allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allow_headers=["*"],
+        )
+        self._logger.info("CORS middleware configured for development")
+
     def _configure_routers(self) -> None:
         """Configure and mount all application routers."""
         # Legacy analysis router (original functionality)
@@ -50,7 +63,7 @@ class BloodworkAnalyzerApplication:
         self._app.include_router(
             analysis_router.get_router(),
             prefix="/analysis",
-            tags=["Legacy Analysis (Deprecated)"],
+            tags=["Legacy Analysis"],
         )
 
         # Authentication and patient routers

@@ -1,4 +1,8 @@
-from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from motor.motor_asyncio import (
+    AsyncIOMotorClient,
+    AsyncIOMotorDatabase,
+    AsyncIOMotorGridFSBucket,
+)
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 
 from app.config.database_config import DatabaseConfig
@@ -14,6 +18,7 @@ class DatabaseService:
         self.config = config
         self.client: AsyncIOMotorClient | None = None
         self.database: AsyncIOMotorDatabase | None = None
+        self.gridfs: AsyncIOMotorGridFSBucket | None = None
         self.logger = ApplicationLogger.get_logger(__name__)
 
     async def initialize_database(self) -> bool:
@@ -80,6 +85,9 @@ class DatabaseService:
             # Get database reference
             self.database = self.client[self.config.database_name]
 
+            # Initialize GridFS bucket
+            self.gridfs = AsyncIOMotorGridFSBucket(self.database)
+
             self.logger.info(
                 f"Successfully connected to MongoDB database: {self.config.database_name}")
             return True
@@ -143,3 +151,44 @@ class DatabaseService:
     def refresh_tokens(self):
         """Get refresh_tokens collection"""
         return self.get_collection("refresh_tokens")
+
+    async def store_pdf_file(self, file_data: bytes, filename: str) -> str:
+        """
+        Store PDF file in GridFS
+
+        Args:
+            file_data: PDF file bytes
+            filename: Original filename
+
+        Returns:
+            str: GridFS file ID
+        """
+        if self.gridfs is None:
+            raise RuntimeError("Database not connected. Call connect() first.")
+
+        file_id = await self.gridfs.upload_from_stream(
+            filename,
+            file_data,
+            metadata={"content_type": "application/pdf"}
+        )
+
+        self.logger.info(
+            f"Stored PDF file {filename} with GridFS ID: {file_id}")
+        return str(file_id)
+
+    async def get_pdf_file(self, file_id: str) -> bytes:
+        """
+        Retrieve PDF file from GridFS
+
+        Args:
+            file_id: GridFS file ID
+
+        Returns:
+            bytes: PDF file data
+        """
+        if self.gridfs is None:
+            raise RuntimeError("Database not connected. Call connect() first.")
+
+        from bson import ObjectId
+        grid_out = await self.gridfs.open_download_stream(ObjectId(file_id))
+        return await grid_out.read()

@@ -55,8 +55,8 @@ class AiDiagnostic(BaseModel):
     sequence_number: int  # Order of tests for this patient (1, 2, 3...)
     test_date: datetime
 
-    # Full OpenAI Analysis
-    openai_analysis: dict[str, any]  # type: ignore
+    # Full OpenAI Analysis (stored as JSON string to preserve exact format)
+    openai_analysis: str = ""  # JSON string from OpenAI API
 
     # PDF metadata
     pdf_metadata: dict[str, any] = {  # type: ignore

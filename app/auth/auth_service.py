@@ -4,6 +4,7 @@ from app.auth.auth_config import AuthConfig
 from app.auth.password_service import PasswordService
 from app.auth.token_service import TokenService
 from app.models.database_models import ApprovalStatus, User, UserRole
+from app.repositories.admin_repository import AdminRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
 from app.repositories.user_repository import UserRepository
 from app.utils.logger_utils import ApplicationLogger
@@ -12,9 +13,10 @@ from app.utils.logger_utils import ApplicationLogger
 class AuthService:
     """Main authentication service"""
 
-    def __init__(self, user_repo: UserRepository, refresh_token_repo: RefreshTokenRepository,
-                 config: AuthConfig | None = None):
+    def __init__(self, user_repo: UserRepository, admin_repo: AdminRepository,
+                 refresh_token_repo: RefreshTokenRepository, config: AuthConfig | None = None):
         self.user_repo = user_repo
+        self.admin_repo = admin_repo
         self.refresh_token_repo = refresh_token_repo
         self.config = config or AuthConfig()
         self.password_service = PasswordService()
@@ -53,23 +55,38 @@ class AuthService:
                     device_info: str | None = None, ip_address: str | None = None) -> dict | None:
         """Authenticate user and return tokens"""
         try:
-            # Get user by username
+            # Check users collection first
             user = await self.user_repo.get_by_username(username)
+            is_admin = False
+
+            # If not found in users, check admins collection
+            if not user:
+                user = await self.admin_repo.get_by_username(username)
+                is_admin = True
+
             if not user:
                 self.logger.warning(
                     f"Login attempt with non-existent username: {username}")
                 return None
 
-            # Check if user is approved and active
-            if user.approval_status != ApprovalStatus.APPROVED:
-                self.logger.warning(
-                    f"Login attempt by unapproved user: {username}")
-                return None
-
-            if not user.is_active:
-                self.logger.warning(
-                    f"Login attempt by inactive user: {username}")
-                return None
+            # Validate user status
+            if is_admin:
+                # Admins only need to be active
+                if not user.is_active:
+                    self.logger.warning(
+                        f"Login attempt by inactive admin: {username}")
+                    return None
+            else:
+                # Regular users need approval and active status
+                from app.models.database_models import User
+                if isinstance(user, User) and user.approval_status != ApprovalStatus.APPROVED:
+                    self.logger.warning(
+                        f"Login attempt by unapproved user: {username}")
+                    return None
+                if not user.is_active:
+                    self.logger.warning(
+                        f"Login attempt by inactive user: {username}")
+                    return None
 
             # Verify password
             if not self.password_service.verify_password(password, user.hashed_password):
@@ -105,7 +122,10 @@ class AuthService:
             )
 
             # Update last login
-            await self.user_repo.update_last_login(user.id)
+            if is_admin:
+                await self.admin_repo.update_last_login(user.id)
+            else:
+                await self.user_repo.update_last_login(user.id)
 
             self.logger.info(f"User logged in successfully: {username}")
 
@@ -201,19 +221,57 @@ class AuthService:
     async def verify_access_token(self, token: str) -> dict | None:
         """Verify access token and return user info"""
         try:
+            self.logger.info("Starting token verification process")
+
             payload = self.token_service.verify_token(token)
-            if not payload or not self.token_service.is_access_token(payload):
+            if not payload:
+                self.logger.warning(
+                    "Token verification failed - invalid token format or signature")
+                return None
+
+            self.logger.info(
+                "Token decoded successfully, checking if access token")
+
+            if not self.token_service.is_access_token(payload):
+                self.logger.warning(
+                    "Token verification failed - not an access token")
                 return None
 
             # Get user to ensure they're still active
             user_id = self.token_service.get_user_id_from_payload(payload)
             if not user_id:
+                self.logger.warning(
+                    "Token verification failed - no user ID in payload")
                 return None
+
+            self.logger.info(f"Retrieved user_id from token: {user_id}")
 
             user = await self.user_repo.get_by_id(user_id)
-            if not user or not user.is_active or user.approval_status != ApprovalStatus.APPROVED:
+            if not user:
+                # Check if it's an admin account
+                self.logger.info(
+                    "User not found in users collection, checking admin collection")
+                admin = await self.admin_repo.get_by_id(user_id)
+                if not admin:
+                    self.logger.warning(
+                        f"Token verification failed - user/admin not found: {user_id}")
+                    return None
+                user = admin
+
+            if not user.is_active:
+                self.logger.warning(
+                    f"Token verification failed - user not active: {user_id}")
                 return None
 
+            # Only check approval status for regular users, not admins
+            from app.models.database_models import User
+            if isinstance(user, User) and user.approval_status != ApprovalStatus.APPROVED:
+                self.logger.warning(
+                    f"Token verification failed - user not approved: {user_id}, status: {user.approval_status}")
+                return None
+
+            self.logger.info(
+                f"Token verification successful for user: {user.username}")
             return {
                 "user_id": user_id,
                 "username": self.token_service.get_username_from_payload(payload),

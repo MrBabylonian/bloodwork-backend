@@ -7,18 +7,17 @@ following veterinary workflow patterns and role-based access control.
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
-
 from app.dependencies.auth_dependencies import (
     get_current_user,
     get_repository_factory,
+    require_admin_or_veterinarian,
     require_admin_role,
-    require_veterinarian,
 )
 from app.models.database_models import Patient, UserRole
 from app.repositories import RepositoryFactory
 from app.schemas.patient_schemas import PatientCreate, PatientResponse, PatientUpdate
 from app.utils.logger_utils import ApplicationLogger
+from fastapi import APIRouter, Depends, HTTPException, status
 
 # Create router
 router = APIRouter(prefix="/api/v1/patients", tags=["Patient Management"])
@@ -28,13 +27,13 @@ logger = ApplicationLogger.get_logger(__name__)
 @router.post("/", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)
 async def create_patient(
     patient_data: PatientCreate,
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_admin_or_veterinarian()),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
     Create a new patient.
 
-    Protected route - requires authentication.
+    Protected route - only admins and veterinarians can create patients.
     Patient is automatically assigned to the creating user.
     """
     patient_repo = repo_factory.patient_repository
@@ -84,17 +83,17 @@ async def create_patient(
 
 
 @router.get("/", response_model=List[PatientResponse])
-async def get_my_patients(
+async def get_all_patients(
     current_user: dict = Depends(get_current_user),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Get all patients assigned to current user.
+    Get all patients.
 
-    Protected route - users see only their assigned patients.
+    Protected route - all authenticated users can view all patients.
     """
     patient_repo = repo_factory.patient_repository
-    patients = await patient_repo.get_by_user_id(current_user["user_id"])
+    patients = await patient_repo.get_all()
 
     return [
         PatientResponse(
@@ -128,7 +127,7 @@ async def get_patient(
     """
     Get specific patient by ID.
 
-    Protected route - users can only access their assigned patients.
+    Protected route - all authenticated users can view any patient.
     """
     patient_repo = repo_factory.patient_repository
 
@@ -142,15 +141,6 @@ async def get_patient(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Patient not found"
         )
-
-    # Check if user has access to this patient
-    if str(patient.assigned_to) != current_user["user_id"]:
-        # Allow veterinarians to access any patient
-        if current_user.get("role") != UserRole.VETERINARIAN:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied - patient not assigned to you"
-            )
 
     return PatientResponse(
         id=str(patient.id),
@@ -182,11 +172,11 @@ async def update_patient(
     """
     Update patient information.
 
-    Protected route - users can only update their assigned patients.
+    Protected route - all authenticated users can update any patient.
     """
     patient_repo = repo_factory.patient_repository
 
-    # Get patient and verify access
+    # Get patient and verify it exists
     patient = await patient_repo.get_by_id(patient_id)
     if not patient:
         patient = await patient_repo.get_by_patient_id(patient_id)
@@ -196,14 +186,6 @@ async def update_patient(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Patient not found"
         )
-
-    # Check access
-    if str(patient.assigned_to) != current_user["user_id"]:
-        if current_user.get("role") != UserRole.VETERINARIAN:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access denied - patient not assigned to you"
-            )
 
     # Ensure patient has ID
     if not patient.id:
@@ -311,13 +293,13 @@ async def delete_patient(
 @router.get("/search/{name}", response_model=List[PatientResponse])
 async def search_patients(
     name: str,
-    current_user: dict = Depends(require_veterinarian()),
+    current_user: dict = Depends(get_current_user),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
     Search patients by name.
 
-    Protected route - only veterinarians can search all patients.
+    Protected route - all authenticated users can search patients.
     """
     patient_repo = repo_factory.patient_repository
     patients = await patient_repo.search_by_name(name)

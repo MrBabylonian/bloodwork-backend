@@ -9,12 +9,12 @@ Last updated: 2025-06-17
 Author: Bedirhan Gilgiler
 """
 
-from pathlib import Path
 from typing import Optional
 
 from fastapi import (
     APIRouter,
     BackgroundTasks,
+    Depends,
     File,
     HTTPException,
     Response,
@@ -22,6 +22,8 @@ from fastapi import (
 )
 from fastapi.responses import JSONResponse
 
+from app.dependencies.auth_dependencies import get_current_user
+from app.models.database_models import User
 from app.services.pdf_analysis_service import BloodworkPdfAnalysisService
 from app.utils.logger_utils import ApplicationLogger
 
@@ -53,17 +55,18 @@ class AnalysisRouter:
         )
 
         self._router.add_api_route(
-            "/pdf_analysis_result/{uuid}",
+            "/pdf_analysis_result/{diagnostic_id}",
             self.get_analysis_result,
             methods=["GET"],
             summary="Get analysis result",
-            description="Retrieve the analysis result for a specific UUID"
+            description="Retrieve the analysis result for a specific diagnostic ID"
         )
 
     async def analyze_pdf_file_endpoint(
         self,
         file: UploadFile = File(...),
-        background_tasks: BackgroundTasks = BackgroundTasks()
+        background_tasks: BackgroundTasks = BackgroundTasks(),
+        current_user: User = Depends(get_current_user)
     ) -> JSONResponse:
         """
         Endpoint to analyze uploaded PDF bloodwork files.
@@ -75,9 +78,10 @@ class AnalysisRouter:
         Args:
             file (UploadFile): The uploaded PDF file
             background_tasks (BackgroundTasks): FastAPI background task manager
+            current_user (User): Authenticated user from JWT token
 
         Returns:
-            JSONResponse: Response with UUID and status message
+            JSONResponse: Response with diagnostic ID and status message
 
         Raises:
             HTTPException: If file validation or processing fails
@@ -100,12 +104,12 @@ class AnalysisRouter:
 
             # Process the PDF file
             result = await self._pdf_analysis_service.process_uploaded_pdf_in_background(
-                file, background_tasks
+                file, background_tasks, current_user
             )
 
             self._logger.info(
                 f"PDF analysis initiated successfully for: {file.filename} "
-                f"(UUID: {result['pdf_uuid']})"
+                f"(ID: {result['diagnostic_id']})"
             )
 
             return JSONResponse(content=result)
@@ -142,18 +146,20 @@ class AnalysisRouter:
 
     async def get_analysis_result(
         self,
-        uuid: str,
-        structured: Optional[bool] = False
+        diagnostic_id: str,
+        structured: Optional[bool] = False,
+        current_user: User = Depends(get_current_user)
     ) -> Response:
         """
-        Endpoint to retrieve analysis results by UUID.
+        Endpoint to retrieve analysis results by diagnostic ID.
 
-        This endpoint checks for the existence of analysis results and returns
-        them if available. If results are not ready, it returns a 202 status.
+        This endpoint retrieves analysis results from the database instead of 
+        the file system, providing better data persistence and access control.
 
         Args:
-            uuid (str): The analysis UUID to retrieve results for
+            diagnostic_id (str): The diagnostic ID to retrieve results for
             structured (Optional[bool]): Whether to return structured data (unused)
+            current_user (User): Authenticated user from JWT token
 
         Returns:
             Response: Analysis results or status message
@@ -162,7 +168,7 @@ class AnalysisRouter:
             HTTPException: If result retrieval fails
 
         Example:
-            GET /analysis/pdf_analysis_result/12345678-1234-1234-1234-123456789012
+            GET /analysis/pdf_analysis_result/60a1b2c3d4e5f6789012345a
 
             Response (if ready):
             HTTP 200 - Analysis result content
@@ -171,61 +177,35 @@ class AnalysisRouter:
             HTTP 202 - {"detail": "Risultato non ancora pronto"}
         """
         try:
-            # Check for the new model output filename first
-            result_file_path = Path(
-                f"data/blood_work_pdfs/{uuid}/model_output.json")
+            # Get analysis result from database
+            result = await self._pdf_analysis_service.get_analysis_result_from_database(
+                diagnostic_id, current_user
+            )
 
-            # Check if any result file exists
-            if not result_file_path.exists():
+            if result is None:
                 self._logger.info(
-                    f"Analysis result not ready yet for UUID: {uuid}")
+                    f"Analysis result not ready yet for diagnostic ID: {diagnostic_id}")
                 return JSONResponse(
                     status_code=202,
                     content={"detail": "Risultato non ancora pronto"}
                 )
 
-            # Read and return the result
-            analysis_result = self._read_analysis_result_file(result_file_path)
-
             self._logger.info(
-                f"Analysis result successfully retrieved for UUID: {uuid} "
-                f"from file: {result_file_path.name}"
+                f"Analysis result successfully retrieved for diagnostic ID: {diagnostic_id}"
             )
 
             return Response(
-                content=analysis_result,
+                content=result,
                 media_type="application/json"
             )
 
         except Exception as error:
-            error_msg = f"Error retrieving analysis result for UUID: {uuid}"
+            error_msg = f"Error retrieving analysis result for diagnostic ID: {diagnostic_id}"
             self._logger.exception(f"{error_msg} - Error: {error}")
             raise HTTPException(
                 status_code=500,
                 detail=f"Errore interno del server: {str(error)}"
             ) from error
-
-    def _read_analysis_result_file(self, file_path: Path) -> str:
-        """
-        Read the analysis result from file.
-
-        Args:
-            file_path (Path): Path to the result file
-
-        Returns:
-            str: Content of the result file
-
-        Raises:
-            RuntimeError: If file reading fails
-        """
-        try:
-            with open(file_path, "r", encoding="utf-8") as result_file:
-                return result_file.read()
-
-        except Exception as error:
-            error_msg = f"Failed to read result file: {file_path}"
-            self._logger.exception(f"{error_msg} - Error: {error}")
-            raise RuntimeError(error_msg) from error
 
     def get_router(self) -> APIRouter:
         """
