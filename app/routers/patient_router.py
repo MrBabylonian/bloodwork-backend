@@ -5,15 +5,15 @@ This module provides CRUD operations for patient management,
 following veterinary workflow patterns and role-based access control.
 """
 
-from typing import List
+from typing import List, Union
 
 from app.dependencies.auth_dependencies import (
-    get_current_user,
     get_repository_factory,
-    require_admin_or_veterinarian,
-    require_admin_role,
+    require_admin_user,
+    require_authenticated,
+    require_vet_or_admin,
 )
-from app.models.database_models import Patient, UserRole
+from app.models.database_models import Admin, Patient, User
 from app.repositories import RepositoryFactory
 from app.schemas.patient_schemas import PatientCreate, PatientResponse, PatientUpdate
 from app.utils.logger_utils import ApplicationLogger
@@ -27,7 +27,7 @@ logger = ApplicationLogger.get_logger(__name__)
 @router.post("/", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)
 async def create_patient(
     patient_data: PatientCreate,
-    current_user: dict = Depends(require_admin_or_veterinarian()),
+    current_user: Union[Admin, User] = Depends(require_vet_or_admin),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
@@ -36,6 +36,12 @@ async def create_patient(
     Protected route - only admins and veterinarians can create patients.
     Patient is automatically assigned to the creating user.
     """
+    if not current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User ID is required"
+        )
+
     patient_repo = repo_factory.patient_repository
 
     # Create patient with current user as creator and assignee
@@ -49,8 +55,8 @@ async def create_patient(
         weight=patient_data.weight,
         owner_info=patient_data.owner_info,
         medical_history=patient_data.medical_history,
-        created_by=current_user["user_id"],
-        assigned_to=current_user["user_id"]
+        created_by=current_user.id,
+        assigned_to=current_user.id
     )
 
     created_patient = await patient_repo.create(patient)
@@ -84,7 +90,7 @@ async def create_patient(
 
 @router.get("/", response_model=List[PatientResponse])
 async def get_all_patients(
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
@@ -121,7 +127,7 @@ async def get_all_patients(
 @router.get("/{patient_id}", response_model=PatientResponse)
 async def get_patient(
     patient_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
@@ -166,7 +172,7 @@ async def get_patient(
 async def update_patient(
     patient_id: str,
     patient_data: PatientUpdate,
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
@@ -243,21 +249,14 @@ async def update_patient(
 @router.delete("/{patient_id}")
 async def delete_patient(
     patient_id: str,
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_vet_or_admin),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
     Soft delete patient.
 
-    Protected route - only veterinarians can delete patients.
+    Protected route - only veterinarians and admins can delete patients.
     """
-    # Only veterinarians can delete patients
-    if current_user.get("role") != UserRole.VETERINARIAN:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Only veterinarians can delete patients"
-        )
-
     patient_repo = repo_factory.patient_repository
 
     # Get patient
@@ -293,7 +292,7 @@ async def delete_patient(
 @router.get("/search/{name}", response_model=List[PatientResponse])
 async def search_patients(
     name: str,
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
@@ -330,7 +329,7 @@ async def search_patients(
 @router.get("/admin/recent", response_model=List[PatientResponse])
 async def get_recent_patients(
     limit: int = 10,
-    current_user: dict = Depends(require_admin_role()),
+    current_user: Admin = Depends(require_admin_user),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """

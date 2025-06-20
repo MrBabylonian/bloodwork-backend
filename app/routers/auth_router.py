@@ -5,11 +5,11 @@ This module implements user registration, login, logout, and token refresh
 endpoints following FastAPI best practices and the Zen of Python.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.security import HTTPBearer
+from typing import Union
 
 from app.auth.auth_service import AuthService
-from app.dependencies.auth_dependencies import get_auth_service, get_current_user
+from app.dependencies.auth_dependencies import get_auth_service, require_authenticated
+from app.models.database_models import Admin, User
 from app.schemas.auth_schemas import (
     AccessTokenResponse,
     TokenRefresh,
@@ -20,6 +20,8 @@ from app.schemas.auth_schemas import (
     UserRegistration,
 )
 from app.utils.logger_utils import ApplicationLogger
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.security import HTTPBearer
 
 # Create router
 router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
@@ -132,7 +134,7 @@ async def logout(
 
 
 @router.get("/profile", response_model=UserProfile)
-async def get_profile(current_user: dict = Depends(get_current_user)):
+async def get_profile(current_user: Union[Admin, User] = Depends(require_authenticated)):
     """
     Get current user profile.
 
@@ -140,16 +142,16 @@ async def get_profile(current_user: dict = Depends(get_current_user)):
     """
     # The auth dependency already validates the token and user status
     return {
-        "id": current_user["user_id"],
-        "username": current_user["username"],
-        "role": current_user["role"]
+        "id": str(current_user.id),
+        "username": current_user.username,
+        "role": current_user.role
     }
 
 
 @router.put("/profile")
 async def update_profile(
     profile_data: UserProfileUpdate,
-    current_user: dict = Depends(get_current_user),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
     auth_service: AuthService = Depends(get_auth_service)
 ):
     """
@@ -170,7 +172,21 @@ async def update_profile(
             detail="No data provided for update"
         )
 
-    success = await user_repo.update_profile(current_user["user_id"], update_data)
+    if not current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User ID is required"
+        )
+
+    # Handle Admin and User profile updates differently
+    if isinstance(current_user, Admin):
+        # Use admin repository for admin users
+        admin_repo = auth_service.admin_repo
+        success = await admin_repo.update_profile(current_user.id, update_data)
+    else:
+        # Use user repository for regular users
+        user_repo = auth_service.user_repo
+        success = await user_repo.update_profile(current_user.id, update_data)
 
     if not success:
         raise HTTPException(

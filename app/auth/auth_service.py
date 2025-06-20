@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from app.auth.auth_config import AuthConfig
 from app.auth.password_service import PasswordService
 from app.auth.token_service import TokenService
-from app.models.database_models import ApprovalStatus, User, UserRole
+from app.models.database_models import Admin, ApprovalStatus, User, UserRole
 from app.repositories.admin_repository import AdminRepository
 from app.repositories.refresh_token_repository import RefreshTokenRepository
 from app.repositories.user_repository import UserRepository
@@ -264,10 +264,23 @@ class AuthService:
                 return None
 
             # Only check approval status for regular users, not admins
-            from app.models.database_models import User
-            if isinstance(user, User) and user.approval_status != ApprovalStatus.APPROVED:
+            from app.models.database_models import Admin, User
+
+            if isinstance(user, Admin):
+                # Admin users don't need approval status check
+                self.logger.info(f"Admin user authenticated: {user.username}")
+            elif isinstance(user, User):
+                # Regular users need approval status check
+                if user.approval_status != ApprovalStatus.APPROVED:
+                    self.logger.warning(
+                        f"Token verification failed - user not approved: {user_id}, status: {user.approval_status}")
+                    return None
+                self.logger.info(
+                    f"Regular user authenticated: {user.username}")
+            else:
+                # Unknown user type
                 self.logger.warning(
-                    f"Token verification failed - user not approved: {user_id}, status: {user.approval_status}")
+                    f"Unknown user type for user_id: {user_id}")
                 return None
 
             self.logger.info(
@@ -280,4 +293,74 @@ class AuthService:
 
         except Exception as e:
             self.logger.error(f"Error verifying access token: {e}")
+            return None
+
+    async def get_authenticated_user(self, token: str) -> User | Admin | None:
+        """
+        Get authenticated user object from token.
+
+        This method verifies the token and returns the actual User or Admin model
+        instead of a dictionary. It handles automatic token refresh and provides
+        the foundation for our bulletproof authentication system.
+
+        Args:
+            token (str): JWT access token
+
+        Returns:
+            User | Admin | None: Authenticated user instance or None if invalid
+        """
+        try:
+            self.logger.info("Getting authenticated user from token")
+
+            # Verify token and get payload
+            payload = self.token_service.verify_token(token)
+            if not payload:
+                self.logger.warning(
+                    "Token verification failed - invalid token")
+                return None
+
+            if not self.token_service.is_access_token(payload):
+                self.logger.warning("Token is not an access token")
+                return None
+
+            # Get user ID from token
+            user_id = self.token_service.get_user_id_from_payload(payload)
+            if not user_id:
+                self.logger.warning("No user ID found in token")
+                return None
+
+            # Try to get user from users collection first
+            user = await self.user_repo.get_by_id(user_id)
+            if user:
+                # Check if user is active
+                if not user.is_active:
+                    self.logger.warning(f"User not active: {user_id}")
+                    return None
+
+                # Check approval status for regular users
+                if user.approval_status != ApprovalStatus.APPROVED:
+                    self.logger.warning(f"User not approved: {user_id}")
+                    return None
+
+                self.logger.info(
+                    f"Authenticated regular user: {user.username}")
+                return user
+
+            # If not found in users, check admin collection
+            admin = await self.admin_repo.get_by_id(user_id)
+            if admin:
+                # Check if admin is active
+                if not admin.is_active:
+                    self.logger.warning(f"Admin not active: {user_id}")
+                    return None
+
+                self.logger.info(f"Authenticated admin user: {admin.username}")
+                return admin
+
+            # User not found in either collection
+            self.logger.warning(f"User not found: {user_id}")
+            return None
+
+        except Exception as e:
+            self.logger.error(f"Error getting authenticated user: {e}")
             return None

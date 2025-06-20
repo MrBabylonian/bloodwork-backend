@@ -46,6 +46,21 @@ class BloodworkAnalyzerApplication:
 
     def _configure_middleware(self) -> None:
         """Configure application middleware including CORS for development."""
+        # Add request logging middleware
+        @self._app.middleware("http")
+        async def log_requests(request, call_next):
+            from app.utils.logger_utils import ApplicationLogger
+            logger = ApplicationLogger.get_logger("request_middleware")
+
+            logger.info(
+                f"=== REQUEST: {request.method} {request.url.path} ===")
+            logger.info(f"Headers: {dict(request.headers)}")
+
+            response = await call_next(request)
+
+            logger.info(f"=== RESPONSE: {response.status_code} ===")
+            return response
+
         # CORS configuration for development
         self._app.add_middleware(
             CORSMiddleware,

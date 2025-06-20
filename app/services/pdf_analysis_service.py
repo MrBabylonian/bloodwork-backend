@@ -12,18 +12,17 @@ Author: Bedirhan Gilgiler
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Dict, List, Optional
-
-from fastapi import BackgroundTasks, HTTPException, UploadFile
+from typing import Dict, List, Optional, Union
 
 from app.dependencies.auth_dependencies import (
     get_database_service,
     get_repository_factory,
 )
-from app.models.database_models import AiDiagnostic, User
+from app.models.database_models import Admin, AiDiagnostic, User
 from app.services.openai_service import BloodworkAnalysisService
 from app.utils.file_utils import PdfImageConverter
 from app.utils.logger_utils import ApplicationLogger
+from fastapi import BackgroundTasks, HTTPException, UploadFile
 
 
 class PdfAnalysisConfiguration:
@@ -61,7 +60,7 @@ class BloodworkPdfAnalysisService:
         self,
         uploaded_file: UploadFile,
         background_tasks: BackgroundTasks,
-        current_user: User
+        current_user: Union[Admin, User]
     ) -> Dict[str, str]:
         """
         Process an uploaded PDF file and schedule AI analysis in the background.
@@ -109,7 +108,8 @@ class BloodworkPdfAnalysisService:
                     "gridfs_id": gridfs_id,
                     "upload_date": datetime.now(timezone.utc)
                 },
-                created_by=current_user.id or ObjectId()
+                created_by=ObjectId(
+                    current_user.id) if current_user.id else ObjectId()
             )
 
             # Save diagnostic to database
@@ -147,7 +147,7 @@ class BloodworkPdfAnalysisService:
     async def get_analysis_result_from_database(
         self,
         diagnostic_id: str,
-        current_user: User
+        current_user: Union[Admin, User]
     ) -> Optional[str]:
         """
         Retrieve analysis result from database.

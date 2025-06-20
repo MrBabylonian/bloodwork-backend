@@ -9,8 +9,12 @@ Last updated: 2025-06-17
 Author: Bedirhan Gilgiler
 """
 
-from typing import Optional
+from typing import Optional, Union
 
+from app.dependencies.auth_dependencies import require_authenticated
+from app.models.database_models import Admin, User
+from app.services.pdf_analysis_service import BloodworkPdfAnalysisService
+from app.utils.logger_utils import ApplicationLogger
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -21,11 +25,6 @@ from fastapi import (
     UploadFile,
 )
 from fastapi.responses import JSONResponse
-
-from app.dependencies.auth_dependencies import get_current_user
-from app.models.database_models import User
-from app.services.pdf_analysis_service import BloodworkPdfAnalysisService
-from app.utils.logger_utils import ApplicationLogger
 
 
 class AnalysisRouter:
@@ -66,7 +65,7 @@ class AnalysisRouter:
         self,
         file: UploadFile = File(...),
         background_tasks: BackgroundTasks = BackgroundTasks(),
-        current_user: User = Depends(get_current_user)
+        current_user: Union[Admin, User] = Depends(require_authenticated)
     ) -> JSONResponse:
         """
         Endpoint to analyze uploaded PDF bloodwork files.
@@ -97,6 +96,7 @@ class AnalysisRouter:
             }
         """
         self._logger.info(f"Received PDF analysis request: {file.filename}")
+        self._logger.info(f"Current user: {current_user}")
 
         try:
             # Validate file type
@@ -148,7 +148,7 @@ class AnalysisRouter:
         self,
         diagnostic_id: str,
         structured: Optional[bool] = False,
-        current_user: User = Depends(get_current_user)
+        current_user: Union[Admin, User] = Depends(require_authenticated)
     ) -> Response:
         """
         Endpoint to retrieve analysis results by diagnostic ID.
