@@ -1,10 +1,22 @@
 """
-Patient management router with protected routes.
+Patient management router for veterinary bloodwork analysis system.
 
-This module provides CRUD operations for patient management,
-following veterinary workflow patterns and role-based access control.
+This module provides comprehensive CRUD operations for patient management,
+implementing role-based access control and following veterinary workflow patterns.
+All endpoints are protected and require authentication.
+
+Features:
+- Patient creation with automatic user assignment
+- Role-based access control (Admin/Vet permissions)
+- Comprehensive patient data management
+- Search and filtering capabilities
+- Data validation and error handling
+
+Last updated: 2025-06-20
+Author: Bedirhan Gilgiler
 """
 
+from datetime import datetime, timezone
 from typing import List, Union
 
 from app.dependencies.auth_dependencies import (
@@ -19,9 +31,9 @@ from app.schemas.patient_schemas import PatientCreate, PatientResponse, PatientU
 from app.utils.logger_utils import ApplicationLogger
 from fastapi import APIRouter, Depends, HTTPException, status
 
-# Create router
+# Initialize router and logger
 router = APIRouter(prefix="/api/v1/patients", tags=["Patient Management"])
-logger = ApplicationLogger.get_logger(__name__)
+logger = ApplicationLogger.get_logger("patient_router")
 
 
 @router.post("/", response_model=PatientResponse, status_code=status.HTTP_201_CREATED)
@@ -31,22 +43,60 @@ async def create_patient(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Create a new patient.
+    Create a new patient record.
 
-    Protected route - only admins and veterinarians can create patients.
-    Patient is automatically assigned to the creating user.
+    This endpoint creates a new patient in the system with the provided data.
+    The patient is automatically assigned to the creating user and marked as active.
+    The patient_id will be auto-generated using the sequence counter.
+
+    Args:
+        patient_data (PatientCreate): Patient information to create
+        current_user (Union[Admin, User]): Authenticated user (vet or admin only)
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        PatientResponse: Created patient data with generated ID
+
+    Raises:
+        HTTPException: 
+            - 400: If user ID missing or patient creation fails
+
+    Example:
+        POST /api/v1/patients/
+        {
+            "name": "Max",
+            "species": "Dog", 
+            "breed": "Golden Retriever",
+            "age": 5,
+            "sex": "Male",
+            "weight": 30.5
+        }
     """
-    if not current_user.id:
+    logger.info(f"Creating patient '{patient_data.name}'")
+
+    # Get user ID based on user type
+    from app.models.database_models import Admin
+    if isinstance(current_user, Admin):
+        creator_id = current_user.admin_id
+    else:
+        creator_id = current_user.user_id
+
+    if not creator_id:
+        logger.error("Patient creation failed: missing user ID")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User ID is required"
         )
 
+    # Get a new patient ID from the sequence counter
+    seq_counter_repo = repo_factory.sequence_counter_repository
+    patient_id = await seq_counter_repo.get_next_id("patient")
+
     patient_repo = repo_factory.patient_repository
 
     # Create patient with current user as creator and assignee
     patient = Patient(
-        patient_id=patient_data.patient_id,
+        patient_id=patient_id,
         name=patient_data.name,
         species=patient_data.species,
         breed=patient_data.breed,
@@ -55,21 +105,23 @@ async def create_patient(
         weight=patient_data.weight,
         owner_info=patient_data.owner_info,
         medical_history=patient_data.medical_history,
-        created_by=current_user.id,
-        assigned_to=current_user.id
+        created_by=creator_id,
+        assigned_to=creator_id
     )
 
     created_patient = await patient_repo.create(patient)
 
     if not created_patient:
+        logger.error(f"Failed to create patient: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Patient ID already exists or creation failed"
+            detail="Patient creation failed"
         )
+
+    logger.info(f"Patient created successfully: {created_patient.patient_id}")
 
     # Convert to response format
     return PatientResponse(
-        id=str(created_patient.id),
         patient_id=created_patient.patient_id,
         name=created_patient.name,
         species=created_patient.species,
@@ -80,8 +132,8 @@ async def create_patient(
         owner_info=created_patient.owner_info,
         medical_history=created_patient.medical_history,
         diagnostic_summary=created_patient.diagnostic_summary,
-        created_by=str(created_patient.created_by),
-        assigned_to=str(created_patient.assigned_to),
+        created_by=created_patient.created_by,
+        assigned_to=created_patient.assigned_to,
         created_at=created_patient.created_at,
         updated_at=created_patient.updated_at,
         is_active=created_patient.is_active
@@ -94,16 +146,38 @@ async def get_all_patients(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Get all patients.
+    Retrieve all patients from the system.
 
-    Protected route - all authenticated users can view all patients.
+    This endpoint returns a list of all patients in the database,
+    accessible to all authenticated users.
+
+    Args:
+        current_user (Union[Admin, User]): Authenticated user
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        List[PatientResponse]: List of all patients with their details
+
+    Example:
+        GET /api/v1/patients/
+        Response: [
+            {
+                "patient_id": "PAT-001",
+                "name": "Max",
+                "species": "Dog",
+                ...
+            }
+        ]
     """
+    logger.info("Retrieving all patients")
+
     patient_repo = repo_factory.patient_repository
     patients = await patient_repo.get_all()
 
+    logger.info(f"Retrieved {len(patients)} patients")
+
     return [
         PatientResponse(
-            id=str(patient.id),
             patient_id=patient.patient_id,
             name=patient.name,
             species=patient.species,
@@ -114,8 +188,8 @@ async def get_all_patients(
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
             diagnostic_summary=patient.diagnostic_summary,
-            created_by=str(patient.created_by),
-            assigned_to=str(patient.assigned_to),
+            created_by=patient.created_by,
+            assigned_to=patient.assigned_to,
             created_at=patient.created_at,
             updated_at=patient.updated_at,
             is_active=patient.is_active
@@ -131,25 +205,45 @@ async def get_patient(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Get specific patient by ID.
+    Retrieve a specific patient by ID.
 
-    Protected route - all authenticated users can view any patient.
+    This endpoint returns detailed information for a specific patient,
+    accessible to all authenticated users.
+
+    Args:
+        patient_id (str): Patient ID to retrieve
+        current_user (Union[Admin, User]): Authenticated user
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        PatientResponse: Patient details
+
+    Raises:
+        HTTPException: 404 if patient not found
+
+    Example:
+        GET /api/v1/patients/PAT-001
+        Response: {
+            "patient_id": "PAT-001",
+            "name": "Max",
+            ...
+        }
     """
+    logger.info(f"Retrieving patient: {patient_id}")
+
     patient_repo = repo_factory.patient_repository
-
-    # Try by MongoDB ObjectId first, then by patient_id
     patient = await patient_repo.get_by_id(patient_id)
-    if not patient:
-        patient = await patient_repo.get_by_patient_id(patient_id)
 
     if not patient:
+        logger.warning(f"Patient not found: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Patient not found"
         )
 
+    logger.info(f"Patient retrieved: {patient_id}")
+
     return PatientResponse(
-        id=str(patient.id),
         patient_id=patient.patient_id,
         name=patient.name,
         species=patient.species,
@@ -160,8 +254,8 @@ async def get_patient(
         owner_info=patient.owner_info,
         medical_history=patient.medical_history,
         diagnostic_summary=patient.diagnostic_summary,
-        created_by=str(patient.created_by),
-        assigned_to=str(patient.assigned_to),
+        created_by=patient.created_by,
+        assigned_to=patient.assigned_to,
         created_at=patient.created_at,
         updated_at=patient.updated_at,
         is_active=patient.is_active
@@ -176,58 +270,84 @@ async def update_patient(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Update patient information.
+    Update a patient's information.
 
-    Protected route - all authenticated users can update any patient.
+    This endpoint updates a patient's information with the provided data.
+    Only fields included in the request are updated.
+
+    Args:
+        patient_id (str): Patient ID to update
+        patient_data (PatientUpdate): Patient fields to update
+        current_user (Union[Admin, User]): Authenticated user
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        PatientResponse: Updated patient details
+
+    Raises:
+        HTTPException:
+            - 404: If patient not found
+            - 400: If update fails
+
+    Example:
+        PUT /api/v1/patients/PAT-001
+        {
+            "weight": 32.5,
+            "medical_history": {
+                "vaccinations": ["Rabies", "Distemper"]
+            }
+        }
     """
+    logger.info(f"Updating patient: {patient_id}")
+
     patient_repo = repo_factory.patient_repository
-
-    # Get patient and verify it exists
     patient = await patient_repo.get_by_id(patient_id)
-    if not patient:
-        patient = await patient_repo.get_by_patient_id(patient_id)
 
     if not patient:
+        logger.warning(f"Patient not found: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Patient not found"
         )
 
-    # Ensure patient has ID
-    if not patient.id:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Patient ID is missing"
-        )
-
-    # Prepare update data
-    update_data = {k: v for k, v in patient_data.model_dump().items()
-                   if v is not None}
+    # Build update data from request
+    update_data = {}
+    for field, value in patient_data.dict(exclude_unset=True).items():
+        if value is not None:
+            update_data[field] = value
 
     if not update_data:
+        logger.warning("No valid fields to update")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No data provided for update"
+            detail="No valid fields to update"
         )
 
+    # Add updated timestamp
+    update_data["updated_at"] = datetime.now(timezone.utc)
+
     # Update patient
-    success = await patient_repo.update(patient.id, update_data)
+    success = await patient_repo.update(patient_id, update_data)
 
     if not success:
+        logger.error(f"Failed to update patient: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Failed to update patient"
         )
 
-    # Return updated patient
-    updated_patient = await patient_repo.get_by_id(patient.id)
+    # Get updated patient
+    updated_patient = await patient_repo.get_by_id(patient_id)
     if not updated_patient:
+        logger.error(f"Failed to retrieve updated patient: {patient_id}")
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Failed to retrieve updated patient"
         )
+
+    logger.info(f"Patient updated successfully: {patient_id}")
+
     return PatientResponse(
-        id=str(updated_patient.id),
         patient_id=updated_patient.patient_id,
         name=updated_patient.name,
         species=updated_patient.species,
@@ -238,8 +358,8 @@ async def update_patient(
         owner_info=updated_patient.owner_info,
         medical_history=updated_patient.medical_history,
         diagnostic_summary=updated_patient.diagnostic_summary,
-        created_by=str(updated_patient.created_by),
-        assigned_to=str(updated_patient.assigned_to),
+        created_by=updated_patient.created_by,
+        assigned_to=updated_patient.assigned_to,
         created_at=updated_patient.created_at,
         updated_at=updated_patient.updated_at,
         is_active=updated_patient.is_active
@@ -253,38 +373,62 @@ async def delete_patient(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Soft delete patient.
+    Delete (soft-delete) a patient.
 
-    Protected route - only veterinarians and admins can delete patients.
+    This endpoint marks a patient as inactive (soft-delete)
+    rather than permanently deleting the record.
+
+    Args:
+        patient_id (str): Patient ID to delete
+        current_user (Union[Admin, User]): Authenticated user (vet or admin only)
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        dict: Deletion success message
+
+    Raises:
+        HTTPException:
+            - 404: If patient not found
+            - 400: If deletion fails
+
+    Example:
+        DELETE /api/v1/patients/PAT-001
+        Response: {"message": "Patient deleted successfully"}
     """
+    logger.info(f"Deleting patient: {patient_id}")
+
     patient_repo = repo_factory.patient_repository
-
-    # Get patient
     patient = await patient_repo.get_by_id(patient_id)
-    if not patient:
-        patient = await patient_repo.get_by_patient_id(patient_id)
 
     if not patient:
+        logger.warning(f"Patient not found: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Patient not found"
         )
 
-    # Ensure patient has ID
-    if not patient.id:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Patient ID is missing"
-        )
+    # Get user ID based on user type
+    from app.models.database_models import Admin
+    if isinstance(current_user, Admin):
+        user_id = current_user.admin_id
+    else:
+        user_id = current_user.user_id
 
-    # Soft delete
-    success = await patient_repo.soft_delete(patient.id)
+    # Log deletion attempt with user info
+    logger.info(
+        f"Deletion of patient {patient_id} requested by: {current_user.username} ({user_id})")
+
+    # Soft delete the patient
+    success = await patient_repo.soft_delete(patient_id)
 
     if not success:
+        logger.error(f"Failed to delete patient: {patient_id}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Failed to delete patient"
         )
+
+    logger.info(f"Patient deleted successfully: {patient_id}")
 
     return {"message": "Patient deleted successfully"}
 
@@ -298,14 +442,36 @@ async def search_patients(
     """
     Search patients by name.
 
-    Protected route - all authenticated users can search patients.
+    This endpoint performs a text search on patient names and returns
+    matching patients, accessible to all authenticated users.
+
+    Args:
+        name (str): Name to search for
+        current_user (Union[Admin, User]): Authenticated user
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        List[PatientResponse]: List of matching patients
+
+    Example:
+        GET /api/v1/patients/search/Max
+        Response: [
+            {
+                "patient_id": "PAT-001",
+                "name": "Max",
+                ...
+            }
+        ]
     """
+    logger.info(f"Searching patients by name: {name}")
+
     patient_repo = repo_factory.patient_repository
     patients = await patient_repo.search_by_name(name)
 
+    logger.info(f"Found {len(patients)} patients matching '{name}'")
+
     return [
         PatientResponse(
-            id=str(patient.id),
             patient_id=patient.patient_id,
             name=patient.name,
             species=patient.species,
@@ -316,8 +482,8 @@ async def search_patients(
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
             diagnostic_summary=patient.diagnostic_summary,
-            created_by=str(patient.created_by),
-            assigned_to=str(patient.assigned_to),
+            created_by=patient.created_by,
+            assigned_to=patient.assigned_to,
             created_at=patient.created_at,
             updated_at=patient.updated_at,
             is_active=patient.is_active
@@ -333,16 +499,39 @@ async def get_recent_patients(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Get recently created patients.
+    Get recently created patients (admin only).
 
-    Protected route - admin only.
+    This endpoint returns a list of recently created patients,
+    accessible to admin users only.
+
+    Args:
+        limit (int): Maximum number of patients to return
+        current_user (Admin): Authenticated admin user
+        repo_factory (RepositoryFactory): Database repository factory
+
+    Returns:
+        List[PatientResponse]: List of recent patients
+
+    Example:
+        GET /api/v1/patients/admin/recent?limit=5
+        Response: [
+            {
+                "patient_id": "PAT-001",
+                "name": "Max",
+                ...
+            }
+        ]
     """
+    logger.info(
+        f"Admin {current_user.username} retrieving {limit} recent patients")
+
     patient_repo = repo_factory.patient_repository
     patients = await patient_repo.get_recent(limit)
 
+    logger.info(f"Retrieved {len(patients)} recent patients")
+
     return [
         PatientResponse(
-            id=str(patient.id),
             patient_id=patient.patient_id,
             name=patient.name,
             species=patient.species,
@@ -353,8 +542,8 @@ async def get_recent_patients(
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
             diagnostic_summary=patient.diagnostic_summary,
-            created_by=str(patient.created_by),
-            assigned_to=str(patient.assigned_to),
+            created_by=patient.created_by,
+            assigned_to=patient.assigned_to,
             created_at=patient.created_at,
             updated_at=patient.updated_at,
             is_active=patient.is_active
@@ -365,5 +554,13 @@ async def get_recent_patients(
 
 @router.get("/health")
 async def health_check():
-    """Health check endpoint for patient service."""
-    return {"status": "healthy", "service": "patient_management"}
+    """
+    Health check endpoint for patient router.
+
+    Returns a simple status message to verify that the patient router is operational.
+    Useful for monitoring and automated health checks.
+
+    Returns:
+        dict: Service status message
+    """
+    return {"status": "Patient router operational"}

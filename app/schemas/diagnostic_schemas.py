@@ -4,52 +4,45 @@ Pydantic schemas for diagnostic and analysis API endpoints.
 This module defines the request and response schemas for PDF analysis,
 diagnostic results, and AI-powered bloodwork analysis endpoints.
 
-Last updated: 2025-06-17
+Last updated: 2025-06-20
 Author: Bedirhan Gilgiler
 """
 
 from datetime import datetime
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
+
 from pydantic import BaseModel, Field
-from app.models.database_models import PyObjectId
 
 
 # Request Schemas
 class AnalysisRequest(BaseModel):
     """Schema for analysis request with patient context."""
-    patient_id: Optional[PyObjectId] = Field(None, description="Associated patient ID")
-    notes: Optional[str] = Field(None, max_length=1000, description="Additional analysis notes")
-    
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {
-            PyObjectId: str
-        }
+    patient_id: Optional[str] = Field(
+        None, description="Associated patient ID (format: PAT-XXX)")
+    notes: Optional[str] = Field(
+        None, max_length=1000, description="Additional analysis notes")
 
 
 class DiagnosticSearchRequest(BaseModel):
     """Schema for searching diagnostics."""
-    patient_id: Optional[PyObjectId] = None
-    status: Optional[str] = Field(None, pattern=r"^(pending|completed|failed)$")
+    patient_id: Optional[str] = None
+    status: Optional[str] = Field(
+        None, pattern=r"^(pending|completed|failed)$")
     date_from: Optional[datetime] = None
     date_to: Optional[datetime] = None
     limit: int = Field(10, ge=1, le=100)
     skip: int = Field(0, ge=0)
-    
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {
-            PyObjectId: str
-        }
 
 
 # Response Schemas
 class AnalysisResponseMinimal(BaseModel):
     """Minimal response schema for analysis initiation."""
-    analysis_id: str = Field(..., description="Unique analysis identifier (UUID)")
+    diagnostic_id: str = Field(...,
+                               description="Unique diagnostic identifier (e.g., DGN-001)")
     status: str = Field(..., description="Analysis status")
     message: str = Field(..., description="Human-readable status message")
-    estimated_completion: Optional[datetime] = Field(None, description="Estimated completion time")
+    estimated_completion: Optional[datetime] = Field(
+        None, description="Estimated completion time")
 
 
 class PatientInfo(BaseModel):
@@ -70,7 +63,8 @@ class ParameterAnalysis(BaseModel):
     valore: str
     unita: Optional[str] = None
     range: Optional[str] = None
-    stato: str = Field(..., pattern=r"^(normale|alterato_lieve|alterato_grave)$")
+    stato: str = Field(...,
+                       pattern=r"^(normale|alterato_lieve|alterato_grave)$")
 
 
 class MathematicalAnalysis(BaseModel):
@@ -91,7 +85,8 @@ class DifferentialDiagnosis(BaseModel):
 class ClinicalInterpretation(BaseModel):
     """Clinical interpretation of results."""
     alterazioni: List[str] = Field(default_factory=list)
-    diagnosi_differenziali: List[DifferentialDiagnosis] = Field(default_factory=list)
+    diagnosi_differenziali: List[DifferentialDiagnosis] = Field(
+        default_factory=list)
     pattern_compatibili: Dict[str, str] = Field(default_factory=dict)
 
 
@@ -127,8 +122,10 @@ class AnalysisResultDetailed(BaseModel):
     """Detailed analysis result schema."""
     paziente: PatientInfo
     parametri: List[ParameterAnalysis] = Field(default_factory=list)
-    analisi_matematica: MathematicalAnalysis = Field(default_factory=MathematicalAnalysis)
-    interpretazione_clinica: ClinicalInterpretation = Field(default_factory=ClinicalInterpretation)
+    analisi_matematica: MathematicalAnalysis = Field(
+        default_factory=MathematicalAnalysis)
+    interpretazione_clinica: ClinicalInterpretation = Field(
+        default_factory=ClinicalInterpretation)
     referto_citologico: Optional[str] = None
     classificazione_urgenza: Optional[UrgencyClassification] = None
     piano_diagnostico: List[DiagnosticPlan] = Field(default_factory=list)
@@ -141,24 +138,19 @@ class AnalysisResultDetailed(BaseModel):
 
 class DiagnosticResponse(BaseModel):
     """Complete diagnostic response schema."""
-    id: PyObjectId = Field(alias="_id")
-    analysis_uuid: str
-    patient_id: Optional[PyObjectId] = None
-    status: str
-    raw_ai_output: Optional[str] = None
-    structured_result: Optional[AnalysisResultDetailed] = None
-    file_paths: List[str] = Field(default_factory=list)
-    error_message: Optional[str] = None
+    diagnostic_id: str
+    patient_id: str
+    sequence_number: int
+    test_date: datetime
+    openai_analysis: str
+    pdf_metadata: dict
+    processing_info: dict
+    veterinarian_review: Optional[dict] = None
+    created_by: str
     created_at: datetime
-    updated_at: datetime
-    processed_at: Optional[datetime] = None
-    
+
     class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {
-            PyObjectId: str
-        }
+        orm_mode = True
 
 
 class DiagnosticListResponse(BaseModel):
@@ -204,14 +196,26 @@ class AnalysisFailedResponse(BaseModel):
 # Validation helpers
 class AnalysisStatusValidator:
     """Validator for analysis status values."""
-    
+
     VALID_STATUSES = {"pending", "in_progress", "completed", "failed"}
-    
+
     @classmethod
     def validate_status(cls, status: str) -> str:
-        """Validate analysis status."""
+        """
+        Validate analysis status value.
+
+        Args:
+            status (str): Status to validate
+
+        Returns:
+            str: Validated status
+
+        Raises:
+            ValueError: If status is invalid
+        """
         if status not in cls.VALID_STATUSES:
-            raise ValueError(f"Invalid status. Must be one of: {cls.VALID_STATUSES}")
+            raise ValueError(
+                f"Invalid status: {status}. Must be one of {cls.VALID_STATUSES}")
         return status
 
 

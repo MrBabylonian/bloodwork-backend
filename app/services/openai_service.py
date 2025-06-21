@@ -16,10 +16,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
-from dotenv import load_dotenv
-
 from app.utils.file_utils import FileProcessor
 from app.utils.logger_utils import ApplicationLogger
+from dotenv import load_dotenv
 
 
 class OpenAiConfiguration:
@@ -141,8 +140,7 @@ class BloodworkAnalysisService:
         if not image_paths:
             raise ValueError("At least one image path must be provided")
 
-        self._logger.info(
-            f"Starting bloodwork analysis for {len(image_paths)} images")
+        self._logger.info(f"Analyzing {len(image_paths)} bloodwork images")
 
         # Validate all image files exist
         for image_path in image_paths:
@@ -197,8 +195,7 @@ class BloodworkAnalysisService:
                 }
 
                 image_messages.append(image_message)
-                self._logger.info(
-                    f"Prepared image for analysis: {image_path.name}")
+                self._logger.debug(f"Prepared image: {image_path.name}")
 
             except Exception as error:
                 error_msg = f"Failed to prepare image: {image_path}"

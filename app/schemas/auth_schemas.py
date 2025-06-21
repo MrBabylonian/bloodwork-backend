@@ -1,12 +1,34 @@
+"""
+Authentication schemas for veterinary bloodwork analysis system.
+
+This module defines Pydantic schemas for authentication-related API operations
+including user registration, login, token management, and profile updates.
+All schemas include proper validation and documentation.
+
+Features:
+- User registration and login validation
+- JWT token response schemas
+- Profile management schemas
+- Email validation with EmailStr
+- Comprehensive field documentation
+
+Last updated: 2025-06-20
+Author: Bedirhan Gilgiler
+"""
+
 from datetime import datetime
+
+from app.models.database_models import ApprovalStatus, UserRole
 from pydantic import BaseModel, EmailStr
 
-from app.models.database_models import UserRole, ApprovalStatus
 
-
-# Authentication Schemas
 class UserRegistration(BaseModel):
-    """User registration request"""
+    """
+    Schema for user registration requests.
+
+    Used when new users sign up for the system. All users start with
+    'pending' approval status requiring admin approval.
+    """
     username: str
     email: EmailStr
     password: str
@@ -15,13 +37,21 @@ class UserRegistration(BaseModel):
 
 
 class UserLogin(BaseModel):
-    """User login request"""
+    """
+    Schema for user login requests.
+
+    Accepts username and password for authentication.
+    """
     username: str
     password: str
 
 
 class TokenResponse(BaseModel):
-    """Token response"""
+    """
+    Schema for JWT token responses.
+
+    Returned after successful login containing both access and refresh tokens.
+    """
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
@@ -44,7 +74,7 @@ class AccessTokenResponse(BaseModel):
 # User Schemas
 class UserProfile(BaseModel):
     """User profile response"""
-    id: str
+    user_id: str
     username: str
     email: str
     role: UserRole
@@ -54,9 +84,13 @@ class UserProfile(BaseModel):
     created_at: datetime
     last_login: datetime | None = None
 
+    class Config:
+        orm_mode = True
+
 
 class UserProfileUpdate(BaseModel):
     """User profile update request"""
+    email: EmailStr | None = None
     first_name: str | None = None
     last_name: str | None = None
     license_number: str | None = None
@@ -66,7 +100,7 @@ class UserProfileUpdate(BaseModel):
 
 class UserResponse(BaseModel):
     """User response"""
-    id: str
+    user_id: str
     username: str
     email: str
     role: UserRole
@@ -75,6 +109,25 @@ class UserResponse(BaseModel):
     is_active: bool
     created_at: datetime
     last_login: datetime | None = None
+
+    class Config:
+        orm_mode = True
+
+
+class AdminResponse(BaseModel):
+    """Admin response"""
+    admin_id: str
+    username: str
+    email: str
+    role: str
+    permissions: list[str]
+    profile: dict
+    is_active: bool
+    created_at: datetime
+    last_login: datetime | None = None
+
+    class Config:
+        orm_mode = True
 
 
 class UserApproval(BaseModel):

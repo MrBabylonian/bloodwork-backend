@@ -1,9 +1,16 @@
 """
-Authentication and authorization dependencies for the application.
+Authentication and authorization dependencies for veterinary bloodwork analysis.
 
-This module provides clean, bulletproof authentication dependencies that handle
-both Admin and User authentication with automatic token refresh and clear
+This module provides production-grade authentication dependencies that handle
+both Admin and User authentication with automatic token validation and clear
 role-based access control.
+
+Features:
+- Unified authentication for Admin and User models
+- Role-based access control with granular permissions
+- Automatic token validation and refresh
+- Clean dependency injection pattern
+- Comprehensive security logging
 
 Author: Bedirhan Gilgiler
 Last updated: 2025-06-20
@@ -15,22 +22,22 @@ from app.auth.auth_config import AuthConfig
 from app.auth.auth_service import AuthService
 from app.config.database_config import DatabaseConfig
 from app.models.database_models import Admin, User, UserRole
-from app.repositories import RepositoryFactory
+from app.repositories.repository_factory import RepositoryFactory
 from app.services.database_service import DatabaseService
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-# Security scheme for token extraction
+# HTTP Bearer token security scheme
 security = HTTPBearer(auto_error=False)
 
-# Global instances (singleton pattern)
+# Singleton instances for dependency injection
 _database_service = None
 _repository_factory = None
 _auth_service = None
 
 
 def get_database_service() -> DatabaseService:
-    """Get database service instance."""
+    """Get singleton database service instance."""
     global _database_service
     if _database_service is None:
         config = DatabaseConfig()
@@ -39,7 +46,7 @@ def get_database_service() -> DatabaseService:
 
 
 def get_repository_factory(db_service: DatabaseService = Depends(get_database_service)) -> RepositoryFactory:
-    """Get repository factory instance."""
+    """Get singleton repository factory instance."""
     global _repository_factory
     if _repository_factory is None:
         _repository_factory = RepositoryFactory(db_service)
@@ -47,7 +54,7 @@ def get_repository_factory(db_service: DatabaseService = Depends(get_database_se
 
 
 def get_auth_service(repo_factory: RepositoryFactory = Depends(get_repository_factory)) -> AuthService:
-    """Get authentication service instance."""
+    """Get singleton authentication service instance."""
     global _auth_service
     if _auth_service is None:
         config = AuthConfig()

@@ -1,11 +1,11 @@
 from datetime import datetime
+
 from pydantic import BaseModel
 
 
 # Patient Schemas
 class PatientCreate(BaseModel):
     """Patient creation request"""
-    patient_id: str
     name: str
     species: str
     breed: str
@@ -31,7 +31,6 @@ class PatientUpdate(BaseModel):
 
 class PatientResponse(BaseModel):
     """Patient response"""
-    id: str
     patient_id: str
     name: str
     species: str
@@ -47,6 +46,9 @@ class PatientResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     is_active: bool
+
+    class Config:
+        orm_mode = True
 
 
 class PatientListResponse(BaseModel):

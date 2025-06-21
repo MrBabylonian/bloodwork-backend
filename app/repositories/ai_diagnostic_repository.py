@@ -1,7 +1,5 @@
 from datetime import datetime, timezone
 
-from bson import ObjectId
-
 from app.models.database_models import AiDiagnostic
 from app.services.database_service import DatabaseService
 from app.utils.logger_utils import ApplicationLogger
@@ -20,9 +18,7 @@ class AiDiagnosticRepository:
         try:
             diagnostic.created_at = datetime.now(timezone.utc)
 
-            result = await self.collection.insert_one(diagnostic.model_dump(by_alias=True, exclude={"id"}))
-            diagnostic.id = result.inserted_id
-
+            await self.collection.insert_one(diagnostic.model_dump(by_alias=True))
             self.logger.info(
                 f"Created diagnostic for patient: {diagnostic.patient_id}")
             return diagnostic
@@ -31,25 +27,19 @@ class AiDiagnosticRepository:
             self.logger.error(f"Error creating diagnostic: {e}")
             return None
 
-    async def get_by_id(self, diagnostic_id: str | ObjectId) -> AiDiagnostic | None:
-        """Get diagnostic by ObjectId"""
+    async def get_by_id(self, diagnostic_id: str) -> AiDiagnostic | None:
+        """Get diagnostic by diagnostic_id"""
         try:
-            if isinstance(diagnostic_id, str):
-                diagnostic_id = ObjectId(diagnostic_id)
-
-            doc = await self.collection.find_one({"_id": diagnostic_id})
+            doc = await self.collection.find_one({"diagnostic_id": diagnostic_id})
             return AiDiagnostic(**doc) if doc else None
 
         except Exception as e:
             self.logger.error(f"Error getting diagnostic by id: {e}")
             return None
 
-    async def get_by_patient_id(self, patient_id: str | ObjectId) -> list[AiDiagnostic]:
+    async def get_by_patient_id(self, patient_id: str) -> list[AiDiagnostic]:
         """Get all diagnostics for a patient, ordered by test date"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
             cursor = self.collection.find(
                 {"patient_id": patient_id}
             ).sort("test_date", -1)
@@ -61,12 +51,9 @@ class AiDiagnosticRepository:
             self.logger.error(f"Error getting diagnostics by patient_id: {e}")
             return []
 
-    async def get_latest_by_patient_id(self, patient_id: str | ObjectId) -> AiDiagnostic | None:
+    async def get_latest_by_patient_id(self, patient_id: str) -> AiDiagnostic | None:
         """Get the most recent diagnostic for a patient"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
             doc = await self.collection.find_one(
                 {"patient_id": patient_id},
                 sort=[("test_date", -1)]
@@ -78,12 +65,9 @@ class AiDiagnosticRepository:
             self.logger.error(f"Error getting latest diagnostic: {e}")
             return None
 
-    async def get_by_created_by(self, user_id: str | ObjectId, limit: int = 50) -> list[AiDiagnostic]:
+    async def get_by_created_by(self, user_id: str, limit: int = 50) -> list[AiDiagnostic]:
         """Get diagnostics created by a specific user"""
         try:
-            if isinstance(user_id, str):
-                user_id = ObjectId(user_id)
-
             cursor = self.collection.find(
                 {"created_by": user_id}
             ).sort("created_at", -1).limit(limit)
@@ -95,12 +79,9 @@ class AiDiagnosticRepository:
             self.logger.error(f"Error getting diagnostics by created_by: {e}")
             return []
 
-    async def get_next_sequence_number(self, patient_id: str | ObjectId) -> int:
+    async def get_next_sequence_number(self, patient_id: str) -> int:
         """Get the next sequence number for a patient's diagnostics"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
             # Find the highest sequence number for this patient
             doc = await self.collection.find_one(
                 {"patient_id": patient_id},
@@ -115,18 +96,15 @@ class AiDiagnosticRepository:
 
     async def add_veterinarian_review(
         self,
-        diagnostic_id: str | ObjectId,
+        diagnostic_id: str,
         review_data: dict
     ) -> bool:
         """Add veterinarian review to a diagnostic"""
         try:
-            if isinstance(diagnostic_id, str):
-                diagnostic_id = ObjectId(diagnostic_id)
-
             review_data["reviewed_at"] = datetime.now(timezone.utc)
 
             result = await self.collection.update_one(
-                {"_id": diagnostic_id},
+                {"diagnostic_id": diagnostic_id},
                 {"$set": {"veterinarian_review": review_data}}
             )
 
@@ -190,16 +168,13 @@ class AiDiagnosticRepository:
 
     async def update_processing_info(
         self,
-        diagnostic_id: str | ObjectId,
+        diagnostic_id: str,
         processing_info: dict
     ) -> bool:
         """Update processing information for a diagnostic"""
         try:
-            if isinstance(diagnostic_id, str):
-                diagnostic_id = ObjectId(diagnostic_id)
-
             result = await self.collection.update_one(
-                {"_id": diagnostic_id},
+                {"diagnostic_id": diagnostic_id},
                 {"$set": {"processing_info": processing_info}}
             )
 

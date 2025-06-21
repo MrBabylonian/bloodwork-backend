@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 from app.models.database_models import Patient
 from app.services.database_service import DatabaseService
 from app.utils.logger_utils import ApplicationLogger
-from bson import ObjectId
 from pymongo.errors import DuplicateKeyError
 
 
@@ -21,9 +20,7 @@ class PatientRepository:
             patient.created_at = datetime.now(timezone.utc)
             patient.updated_at = datetime.now(timezone.utc)
 
-            result = await self.collection.insert_one(patient.model_dump(by_alias=True, exclude={"id"}))
-            patient.id = result.inserted_id
-
+            await self.collection.insert_one(patient.model_dump(by_alias=True))
             self.logger.info(f"Created patient: {patient.patient_id}")
             return patient
 
@@ -35,35 +32,19 @@ class PatientRepository:
             self.logger.error(f"Error creating patient: {e}")
             return None
 
-    async def get_by_id(self, patient_id: str | ObjectId) -> Patient | None:
-        """Get patient by ObjectId"""
+    async def get_by_id(self, patient_id: str) -> Patient | None:
+        """Get patient by patient_id"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
-            doc = await self.collection.find_one({"_id": patient_id})
+            doc = await self.collection.find_one({"patient_id": patient_id})
             return Patient(**doc) if doc else None
 
         except Exception as e:
             self.logger.error(f"Error getting patient by id: {e}")
             return None
 
-    async def get_by_patient_id(self, patient_id: str) -> Patient | None:
-        """Get patient by human-readable patient_id"""
-        try:
-            doc = await self.collection.find_one({"patient_id": patient_id})
-            return Patient(**doc) if doc else None
-
-        except Exception as e:
-            self.logger.error(f"Error getting patient by patient_id: {e}")
-            return None
-
-    async def get_by_user_id(self, user_id: str | ObjectId) -> list[Patient]:
+    async def get_by_user_id(self, user_id: str) -> list[Patient]:
         """Get all patients assigned to a user"""
         try:
-            if isinstance(user_id, str):
-                user_id = ObjectId(user_id)
-
             cursor = self.collection.find(
                 {"assigned_to": user_id, "is_active": True})
             docs = await cursor.to_list(length=None)
@@ -114,16 +95,13 @@ class PatientRepository:
             self.logger.error(f"Error searching patients by name: {e}")
             return []
 
-    async def update(self, patient_id: str | ObjectId, update_data: dict) -> bool:
+    async def update(self, patient_id: str, update_data: dict) -> bool:
         """Update patient data"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
             update_data["updated_at"] = datetime.now(timezone.utc)
 
             result = await self.collection.update_one(
-                {"_id": patient_id},
+                {"patient_id": patient_id},
                 {"$set": update_data}
             )
 
@@ -136,14 +114,11 @@ class PatientRepository:
             self.logger.error(f"Error updating patient: {e}")
             return False
 
-    async def soft_delete(self, patient_id: str | ObjectId) -> bool:
+    async def soft_delete(self, patient_id: str) -> bool:
         """Soft delete patient (set is_active to False)"""
         try:
-            if isinstance(patient_id, str):
-                patient_id = ObjectId(patient_id)
-
             result = await self.collection.update_one(
-                {"_id": patient_id},
+                {"patient_id": patient_id},
                 {"$set": {"is_active": False,
                           "updated_at": datetime.now(timezone.utc)}}
             )

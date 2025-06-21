@@ -55,6 +55,10 @@ class BloodworkPdfAnalysisService:
         self._ai_service = BloodworkAnalysisService()
         self._db_service = get_database_service()
         self._repo_factory = get_repository_factory(self._db_service)
+        # Track processing metrics
+        self._last_processing_time_ms = 0
+        self._model_version = "gpt-4o"
+        self._confidence_score = 0.0
 
     async def process_uploaded_pdf_in_background(
         self,
@@ -83,9 +87,7 @@ class BloodworkPdfAnalysisService:
         self._validate_uploaded_file(uploaded_file)
 
         self._logger.info(
-            f"Starting PDF analysis for: {uploaded_file.filename} "
-            f"by user: {current_user.username}"
-        )
+            f"Processing PDF: {uploaded_file.filename} (user: {current_user.username})")
 
         try:
             # Read PDF file data
@@ -95,10 +97,25 @@ class BloodworkPdfAnalysisService:
             filename = uploaded_file.filename or "unknown.pdf"
             gridfs_id = await self._db_service.store_pdf_file(pdf_data, filename)
 
+            # Generate a new diagnostic ID using sequence counter
+            seq_counter_repo = self._repo_factory.sequence_counter_repository
+            diagnostic_id = await seq_counter_repo.get_next_id("diagnostic")
+
+            # Get user ID based on user type
+            from app.models.database_models import Admin
+            if isinstance(current_user, Admin):
+                creator_id = current_user.admin_id
+            else:
+                creator_id = current_user.user_id
+
+            # Create a placeholder patient ID - will be linked to a real patient later
+            placeholder_patient_id = "PAT-TEMP"
+
             # Create diagnostic record (will be linked to patient later)
-            from bson import ObjectId
             diagnostic = AiDiagnostic(
-                patient_id=ObjectId(),  # Temporary placeholder - will be updated when linked
+                diagnostic_id=diagnostic_id,
+                # Temporary placeholder - will be updated when linked
+                patient_id=placeholder_patient_id,
                 sequence_number=1,  # Will be updated when linked to patient
                 test_date=datetime.now(timezone.utc),
                 openai_analysis="",  # Will be filled by AI analysis
@@ -108,8 +125,7 @@ class BloodworkPdfAnalysisService:
                     "gridfs_id": gridfs_id,
                     "upload_date": datetime.now(timezone.utc)
                 },
-                created_by=ObjectId(
-                    current_user.id) if current_user.id else ObjectId()
+                created_by=creator_id
             )
 
             # Save diagnostic to database
@@ -125,12 +141,12 @@ class BloodworkPdfAnalysisService:
             # Schedule AI analysis in background
             background_tasks.add_task(
                 self._perform_ai_analysis_and_save_results,
-                str(created_diagnostic.id),
+                created_diagnostic.diagnostic_id,
                 gridfs_id
             )
 
             return {
-                "diagnostic_id": str(created_diagnostic.id),
+                "diagnostic_id": created_diagnostic.diagnostic_id,
                 "message": "Analisi in corso. Torna più tardi per vedere i risultati."
             }
 
@@ -196,7 +212,7 @@ class BloodworkPdfAnalysisService:
                 detail="Solo file PDF sono accettati."
             )
 
-        self._logger.info(f"File validation passed: {uploaded_file.filename}")
+        self._logger.debug(f"Validated PDF: {uploaded_file.filename}")
 
     async def _perform_ai_analysis_and_save_results(
         self,
@@ -204,54 +220,67 @@ class BloodworkPdfAnalysisService:
         gridfs_id: str
     ) -> None:
         """
-        Perform AI analysis on PDF and save results to database.
+        Execute AI analysis on PDF and save results to database.
 
-        This method retrieves the PDF from GridFS, converts it to images temporarily,
-        performs AI analysis, saves results to database, and cleans up temporary files.
+        This method runs in the background, processes the PDF through
+        OpenAI, and updates the diagnostic record with the results.
 
         Args:
-            diagnostic_id (str): The diagnostic record ID
-            gridfs_id (str): The GridFS file ID
+            diagnostic_id (str): The diagnostic ID
+            gridfs_id (str): The GridFS file ID for the PDF
         """
-        try:
-            self._logger.info(
-                f"Starting AI analysis for diagnostic: {diagnostic_id}")
+        self._logger.info(
+            f"Starting AI analysis for diagnostic: {diagnostic_id}")
 
-            # Retrieve PDF from GridFS
+        try:
+            # Get PDF from GridFS
             pdf_data = await self._db_service.get_pdf_file(gridfs_id)
 
-            # Create temporary directory for image processing
+            # Save PDF to temporary file
             with TemporaryDirectory() as temp_dir:
                 temp_dir_path = Path(temp_dir)
+                pdf_path = temp_dir_path / \
+                    f"bloodwork{self._config.temp_file_suffix}"
 
-                # Save PDF temporarily
-                temp_pdf_path = temp_dir_path / "temp.pdf"
-                with open(temp_pdf_path, "wb") as f:
+                with open(pdf_path, "wb") as f:
                     f.write(pdf_data)
 
                 # Convert PDF to images
                 image_paths = self._convert_pdf_to_images_temp(
-                    temp_pdf_path, temp_dir_path
-                )
+                    pdf_path, temp_dir_path)
 
-                # Perform AI analysis
-                analysis_result = await self._ai_service.analyze_bloodwork_images(
-                    image_paths
-                )
+                if not image_paths:
+                    self._logger.error(
+                        f"Failed to extract images from PDF: {diagnostic_id}")
+                    await self._save_error_to_diagnostic(
+                        diagnostic_id, "Failed to extract images from PDF")
+                    return
 
-                # OpenAI already returns structured JSON as per the prompt
-                # Save the result directly to database
+                # Track processing start time
+                start_time = datetime.now()
+
+                # Process images with OpenAI API
+                analysis_result = await self._ai_service.analyze_bloodwork_images(image_paths)
+
+                # Calculate processing time
+                self._last_processing_time_ms = (
+                    datetime.now() - start_time).total_seconds() * 1000
+
+                if not analysis_result:
+                    self._logger.error(
+                        f"Failed to analyze bloodwork: {diagnostic_id}")
+                    await self._save_error_to_diagnostic(
+                        diagnostic_id, "AI analysis failed")
+                    return
+
+                # Save analysis results to database
                 await self._save_analysis_to_database(diagnostic_id, analysis_result)
 
-                # Images are automatically cleaned up when temp directory is deleted
-
-            self._logger.info(
-                f"AI analysis completed for diagnostic: {diagnostic_id}")
-
         except Exception as error:
-            self._logger.exception(
-                f"Error during AI analysis for diagnostic {diagnostic_id}: {error}"
-            )
+            error_msg = f"Error during AI analysis for diagnostic {diagnostic_id}: {error}"
+            self._logger.exception(error_msg)
+            await self._save_error_to_diagnostic(
+                diagnostic_id, f"Analysis error: {error}")
 
     def _convert_pdf_to_images_temp(
         self,
@@ -259,24 +288,23 @@ class BloodworkPdfAnalysisService:
         temp_dir: Path
     ) -> List[Path]:
         """
-        Convert PDF to images in temporary directory.
+        Convert PDF pages to images in temporary directory.
 
         Args:
             pdf_path (Path): Path to the PDF file
-            temp_dir (Path): Temporary directory for images
+            temp_dir (Path): Path to the temporary directory
 
         Returns:
-            List[Path]: List of image file paths
+            List[Path]: List of paths to the extracted images
         """
         try:
-            image_paths = self._pdf_converter.convert_pdf_to_image_list(
-                pdf_path, temp_dir, "page"
+            return self._pdf_converter.convert_pdf_to_image_list(
+                pdf_path, temp_dir, "bloodwork_page_"
             )
-            return [Path(path) for path in image_paths]
-
         except Exception as error:
-            self._logger.exception(f"Error converting PDF to images: {error}")
-            raise
+            self._logger.error(
+                f"Error converting PDF to images: {error}")
+            return []
 
     async def _save_analysis_to_database(
         self,
@@ -284,35 +312,83 @@ class BloodworkPdfAnalysisService:
         analysis_result: str
     ) -> None:
         """
-        Save AI analysis result to database.
+        Save AI analysis results to the diagnostic record.
 
         Args:
-            diagnostic_id (str): The diagnostic record ID
-            analysis_result (str): The AI analysis result as JSON string
+            diagnostic_id (str): The diagnostic ID
+            analysis_result (str): JSON string with analysis results
         """
         try:
             ai_repo = self._repo_factory.ai_diagnostic_repository
 
-            # Update diagnostic with analysis result
-            from bson import ObjectId
+            # Update processing info
+            processing_info = {
+                "model_version": self.get_model_version(),
+                "processing_time_ms": self.get_last_processing_time(),
+                "confidence_score": self.get_confidence_score(),
+                "processed_at": datetime.now(timezone.utc)
+            }
+
+            # Update diagnostic record
             diagnostic = await ai_repo.get_by_id(diagnostic_id)
+            if not diagnostic:
+                self._logger.error(
+                    f"Diagnostic not found for updating: {diagnostic_id}")
+                return
 
-            if diagnostic:
-                # Store the OpenAI response exactly as received (no parsing)
-                diagnostic.openai_analysis = analysis_result
+            # Update only the necessary fields
+            await ai_repo.update_processing_info(diagnostic_id, processing_info)
 
-                # Update in database with the original JSON string
-                await ai_repo.collection.update_one(
-                    {"_id": ObjectId(diagnostic_id)},
-                    {"$set": {"openai_analysis": analysis_result}}
-                )
+            # Update OpenAI analysis
+            update_data = {"openai_analysis": analysis_result}
+            await ai_repo.collection.update_one(
+                {"diagnostic_id": diagnostic_id},
+                {"$set": update_data}
+            )
 
-                self._logger.info(
-                    f"Analysis result saved for diagnostic: {diagnostic_id}")
-            else:
-                self._logger.error(f"Diagnostic not found: {diagnostic_id}")
+            self._logger.info(
+                f"Analysis saved for diagnostic: {diagnostic_id}")
 
         except Exception as error:
             self._logger.exception(
                 f"Error saving analysis to database: {error}")
-            raise
+
+    async def _save_error_to_diagnostic(
+        self,
+        diagnostic_id: str,
+        error_message: str
+    ) -> None:
+        """
+        Save error message to the diagnostic record.
+
+        Args:
+            diagnostic_id (str): The diagnostic ID
+            error_message (str): Error message to save
+        """
+        try:
+            ai_repo = self._repo_factory.ai_diagnostic_repository
+
+            processing_info = {
+                "error": error_message,
+                "failed_at": datetime.now(timezone.utc)
+            }
+
+            await ai_repo.update_processing_info(diagnostic_id, processing_info)
+            self._logger.info(
+                f"Error saved for diagnostic: {diagnostic_id}")
+
+        except Exception as error:
+            self._logger.exception(
+                f"Error saving diagnostic error: {error}")
+
+    def get_model_version(self) -> str:
+        """Get the OpenAI model version used for analysis."""
+        return self._model_version
+
+    def get_last_processing_time(self) -> float:
+        """Get the processing time of the last analysis in milliseconds."""
+        return self._last_processing_time_ms
+
+    def get_confidence_score(self) -> float:
+        """Get the confidence score of the last analysis."""
+        return self._confidence_score

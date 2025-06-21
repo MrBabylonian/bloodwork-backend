@@ -1,119 +1,130 @@
 """
-Main application entry point for the Veterinary Bloodwork Analyzer.
+Main FastAPI application for veterinary bloodwork analysis system.
 
-This module initializes the FastAPI application and configures all necessary
-components including routers, logging, and startup events.
+This module sets up the FastAPI application with all routers, middleware,
+startup/shutdown events, and dependencies.
 
-Last updated: 2025-06-17
+Last updated: 2025-06-20
 Author: Bedirhan Gilgiler
 """
 
-from app.routers import auth_router, patient_router
-from app.routers.analysis_router import AnalysisRouter
+import os
+import sys
+
+import uvicorn
+from app.dependencies.auth_dependencies import (
+    get_database_service,
+    get_repository_factory,
+    require_authenticated,
+)
+from app.routers import analysis_router, auth_router, patient_router
 from app.utils.logger_utils import ApplicationLogger
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+# Add parent directory to path for local imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-class BloodworkAnalyzerApplication:
-    """
-    Main application class that encapsulates the FastAPI application configuration.
+# Initialize the FastAPI application
+app = FastAPI(
+    title="Veterinary Bloodwork Analysis API",
+    description="API for veterinary bloodwork analysis with AI-powered diagnostics",
+    version="1.0.0",
+)
 
-    This class follows the Zen of Python principle: "Simple is better than complex."
-    It provides a clean interface for initializing and configuring the application.
-    """
+# Logger
+logger = ApplicationLogger.get_logger(__name__)
 
-    def __init__(self):
-        """Initialize the application with default configuration."""
-        self._logger = ApplicationLogger.setup_logging().getChild("main")
-        self._app = self._create_fastapi_instance()
-        self._configure_middleware()
-        self._configure_routers()
-        self._configure_events()
+# Initialize services - use the same instances as in the dependency injection system
+db_service = get_database_service()
+repository_factory = get_repository_factory(db_service)
 
-    def _create_fastapi_instance(self) -> FastAPI:
-        """
-        Create and configure the FastAPI application instance.
+# CORS Configuration
+origins = [
+    '*'
+]
 
-        Returns:
-            FastAPI: Configured FastAPI application instance
-        """
-        return FastAPI(
-            title="Veterinary Bloodwork Analyzer",
-            description="API for processing veterinary PDF blood test reports via vision model",
-            version="1.0.0"
-        )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    def _configure_middleware(self) -> None:
-        """Configure application middleware including CORS for development."""
-        # Add request logging middleware
-        @self._app.middleware("http")
-        async def log_requests(request, call_next):
-            from app.utils.logger_utils import ApplicationLogger
-            logger = ApplicationLogger.get_logger("request_middleware")
-
-            logger.info(
-                f"=== REQUEST: {request.method} {request.url.path} ===")
-            logger.info(f"Headers: {dict(request.headers)}")
-
-            response = await call_next(request)
-
-            logger.info(f"=== RESPONSE: {response.status_code} ===")
-            return response
-
-        # CORS configuration for development
-        self._app.add_middleware(
-            CORSMiddleware,
-            allow_origins="*",
-            allow_credentials=True,
-            allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            allow_headers=["*"],
-        )
-        self._logger.info("CORS middleware configured for development")
-
-    def _configure_routers(self) -> None:
-        """Configure and mount all application routers."""
-        # Legacy analysis router (original functionality)
-        analysis_router = AnalysisRouter()
-        self._app.include_router(
-            analysis_router.get_router(),
-            prefix="/analysis",
-            tags=["Legacy Analysis"],
-        )
-
-        # Authentication and patient routers
-        self._app.include_router(auth_router.router)
-        self._app.include_router(patient_router.router)
-
-    def _configure_events(self) -> None:
-        """Configure application startup and shutdown events."""
-        @self._app.on_event("startup")
-        async def startup_event():
-            """Handle application startup."""
-            from app.dependencies.auth_dependencies import get_database_service
-            db_service = get_database_service()
-            await db_service.connect()
-            await db_service.initialize_database()
-            self._logger.info("FastAPI application has started successfully.")
-
-        @self._app.on_event("shutdown")
-        async def shutdown_event():
-            """Handle application shutdown."""
-            from app.dependencies.auth_dependencies import get_database_service
-            db_service = get_database_service()
-            await db_service.disconnect()
-            self._logger.info("FastAPI application is shutting down.")
-
-    def get_app(self) -> FastAPI:
-        """
-        Get the configured FastAPI application instance.
-
-        Returns:
-            FastAPI: The configured application instance
-        """
-        return self._app
+# Mount static files only if the directory exists
+static_dir = os.path.join(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))), "static")
+if os.path.isdir(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    logger.info(f"Static files directory mounted from: {static_dir}")
+else:
+    logger.warning(
+        f"Static files directory not found at: {static_dir}. Static files will not be served.")
 
 
-# Create application instance
-bloodwork_app = BloodworkAnalyzerApplication()
-app = bloodwork_app.get_app()
+# Startup and Shutdown Events
+@app.on_event("startup")
+async def startup_db_client():
+    """Connect to database on startup"""
+    logger.info("Starting up application...")
+
+    try:
+        await db_service.connect()
+        await db_service.initialize_database()
+
+        # Initialize sequence counters
+        await repository_factory.sequence_counter_repository.initialize_counters()
+
+        logger.info("Application startup completed")
+    except Exception as e:
+        logger.error(f"Failed to start application: {e}")
+        # Exit application if critical services fail
+        sys.exit(1)
+
+
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    """Disconnect from database on shutdown"""
+    logger.info("Shutting down application...")
+    await db_service.disconnect()
+
+
+# Register Routers
+app.include_router(auth_router.router, tags=["Authentication"])
+app.include_router(
+    patient_router.router, tags=["Patient Management"]
+)
+app.include_router(
+    analysis_router.router, prefix="/api/analysis", tags=["Bloodwork Analysis"]
+)
+
+
+# Error Handlers
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Global exception handler for uncaught exceptions"""
+    logger.error(f"Unhandled exception: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error, please try again later"},
+    )
+
+
+@app.get("/api/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "version": "1.0.0"}
+
+
+@app.get("/api/protected")
+async def protected_route(current_user=Depends(require_authenticated)):
+    """Test protected route"""
+    return {"message": f"Hello, {current_user.role}!"}
+
+
+if __name__ == "__main__":
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

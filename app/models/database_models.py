@@ -1,27 +1,74 @@
+"""
+Database models for veterinary bloodwork analysis system.
+
+This module defines all Pydantic models used for database operations including
+Patient, User, Admin, and AiDiagnostic entities. All models use human-readable
+sequential IDs with role-based prefixes for better usability and maintenance.
+
+Features:
+- Human-readable sequential IDs (PAT-001, VET-001, TEC-001, ADM-001)
+- Role-based user ID prefixes (VET for veterinarians, TEC for technicians)
+- Comprehensive data validation with Pydantic
+- Enum-based status and role management
+- Proper datetime handling with timezone awareness
+- Clean foreign key relationships using readable IDs
+
+ID Schemes:
+- Patients: PAT-001, PAT-002, PAT-003...
+- Veterinarians: VET-001, VET-002, VET-003...
+- Technicians: TEC-001, TEC-002, TEC-003...
+- Admins: ADM-001, ADM-002, ADM-003...
+- Diagnostics: DGN-001, DGN-002, DGN-003...
+
+Last updated: 2025-06-20
+Author: Bedirhan Gilgiler
+"""
+
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Annotated
+from typing import Any
 
-from bson import ObjectId
-from pydantic import BaseModel, BeforeValidator, Field
-
-
-def validate_object_id(v):
-    """Validate and convert to ObjectId"""
-    if isinstance(v, ObjectId):
-        return v
-    if isinstance(v, str) and ObjectId.is_valid(v):
-        return ObjectId(v)
-    raise ValueError("Invalid ObjectId")
+from pydantic import BaseModel, Field
 
 
-# Use Annotated for Pydantic v2 compatibility
-PyObjectId = Annotated[ObjectId, BeforeValidator(validate_object_id)]
+class UserRole(str, Enum):
+    """User role enumeration for role-based access control."""
+    VETERINARIAN = "veterinarian"
+    VETERINARY_TECHNICIAN = "veterinary_technician"
+
+
+class ApprovalStatus(str, Enum):
+    """User approval status enumeration."""
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+
+class SequenceCounter(BaseModel):
+    """
+    Sequence counter model for generating sequential IDs.
+
+    This model manages the generation of human-readable sequential IDs
+    for different entity types with appropriate prefixes.
+    """
+    counter_id: str = Field(
+        alias="_id")  # e.g., "patient_seq", "veterinarian_seq"
+    current_value: int = 0
+    prefix: str  # e.g., "PAT", "VET", "TEC", "ADM", "DGN"
+
+    class Config:
+        populate_by_name = True
 
 
 class Patient(BaseModel):
-    id: PyObjectId | None = Field(default_factory=ObjectId, alias="_id")
-    patient_id: str  # Human readable ID like "Pat-2024-001"
+    """
+    Patient model representing veterinary patients in the system.
+
+    This model stores comprehensive patient information including demographics,
+    medical history, and administrative data for veterinary practice management.
+    Uses human-readable IDs like PAT-001, PAT-002, etc.
+    """
+    patient_id: str  # Primary key: "PAT-001", "PAT-002", etc.
     name: str
     species: str
     breed: str
@@ -29,14 +76,14 @@ class Patient(BaseModel):
     sex: str
     weight: float | None = None
     owner_info: dict[str, str]
-    medical_history: dict[str, any] = {}  # type: ignore
+    medical_history: dict[str, Any] = {}
 
     # Extended references - key diagnostic info for fast queries
-    diagnostic_summary: dict[str, any] = {}  # type: ignore
+    diagnostic_summary: dict[str, Any] = {}
 
-    # Metadata
-    created_by: PyObjectId
-    assigned_to: PyObjectId
+    # Metadata with human-readable references
+    created_by: str      # Reference to User.user_id or Admin.admin_id
+    assigned_to: str     # Reference to User.user_id or Admin.admin_id
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(
@@ -45,13 +92,17 @@ class Patient(BaseModel):
 
     class Config:
         populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
 
 
 class AiDiagnostic(BaseModel):
-    id: PyObjectId | None = Field(default_factory=ObjectId, alias="_id")
-    patient_id: PyObjectId  # Reference to Patient
+    """
+    AI diagnostic model for bloodwork analysis results.
+
+    This model stores AI-generated analysis results, PDF metadata,
+    and processing information. Uses human-readable IDs like DGN-001.
+    """
+    diagnostic_id: str   # Primary key: "DGN-001", "DGN-002", etc.
+    patient_id: str      # Foreign key: "PAT-001", "PAT-002", etc.
     sequence_number: int  # Order of tests for this patient (1, 2, 3...)
     test_date: datetime
 
@@ -59,7 +110,7 @@ class AiDiagnostic(BaseModel):
     openai_analysis: str = ""  # JSON string from OpenAI API
 
     # PDF metadata
-    pdf_metadata: dict[str, any] = {  # type: ignore
+    pdf_metadata: dict[str, Any] = {
         "original_filename": "",
         "file_size": 0,
         "gridfs_id": None,  # Reference to GridFS file
@@ -67,46 +118,39 @@ class AiDiagnostic(BaseModel):
     }
 
     # Processing information
-    processing_info: dict[str, any] = {  # type: ignore
+    processing_info: dict[str, Any] = {
         "model_version": "",
         "processing_time_ms": 0,
         "confidence_score": 0.0,
     }
 
     # Veterinarian review
-    veterinarian_review: dict[str, any] | None = None  # type: ignore
+    veterinarian_review: dict[str, Any] | None = None
 
-    # Metadata
-    created_by: PyObjectId
+    # Metadata with human-readable references
+    created_by: str      # Reference to User.user_id or Admin.admin_id
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc))
 
     class Config:
         populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-
-
-class UserRole(str, Enum):
-    VETERINARIAN = "veterinarian"
-    VETERINARY_TECHNICIAN = "veterinary_technician"
-
-
-class ApprovalStatus(str, Enum):
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
 
 
 class User(BaseModel):
-    id: PyObjectId | None = Field(default_factory=ObjectId, alias="_id")
-    username: str
+    """
+    User model for veterinarians and veterinary technicians.
+
+    This model stores user account information with role-based human-readable IDs.
+    Veterinarians get VET-001 format, technicians get TEC-001 format.
+    """
+    user_id: str        # Primary key: "VET-001", "TEC-001", etc.
+    username: str       # Login identifier (unique)
     email: str
     hashed_password: str
-    role: UserRole  # "veterinarian" or "veterinary_technician"
+    role: UserRole      # "veterinarian" or "veterinary_technician"
 
     # Professional profile
-    profile: dict[str, any] = {  # type: ignore
+    profile: dict[str, Any] = {
         "first_name": "",
         "last_name": "",
         "license_number": "",
@@ -114,10 +158,9 @@ class User(BaseModel):
         "phone": ""
     }
 
-    # Approval system
-    # "pending", "approved", "rejected"
+    # Approval system with human-readable references
     approval_status: ApprovalStatus = ApprovalStatus.PENDING
-    approved_by: PyObjectId | None = None  # Admin who approved
+    approved_by: str | None = None  # Reference to Admin.admin_id
     approved_at: datetime | None = None
 
     # Metadata
@@ -128,13 +171,17 @@ class User(BaseModel):
 
     class Config:
         populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
 
 
 class Admin(BaseModel):
-    id: PyObjectId | None = Field(default_factory=ObjectId, alias="_id")
-    username: str
+    """
+    Admin model for system administrators.
+
+    This model stores admin account information with human-readable IDs
+    like ADM-001, ADM-002, etc.
+    """
+    admin_id: str       # Primary key: "ADM-001", "ADM-002", etc.
+    username: str       # Login identifier (unique)
     email: str
     hashed_password: str
     role: str = "admin"  # Always "admin"
@@ -148,7 +195,7 @@ class Admin(BaseModel):
     ]
 
     # Profile
-    profile: dict[str, any] = {  # type: ignore
+    profile: dict[str, Any] = {
         "first_name": "",
         "last_name": ""
     }
@@ -161,25 +208,26 @@ class Admin(BaseModel):
 
     class Config:
         populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
 
 
 class RefreshToken(BaseModel):
-    """Refresh token model for JWT token management"""
-    id: PyObjectId | None = Field(default_factory=ObjectId, alias="_id")
-    user_id: PyObjectId  # Reference to User
-    token_hash: str  # Hashed version of the token
+    """
+    Refresh token model for JWT token management.
+
+    This model stores refresh tokens with human-readable references
+    to users and admins.
+    """
+    token_id: str        # Primary key: "TKN-001" or UUID format
+    user_id: str         # Reference to User.user_id or Admin.admin_id
+    token_hash: str      # Hashed version of the token
     expires_at: datetime
     is_active: bool = True
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc))
 
-    # Optional metadata
+    # Optional metadata for security tracking
     device_info: str | None = None  # User agent, device name, etc.
     ip_address: str | None = None
 
     class Config:
         populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}

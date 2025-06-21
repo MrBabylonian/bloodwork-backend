@@ -1,3 +1,23 @@
+"""
+Database service for veterinary bloodwork analysis system.
+
+This module provides comprehensive MongoDB database management including
+connection handling, collection access, GridFS file storage, and index management.
+It implements async operations and proper error handling for production use.
+
+Features:
+- Async MongoDB operations with Motor driver
+- GridFS integration for PDF file storage
+- Automatic index creation and management
+- Connection health monitoring
+- Proper error handling and logging
+
+Last updated: 2025-06-20
+Author: Bedirhan Gilgiler
+"""
+
+from app.config.database_config import DatabaseConfig
+from app.utils.logger_utils import ApplicationLogger
 from motor.motor_asyncio import (
     AsyncIOMotorClient,
     AsyncIOMotorDatabase,
@@ -5,21 +25,28 @@ from motor.motor_asyncio import (
 )
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 
-from app.config.database_config import DatabaseConfig
-from app.utils.logger_utils import ApplicationLogger
-
 
 class DatabaseService:
     """
-    MongoDB database service for handling connections and operations
+    MongoDB database service for handling connections and operations.
+
+    This service provides centralized database access with proper connection
+    management, GridFS file storage, and optimized indexing for the 
+    veterinary bloodwork analysis system.
     """
 
     def __init__(self, config: DatabaseConfig):
+        """
+        Initialize database service with configuration.
+
+        Args:
+            config (DatabaseConfig): Database configuration object
+        """
         self.config = config
         self.client: AsyncIOMotorClient | None = None
         self.database: AsyncIOMotorDatabase | None = None
         self.gridfs: AsyncIOMotorGridFSBucket | None = None
-        self.logger = ApplicationLogger.get_logger(__name__)
+        self.logger = ApplicationLogger.get_logger("database_service")
 
     async def initialize_database(self) -> bool:
         """
@@ -151,6 +178,11 @@ class DatabaseService:
     def refresh_tokens(self):
         """Get refresh_tokens collection"""
         return self.get_collection("refresh_tokens")
+
+    @property
+    def sequence_counters(self):
+        """Get sequence_counters collection"""
+        return self.get_collection("sequence_counters")
 
     async def store_pdf_file(self, file_data: bytes, filename: str) -> str:
         """
