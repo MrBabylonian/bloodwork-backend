@@ -99,7 +99,7 @@ app.include_router(
     patient_router.router, tags=["Patient Management"]
 )
 app.include_router(
-    analysis_router.router, prefix="/api/analysis", tags=["Bloodwork Analysis"]
+    analysis_router.router, prefix="/api/v1/analysis", tags=["Bloodwork Analysis"]
 )
 
 

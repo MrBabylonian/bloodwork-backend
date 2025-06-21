@@ -24,6 +24,7 @@ from app.dependencies.auth_dependencies import get_auth_service, require_authent
 from app.models.database_models import Admin, ApprovalStatus, User, UserRole
 from app.schemas.auth_schemas import (
     AccessTokenResponse,
+    PasswordChangeRequest,
     TokenRefresh,
     TokenResponse,
     UserLogin,
@@ -306,18 +307,18 @@ async def update_profile(
     auth_service: AuthService = Depends(get_auth_service)
 ):
     """
-    Update authenticated user's profile information.
+    Update user profile information.
 
-    Updates the current user's profile with the provided fields.
-    Only fields included in the request are updated.
+    Updates the authenticated user's profile with the provided data.
+    Only the fields provided in the request will be updated.
 
     Args:
         profile_data (UserProfileUpdate): Profile fields to update
-        current_user (User): Current authenticated user
+        current_user (Union[Admin, User]): Authenticated user
         auth_service (AuthService): Authentication service instance
 
     Returns:
-        dict: Update success message and updated fields
+        dict: Success message
 
     Raises:
         HTTPException: 400 if update fails
@@ -325,49 +326,119 @@ async def update_profile(
     Example:
         PUT /api/v1/auth/profile
         {
+            "email": "new@example.com",
             "first_name": "John",
-            "last_name": "Doe",
-            "clinic_name": "Pet Care Clinic"
+            "last_name": "Doe"
         }
     """
-    logger.info(f"Profile update requested by {current_user.username}")
+    logger.info(f"Profile update request for user: {current_user.username}")
 
-    # Extract the appropriate ID based on user type
+    # Get user ID based on user type
     from app.models.database_models import Admin
+    if isinstance(current_user, Admin):
+        user_id = current_user.admin_id
+        repo = auth_service.admin_repo
+    else:
+        user_id = current_user.user_id
+        repo = auth_service.user_repo
 
-    # Build profile data update dictionary
-    update_data = {}
-    for key, value in profile_data.dict(exclude_unset=True).items():
-        if value is not None:
-            update_data[key] = value
+    # Convert profile data to dictionary, excluding None values
+    profile_dict = {k: v for k,
+                    v in profile_data.model_dump().items() if v is not None}
 
-    if not update_data:
-        logger.warning("Profile update failed - no valid fields to update")
+    if not profile_dict:
+        logger.warning(
+            f"Profile update failed: no data provided for {current_user.username}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No valid fields to update"
+            detail="No profile data provided"
         )
 
-    # Update profile based on user type
-    if isinstance(current_user, Admin):
-        admin_repo = auth_service.admin_repo
-        success = await admin_repo.update_profile(current_user.admin_id, update_data)
-    else:  # User
-        user_repo = auth_service.user_repo
-        success = await user_repo.update_profile(current_user.user_id, update_data)
+    # Update profile
+    success = await repo.update_profile(user_id, profile_dict)
 
     if not success:
-        logger.error(f"Profile update failed for {current_user.username}")
+        logger.error(
+            f"Profile update failed for user: {current_user.username}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Failed to update profile"
+            detail="Profile update failed"
         )
 
-    logger.info(f"Profile updated successfully for {current_user.username}")
-    return {
-        "message": "Profile updated successfully",
-        "updated_fields": list(update_data.keys())
-    }
+    logger.info(
+        f"Profile updated successfully for user: {current_user.username}")
+    return {"message": "Profile updated successfully"}
+
+
+@router.put("/password")
+async def change_password(
+    password_data: PasswordChangeRequest,
+    current_user: Union[Admin, User] = Depends(require_authenticated),
+    auth_service: AuthService = Depends(get_auth_service)
+):
+    """
+    Change user password.
+
+    Updates the authenticated user's password after validating the current password.
+    Requires current password for security verification.
+
+    Args:
+        password_data (PasswordChangeRequest): Password change request data
+        current_user (Union[Admin, User]): Authenticated user
+        auth_service (AuthService): Authentication service instance
+
+    Returns:
+        dict: Success message
+
+    Raises:
+        HTTPException: 
+            - 400 if passwords don't match or validation fails
+            - 401 if current password is incorrect
+
+    Example:
+        PUT /api/v1/auth/password
+        {
+            "current_password": "old_password",
+            "new_password": "new_secure_password",
+            "confirm_password": "new_secure_password"
+        }
+    """
+    logger.info(f"Password change request for user: {current_user.username}")
+
+    # Validate password confirmation
+    if password_data.new_password != password_data.confirm_password:
+        logger.warning(
+            f"Password change failed: passwords don't match for {current_user.username}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password and confirmation do not match"
+        )
+
+    # Get user ID based on user type
+    from app.models.database_models import Admin
+    if isinstance(current_user, Admin):
+        user_id = current_user.admin_id
+    else:
+        user_id = current_user.user_id
+
+    # Change password using auth service
+    success = await auth_service.change_password(
+        user_id=user_id,
+        current_password=password_data.current_password,
+        new_password=password_data.new_password
+    )
+
+    if not success:
+        logger.warning(
+            f"Password change failed for user: {current_user.username}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Current password is incorrect or new password is too weak"
+        )
+
+    logger.info(
+        f"Password changed successfully for user: {current_user.username}")
+    return {"message": "Password changed successfully"}
 
 
 @router.get("/health")

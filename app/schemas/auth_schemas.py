@@ -134,3 +134,15 @@ class UserApproval(BaseModel):
     """User approval request"""
     user_id: str
     approved: bool  # True for approve, False for reject
+
+
+class PasswordChangeRequest(BaseModel):
+    """
+    Schema for password change requests.
+
+    Used when users want to change their password. Requires current password
+    for security verification and new password with confirmation.
+    """
+    current_password: str
+    new_password: str
+    confirm_password: str

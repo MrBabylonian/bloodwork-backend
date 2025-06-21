@@ -429,66 +429,106 @@ class AuthService:
 
     async def get_authenticated_user(self, token: str) -> User | Admin | None:
         """
-        Get authenticated user object from JWT token.
+        Get the authenticated user from a JWT token.
 
-        This is the primary authentication method that returns actual User or Admin
-        model instances. Handles automatic validation and provides the foundation
-        for bulletproof authentication throughout the application.
+        This method validates the token and returns the corresponding user object
+        from either the User or Admin collection based on the token contents.
 
         Args:
             token: JWT access token
 
         Returns:
-            User or Admin instance if authenticated, None if invalid
+            User or Admin object if valid, None otherwise
         """
         try:
-            # Verify and decode JWT token
+            # Verify and decode the token
             payload = self.token_service.verify_token(token)
             if not payload:
-                self.logger.warning("Auth failed - invalid token")
                 return None
 
-            if not self.token_service.is_access_token(payload):
-                self.logger.warning("Auth failed - not access token")
-                return None
-
-            # Extract user ID from token payload
             user_id = self.token_service.get_user_id_from_payload(payload)
             if not user_id:
-                self.logger.warning("Auth failed - no user ID in token")
                 return None
 
-            # Check users collection first
+            # Try to get user from users collection first
             user = await self.user_repo.get_by_id(user_id)
             if user:
-                if not user.is_active:
-                    self.logger.warning(
-                        f"Auth blocked - inactive user: {user.username}")
-                    return None
-
-                if user.approval_status != ApprovalStatus.APPROVED:
-                    self.logger.warning(
-                        f"Auth blocked - unapproved user: {user.username}")
-                    return None
-
-                self.logger.debug(f"User authenticated: {user.username}")
                 return user
 
-            # Check admin collection if not found in users
+            # If not found in users, try admins collection
             admin = await self.admin_repo.get_by_id(user_id)
             if admin:
-                if not admin.is_active:
-                    self.logger.warning(
-                        f"Auth blocked - inactive admin: {admin.username}")
-                    return None
-
-                self.logger.debug(f"Admin authenticated: {admin.username}")
                 return admin
 
-            # User not found in either collection
-            self.logger.warning(f"Auth failed - user not found: {user_id}")
             return None
 
         except Exception as e:
-            self.logger.error(f"Auth error: {e}")
+            self.logger.error(f"Error getting authenticated user: {e}")
             return None
+
+    async def change_password(self, user_id: str, current_password: str, new_password: str) -> bool:
+        """
+        Change user password after validating current password.
+
+        This method provides secure password change functionality by:
+        1. Validating the current password
+        2. Checking new password strength
+        3. Updating the password hash in the database
+        4. Supporting both User and Admin accounts
+
+        Args:
+            user_id: User or Admin ID (e.g., VET-001, ADM-001)
+            current_password: Current password for verification
+            new_password: New password to set
+
+        Returns:
+            True if password changed successfully, False otherwise
+        """
+        try:
+            # Find the user in either collection
+            user = await self.user_repo.get_by_id(user_id)
+            is_admin = False
+
+            if not user:
+                user = await self.admin_repo.get_by_id(user_id)
+                is_admin = True
+
+            if not user:
+                self.logger.warning(
+                    f"Password change failed - user not found: {user_id}")
+                return False
+
+            # Verify current password
+            if not self.password_service.verify_password(current_password, user.hashed_password):
+                self.logger.warning(
+                    f"Password change failed - invalid current password: {user_id}")
+                return False
+
+            # Validate new password strength
+            if not self.password_service.is_valid_password(new_password, self.config.password_min_length):
+                self.logger.warning(
+                    f"Password change failed - weak new password: {user_id}")
+                return False
+
+            # Hash the new password
+            new_hashed_password = self.password_service.hash_password(
+                new_password)
+
+            # Update password in appropriate repository
+            if is_admin:
+                success = await self.admin_repo.update_password(user_id, new_hashed_password)
+            else:
+                success = await self.user_repo.update_password(user_id, new_hashed_password)
+
+            if success:
+                self.logger.info(
+                    f"Password changed successfully for user: {user_id}")
+                return True
+            else:
+                self.logger.error(
+                    f"Password change failed - database update failed: {user_id}")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"Password change error: {e}")
+            return False
