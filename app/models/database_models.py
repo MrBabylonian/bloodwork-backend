@@ -24,7 +24,7 @@ Last updated: 2025-06-20
 Author: Bedirhan Gilgiler
 """
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from enum import Enum
 from typing import Any
 
@@ -68,18 +68,15 @@ class Patient(BaseModel):
     medical history, and administrative data for veterinary practice management.
     Uses human-readable IDs like PAT-001, PAT-002, etc.
     """
-    patient_id: str  # Primary key: "PAT-001", "PAT-002", etc.
+    patient_id: str = Field(..., alias="_id")
     name: str
-    species: str
+    species: str  # e.g., "Canine", "Feline"
     breed: str
-    age: dict[str, int]  # {"years": 12, "months": 3}
+    birthdate: date
     sex: str
     weight: float | None = None
     owner_info: dict[str, str]
     medical_history: dict[str, Any] = {}
-
-    # Extended references - key diagnostic info for fast queries
-    diagnostic_summary: dict[str, Any] = {}
 
     # Metadata with human-readable references
     created_by: str      # Reference to User.user_id or Admin.admin_id
@@ -101,13 +98,13 @@ class AiDiagnostic(BaseModel):
     This model stores AI-generated analysis results, PDF metadata,
     and processing information. Uses human-readable IDs like DGN-001.
     """
-    diagnostic_id: str   # Primary key: "DGN-001", "DGN-002", etc.
-    patient_id: str      # Foreign key: "PAT-001", "PAT-002", etc.
+    diagnostic_id: str = Field(..., alias="_id")
+    patient_id: str
     sequence_number: int  # Order of tests for this patient (1, 2, 3...)
     test_date: datetime
 
-    # Full OpenAI Analysis (stored as JSON string to preserve exact format)
-    openai_analysis: str = ""  # JSON string from OpenAI API
+    # Full OpenAI Analysis (stored as native JSON document)
+    ai_diagnostic: dict[str, Any] = {}  # JSON document from OpenAI API
 
     # PDF metadata
     pdf_metadata: dict[str, Any] = {
@@ -143,7 +140,7 @@ class User(BaseModel):
     This model stores user account information with role-based human-readable IDs.
     Veterinarians get VET-001 format, technicians get TEC-001 format.
     """
-    user_id: str        # Primary key: "VET-001", "TEC-001", etc.
+    user_id: str = Field(..., alias="_id")
     username: str       # Login identifier (unique)
     email: str
     hashed_password: str
@@ -180,7 +177,7 @@ class Admin(BaseModel):
     This model stores admin account information with human-readable IDs
     like ADM-001, ADM-002, etc.
     """
-    admin_id: str       # Primary key: "ADM-001", "ADM-002", etc.
+    admin_id: str = Field(..., alias="_id")
     username: str       # Login identifier (unique)
     email: str
     hashed_password: str
@@ -217,7 +214,7 @@ class RefreshToken(BaseModel):
     This model stores refresh tokens with human-readable references
     to users and admins.
     """
-    token_id: str        # Primary key: "TKN-001" or UUID format
+    token_id: str = Field(..., alias="_id")
     user_id: str         # Reference to User.user_id or Admin.admin_id
     token_hash: str      # Hashed version of the token
     expires_at: datetime

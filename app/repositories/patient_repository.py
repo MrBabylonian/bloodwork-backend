@@ -35,7 +35,7 @@ class PatientRepository:
     async def get_by_id(self, patient_id: str) -> Patient | None:
         """Get patient by patient_id"""
         try:
-            doc = await self.collection.find_one({"patient_id": patient_id})
+            doc = await self.collection.find_one({"_id": patient_id})
             return Patient(**doc) if doc else None
 
         except Exception as e:
@@ -54,20 +54,34 @@ class PatientRepository:
             self.logger.error(f"Error getting patients by user_id: {e}")
             return []
 
-    async def get_all(self) -> list[Patient]:
-        """Get all active patients"""
+    async def get_all(self, skip: int = 0, limit: int = 10) -> tuple[list[Patient], int]:
+        """
+        Get all active patients with pagination support.
+
+        Args:
+            skip (int): Number of records to skip
+            limit (int): Maximum number of records to return
+
+        Returns:
+            tuple[list[Patient], int]: List of patients and total count
+        """
         try:
             # Debug logging to see what database and collection we're using
             database_name = self.db_service.database.name if self.db_service.database is not None else 'Unknown'
             self.logger.info(f"Querying database: {database_name}")
             self.logger.info(f"Querying collection: {self.collection.name}")
 
+            # Get total count first (for pagination metadata)
+            total = await self.collection.count_documents({"is_active": True})
+
+            # Then get the paginated results
             cursor = self.collection.find(
                 {"is_active": True}
-            ).sort("created_at", -1)
+            ).sort("created_at", -1).skip(skip).limit(limit)
 
-            docs = await cursor.to_list(length=None)
-            self.logger.info(f"Found {len(docs)} patient documents")
+            docs = await cursor.to_list(length=limit)
+            self.logger.info(
+                f"Found {len(docs)} patient documents (page {skip//limit + 1}, total: {total})")
 
             # Debug: let's see what the first document looks like
             if docs:
@@ -75,25 +89,44 @@ class PatientRepository:
                 self.logger.info(
                     f"First document: patient_id={first_doc.get('patient_id')}, created_by={first_doc.get('created_by')}, assigned_to={first_doc.get('assigned_to')}")
 
-            return [Patient(**doc) for doc in docs]
+            return [Patient(**doc) for doc in docs], total
 
         except Exception as e:
             self.logger.error(f"Error getting all patients: {e}")
-            return []
+            return [], 0
 
-    async def search_by_name(self, name: str) -> list[Patient]:
-        """Search patients by name (text search)"""
+    async def search_by_name(self, name: str, skip: int = 0, limit: int = 10) -> tuple[list[Patient], int]:
+        """
+        Search patients by name with pagination support.
+
+        Args:
+            name (str): Name to search for
+            skip (int): Number of records to skip
+            limit (int): Maximum number of records to return
+
+        Returns:
+            tuple[list[Patient], int]: List of matching patients and total count
+        """
         try:
+            # Get total count first (for pagination metadata)
+            total = await self.collection.count_documents(
+                {"$text": {"$search": name}, "is_active": True}
+            )
+
+            # Then get the paginated results
             cursor = self.collection.find(
                 {"$text": {"$search": name}, "is_active": True}
-            ).sort("created_at", -1)
+            ).sort("created_at", -1).skip(skip).limit(limit)
 
-            docs = await cursor.to_list(length=50)  # Limit results
-            return [Patient(**doc) for doc in docs]
+            docs = await cursor.to_list(length=limit)
+            self.logger.info(
+                f"Found {len(docs)} patients matching '{name}' (page {skip//limit + 1}, total: {total})")
+
+            return [Patient(**doc) for doc in docs], total
 
         except Exception as e:
             self.logger.error(f"Error searching patients by name: {e}")
-            return []
+            return [], 0
 
     async def update(self, patient_id: str, update_data: dict) -> bool:
         """Update patient data"""
@@ -101,7 +134,7 @@ class PatientRepository:
             update_data["updated_at"] = datetime.now(timezone.utc)
 
             result = await self.collection.update_one(
-                {"patient_id": patient_id},
+                {"_id": patient_id},
                 {"$set": update_data}
             )
 
@@ -118,7 +151,7 @@ class PatientRepository:
         """Soft delete patient (set is_active to False)"""
         try:
             result = await self.collection.update_one(
-                {"patient_id": patient_id},
+                {"_id": patient_id},
                 {"$set": {"is_active": False,
                           "updated_at": datetime.now(timezone.utc)}}
             )

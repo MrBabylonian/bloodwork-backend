@@ -142,7 +142,7 @@ class DiagnosticResponse(BaseModel):
     patient_id: str
     sequence_number: int
     test_date: datetime
-    openai_analysis: str
+    ai_diagnostic: dict
     pdf_metadata: dict
     processing_info: dict
     veterinarian_review: Optional[dict] = None

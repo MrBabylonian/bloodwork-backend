@@ -9,3 +9,4 @@ debug_admin.py
 debug_db_config.py
 fix_patient_data.py
 flush_patients.py
+.cursor

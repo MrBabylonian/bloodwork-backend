@@ -30,28 +30,54 @@ class AiDiagnosticRepository:
     async def get_by_id(self, diagnostic_id: str) -> AiDiagnostic | None:
         """Get diagnostic by diagnostic_id"""
         try:
-            doc = await self.collection.find_one({"diagnostic_id": diagnostic_id})
+            doc = await self.collection.find_one({"_id": diagnostic_id})
             return AiDiagnostic(**doc) if doc else None
 
         except Exception as e:
             self.logger.error(f"Error getting diagnostic by id: {e}")
             return None
 
-    async def get_by_patient_id(self, patient_id: str) -> list[AiDiagnostic]:
-        """Get all diagnostics for a patient, ordered by test date"""
+    async def get_by_patient_id_paginated(
+        self,
+        patient_id: str,
+        skip: int = 0,
+        limit: int = 10
+    ) -> tuple[list[AiDiagnostic], int]:
+        """
+        Get paginated diagnostics for a patient, ordered by test date (newest first)
+
+        Args:
+            patient_id: The patient ID to get diagnostics for
+            skip: Number of records to skip
+            limit: Maximum number of records to return
+
+        Returns:
+            tuple: (list of diagnostics, total count)
+        """
         try:
+            # Get total count
+            total = await self.collection.count_documents({"patient_id": patient_id})
+
+            # Get paginated results
             cursor = self.collection.find(
                 {"patient_id": patient_id}
-            ).sort("test_date", -1)
+            ).sort("test_date", -1).skip(skip).limit(limit)
 
-            docs = await cursor.to_list(length=None)
-            return [AiDiagnostic(**doc) for doc in docs]
+            docs = await cursor.to_list(length=limit)
+            diagnostics = [AiDiagnostic(**doc) for doc in docs]
+
+            self.logger.info(
+                f"Retrieved {len(diagnostics)} of {total} diagnostics for patient: {patient_id}"
+            )
+
+            return diagnostics, total
 
         except Exception as e:
-            self.logger.error(f"Error getting diagnostics by patient_id: {e}")
-            return []
+            self.logger.error(
+                f"Error getting paginated diagnostics by patient_id: {e}")
+            return [], 0
 
-    async def get_latest_by_patient_id(self, patient_id: str) -> AiDiagnostic | None:
+    async def get_latest_patient_diagnostic(self, patient_id: str) -> AiDiagnostic | None:
         """Get the most recent diagnostic for a patient"""
         try:
             doc = await self.collection.find_one(
@@ -62,7 +88,7 @@ class AiDiagnosticRepository:
             return AiDiagnostic(**doc) if doc else None
 
         except Exception as e:
-            self.logger.error(f"Error getting latest diagnostic: {e}")
+            self.logger.error(f"Error getting latest patient diagnostic: {e}")
             return None
 
     async def get_by_created_by(self, user_id: str, limit: int = 50) -> list[AiDiagnostic]:
@@ -104,7 +130,7 @@ class AiDiagnosticRepository:
             review_data["reviewed_at"] = datetime.now(timezone.utc)
 
             result = await self.collection.update_one(
-                {"diagnostic_id": diagnostic_id},
+                {"_id": diagnostic_id},
                 {"$set": {"veterinarian_review": review_data}}
             )
 
@@ -133,39 +159,6 @@ class AiDiagnosticRepository:
             self.logger.error(f"Error getting pending reviews: {e}")
             return []
 
-    async def get_recent(self, limit: int = 20) -> list[AiDiagnostic]:
-        """Get recently created diagnostics"""
-        try:
-            cursor = self.collection.find({}).sort(
-                "created_at", -1).limit(limit)
-            docs = await cursor.to_list(length=limit)
-            return [AiDiagnostic(**doc) for doc in docs]
-
-        except Exception as e:
-            self.logger.error(f"Error getting recent diagnostics: {e}")
-            return []
-
-    async def get_by_date_range(
-        self,
-        start_date: datetime,
-        end_date: datetime
-    ) -> list[AiDiagnostic]:
-        """Get diagnostics within a date range"""
-        try:
-            cursor = self.collection.find({
-                "test_date": {
-                    "$gte": start_date,
-                    "$lte": end_date
-                }
-            }).sort("test_date", -1)
-
-            docs = await cursor.to_list(length=None)
-            return [AiDiagnostic(**doc) for doc in docs]
-
-        except Exception as e:
-            self.logger.error(f"Error getting diagnostics by date range: {e}")
-            return []
-
     async def update_processing_info(
         self,
         diagnostic_id: str,
@@ -174,7 +167,7 @@ class AiDiagnosticRepository:
         """Update processing information for a diagnostic"""
         try:
             result = await self.collection.update_one(
-                {"diagnostic_id": diagnostic_id},
+                {"_id": diagnostic_id},
                 {"$set": {"processing_info": processing_info}}
             )
 

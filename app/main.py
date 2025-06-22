@@ -4,7 +4,7 @@ Main FastAPI application for veterinary bloodwork analysis system.
 This module sets up the FastAPI application with all routers, middleware,
 startup/shutdown events, and dependencies.
 
-Last updated: 2025-06-20
+Last updated: 2025-06-22
 Author: Bedirhan Gilgiler
 """
 
@@ -17,7 +17,7 @@ from app.dependencies.auth_dependencies import (
     get_repository_factory,
     require_authenticated,
 )
-from app.routers import analysis_router, auth_router, patient_router
+from app.routers import analysis_router, auth_router, diagnostic_router, patient_router
 from app.utils.logger_utils import ApplicationLogger
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -99,7 +99,10 @@ app.include_router(
     patient_router.router, tags=["Patient Management"]
 )
 app.include_router(
-    analysis_router.router, prefix="/api/v1/analysis", tags=["Bloodwork Analysis"]
+    analysis_router.router, tags=["Bloodwork Analysis"]
+)
+app.include_router(
+    diagnostic_router.router, tags=["Diagnostics"]
 )
 
 

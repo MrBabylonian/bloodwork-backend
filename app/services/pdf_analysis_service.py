@@ -12,7 +12,7 @@ Author: Bedirhan Gilgiler
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 from app.dependencies.auth_dependencies import (
     get_database_service,
@@ -63,6 +63,7 @@ class BloodworkPdfAnalysisService:
     async def process_uploaded_pdf_in_background(
         self,
         uploaded_file: UploadFile,
+        patient_id: str,
         background_tasks: BackgroundTasks,
         current_user: Union[Admin, User]
     ) -> Dict[str, str]:
@@ -74,6 +75,7 @@ class BloodworkPdfAnalysisService:
 
         Args:
             uploaded_file (UploadFile): The uploaded PDF file
+            patient_id (str): The patient ID to link the analysis to
             background_tasks (BackgroundTasks): FastAPI background tasks manager
             current_user (User): The authenticated user
 
@@ -87,9 +89,20 @@ class BloodworkPdfAnalysisService:
         self._validate_uploaded_file(uploaded_file)
 
         self._logger.info(
-            f"Processing PDF: {uploaded_file.filename} (user: {current_user.username})")
+            f"Processing PDF: {uploaded_file.filename} (user: {current_user.username}, patient: {patient_id})")
 
         try:
+            # Verify patient exists
+            patient_repo = self._repo_factory.patient_repository
+            patient = await patient_repo.get_by_id(patient_id)
+
+            if not patient:
+                self._logger.error(f"Patient not found: {patient_id}")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Patient not found: {patient_id}"
+                )
+
             # Read PDF file data
             pdf_data = await uploaded_file.read()
 
@@ -108,17 +121,17 @@ class BloodworkPdfAnalysisService:
             else:
                 creator_id = current_user.user_id
 
-            # Create a placeholder patient ID - will be linked to a real patient later
-            placeholder_patient_id = "PAT-TEMP"
+            # Get next sequence number for this patient
+            ai_repo = self._repo_factory.ai_diagnostic_repository
+            sequence_number = await ai_repo.get_next_sequence_number(patient_id)
 
-            # Create diagnostic record (will be linked to patient later)
+            # Create diagnostic record linked to the patient
             diagnostic = AiDiagnostic(
-                diagnostic_id=diagnostic_id,
-                # Temporary placeholder - will be updated when linked
-                patient_id=placeholder_patient_id,
-                sequence_number=1,  # Will be updated when linked to patient
+                _id=diagnostic_id,
+                patient_id=patient_id,
+                sequence_number=sequence_number,
                 test_date=datetime.now(timezone.utc),
-                openai_analysis="",  # Will be filled by AI analysis
+                ai_diagnostic={},  # Will be filled by AI analysis
                 pdf_metadata={
                     "original_filename": filename,
                     "file_size": len(pdf_data),
@@ -160,34 +173,35 @@ class BloodworkPdfAnalysisService:
                 detail="Errore durante l'analisi del PDF"
             ) from error
 
-    async def get_analysis_result_from_database(
+    async def get_analysis_result(
         self,
-        diagnostic_id: str,
-        current_user: Union[Admin, User]
-    ) -> Optional[str]:
+        diagnostic_id: str
+    ) -> dict[str, Any] | None:
         """
-        Retrieve analysis result from database.
+        Get the stored analysis result for a diagnostic.
 
         Args:
             diagnostic_id (str): The diagnostic ID
-            current_user (User): The authenticated user
 
         Returns:
-            Optional[str]: JSON string of analysis result or None if not ready
+            dict | None: The analysis result as a dict, or None if not found
         """
         try:
             ai_repo = self._repo_factory.ai_diagnostic_repository
             diagnostic = await ai_repo.get_by_id(diagnostic_id)
 
             if not diagnostic:
+                self._logger.error(f"Diagnostic not found: {diagnostic_id}")
                 return None
 
             # Check if analysis is complete
-            if not diagnostic.openai_analysis:
+            if not diagnostic.ai_diagnostic:
+                self._logger.info(
+                    f"No analysis found for diagnostic: {diagnostic_id}")
                 return None
 
-            # Return the OpenAI analysis as-is (already a JSON string)
-            return diagnostic.openai_analysis
+            # Return the AI diagnostic data
+            return diagnostic.ai_diagnostic
 
         except Exception as error:
             self._logger.exception(
@@ -339,10 +353,12 @@ class BloodworkPdfAnalysisService:
             # Update only the necessary fields
             await ai_repo.update_processing_info(diagnostic_id, processing_info)
 
-            # Update OpenAI analysis
-            update_data = {"openai_analysis": analysis_result}
+            # Parse JSON string to dict and update AI diagnostic
+            import json
+            ai_diagnostic_dict = json.loads(analysis_result)
+            update_data = {"ai_diagnostic": ai_diagnostic_dict}
             await ai_repo.collection.update_one(
-                {"diagnostic_id": diagnostic_id},
+                {"_id": diagnostic_id},
                 {"$set": update_data}
             )
 

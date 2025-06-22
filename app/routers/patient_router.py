@@ -17,17 +17,21 @@ Author: Bedirhan Gilgiler
 """
 
 from datetime import datetime, timezone
-from typing import List, Union
+from typing import Union
 
 from app.dependencies.auth_dependencies import (
     get_repository_factory,
-    require_admin_user,
     require_authenticated,
     require_vet_or_admin,
 )
 from app.models.database_models import Admin, Patient, User
 from app.repositories import RepositoryFactory
-from app.schemas.patient_schemas import PatientCreate, PatientResponse, PatientUpdate
+from app.schemas.patient_schemas import (
+    PatientCreate,
+    PatientListResponse,
+    PatientResponse,
+    PatientUpdate,
+)
 from app.utils.logger_utils import ApplicationLogger
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -96,11 +100,11 @@ async def create_patient(
 
     # Create patient with current user as creator and assignee
     patient = Patient(
-        patient_id=patient_id,
+        _id=patient_id,
         name=patient_data.name,
         species=patient_data.species,
         breed=patient_data.breed,
-        age=patient_data.age,
+        birthdate=patient_data.birthdate,
         sex=patient_data.sex,
         weight=patient_data.weight,
         owner_info=patient_data.owner_info,
@@ -126,12 +130,11 @@ async def create_patient(
         name=created_patient.name,
         species=created_patient.species,
         breed=created_patient.breed,
-        age=created_patient.age,
+        birthdate=created_patient.birthdate,
         sex=created_patient.sex,
         weight=created_patient.weight,
         owner_info=created_patient.owner_info,
         medical_history=created_patient.medical_history,
-        diagnostic_summary=created_patient.diagnostic_summary,
         created_by=created_patient.created_by,
         assigned_to=created_patient.assigned_to,
         created_at=created_patient.created_at,
@@ -140,54 +143,75 @@ async def create_patient(
     )
 
 
-@router.get("/", response_model=List[PatientResponse])
+@router.get("/", response_model=PatientListResponse)
 async def get_all_patients(
+    page: int = 1,
+    limit: int = 10,
     current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Retrieve all patients from the system.
+    Retrieve all patients from the system with pagination.
 
-    This endpoint returns a list of all patients in the database,
+    This endpoint returns a paginated list of patients in the database,
     accessible to all authenticated users.
 
     Args:
+        page (int): Page number (1-indexed)
+        limit (int): Number of items per page
         current_user (Union[Admin, User]): Authenticated user
         repo_factory (RepositoryFactory): Database repository factory
 
     Returns:
-        List[PatientResponse]: List of all patients with their details
+        PatientListResponse: List of patients with pagination metadata
 
     Example:
-        GET /api/v1/patients/
-        Response: [
-            {
-                "patient_id": "PAT-001",
-                "name": "Max",
-                "species": "Dog",
-                ...
-            }
-        ]
+        GET /api/v1/patients/?page=1&limit=10
+        Response: {
+            "patients": [
+                {
+                    "patient_id": "PAT-001",
+                    "name": "Max",
+                    "species": "Dog",
+                    ...
+                }
+            ],
+            "total": 45,
+            "page": 1,
+            "limit": 10
+        }
     """
-    logger.info("Retrieving all patients")
+    logger.info(f"Retrieving patients (page {page}, limit {limit})")
+
+    # Validate pagination parameters
+    if page < 1:
+        page = 1
+    if limit < 1:
+        limit = 10
+    elif limit > 100:
+        limit = 100
+
+    # Calculate skip value for pagination
+    skip = (page - 1) * limit
 
     patient_repo = repo_factory.patient_repository
-    patients = await patient_repo.get_all()
+    patients, total = await patient_repo.get_all(skip=skip, limit=limit)
 
-    logger.info(f"Retrieved {len(patients)} patients")
+    logger.info(
+        f"Retrieved {len(patients)} patients (page {page} of {(total + limit - 1) // limit})")
 
-    return [
+    # Convert to response format
+    patient_responses = [
         PatientResponse(
             patient_id=patient.patient_id,
             name=patient.name,
             species=patient.species,
             breed=patient.breed,
-            age=patient.age,
+            birthdate=patient.birthdate,
             sex=patient.sex,
             weight=patient.weight,
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
-            diagnostic_summary=patient.diagnostic_summary,
             created_by=patient.created_by,
             assigned_to=patient.assigned_to,
             created_at=patient.created_at,
@@ -196,6 +220,13 @@ async def get_all_patients(
         )
         for patient in patients
     ]
+
+    return PatientListResponse(
+        patients=patient_responses,
+        total=total,
+        page=page,
+        limit=limit
+    )
 
 
 @router.get("/{patient_id}", response_model=PatientResponse)
@@ -248,12 +279,11 @@ async def get_patient(
         name=patient.name,
         species=patient.species,
         breed=patient.breed,
-        age=patient.age,
+        birthdate=patient.birthdate,
         sex=patient.sex,
         weight=patient.weight,
         owner_info=patient.owner_info,
         medical_history=patient.medical_history,
-        diagnostic_summary=patient.diagnostic_summary,
         created_by=patient.created_by,
         assigned_to=patient.assigned_to,
         created_at=patient.created_at,
@@ -352,12 +382,11 @@ async def update_patient(
         name=updated_patient.name,
         species=updated_patient.species,
         breed=updated_patient.breed,
-        age=updated_patient.age,
+        birthdate=updated_patient.birthdate,
         sex=updated_patient.sex,
         weight=updated_patient.weight,
         owner_info=updated_patient.owner_info,
         medical_history=updated_patient.medical_history,
-        diagnostic_summary=updated_patient.diagnostic_summary,
         created_by=updated_patient.created_by,
         assigned_to=updated_patient.assigned_to,
         created_at=updated_patient.created_at,
@@ -433,55 +462,77 @@ async def delete_patient(
     return {"message": "Patient deleted successfully"}
 
 
-@router.get("/search/{name}", response_model=List[PatientResponse])
+@router.get("/search/{name}", response_model=PatientListResponse)
 async def search_patients(
     name: str,
+    page: int = 1,
+    limit: int = 10,
     current_user: Union[Admin, User] = Depends(require_authenticated),
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Search patients by name.
+    Search patients by name with pagination.
 
     This endpoint performs a text search on patient names and returns
-    matching patients, accessible to all authenticated users.
+    matching patients with pagination, accessible to all authenticated users.
 
     Args:
         name (str): Name to search for
+        page (int): Page number (1-indexed)
+        limit (int): Number of items per page
         current_user (Union[Admin, User]): Authenticated user
         repo_factory (RepositoryFactory): Database repository factory
 
     Returns:
-        List[PatientResponse]: List of matching patients
+        PatientListResponse: List of matching patients with pagination metadata
 
     Example:
-        GET /api/v1/patients/search/Max
-        Response: [
-            {
-                "patient_id": "PAT-001",
-                "name": "Max",
-                ...
-            }
-        ]
+        GET /api/v1/patients/search/Max?page=1&limit=10
+        Response: {
+            "patients": [
+                {
+                    "patient_id": "PAT-001",
+                    "name": "Max",
+                    ...
+                }
+            ],
+            "total": 3,
+            "page": 1,
+            "limit": 10
+        }
     """
-    logger.info(f"Searching patients by name: {name}")
+    logger.info(
+        f"Searching patients by name: {name} (page {page}, limit {limit})")
+
+    # Validate pagination parameters
+    if page < 1:
+        page = 1
+    if limit < 1:
+        limit = 10
+    elif limit > 100:
+        limit = 100
+
+    # Calculate skip value for pagination
+    skip = (page - 1) * limit
 
     patient_repo = repo_factory.patient_repository
-    patients = await patient_repo.search_by_name(name)
+    patients, total = await patient_repo.search_by_name(name, skip=skip, limit=limit)
 
-    logger.info(f"Found {len(patients)} patients matching '{name}'")
+    logger.info(
+        f"Found {len(patients)} patients matching '{name}' (page {page} of {(total + limit - 1) // limit if total > 0 else 1})")
 
-    return [
+    # Convert to response format
+    patient_responses = [
         PatientResponse(
             patient_id=patient.patient_id,
             name=patient.name,
             species=patient.species,
             breed=patient.breed,
-            age=patient.age,
+            birthdate=patient.birthdate,
             sex=patient.sex,
             weight=patient.weight,
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
-            diagnostic_summary=patient.diagnostic_summary,
             created_by=patient.created_by,
             assigned_to=patient.assigned_to,
             created_at=patient.created_at,
@@ -491,13 +542,13 @@ async def search_patients(
         for patient in patients
     ]
 
+    return PatientListResponse(
+        patients=patient_responses,
+        total=total,
+        page=page,
+        limit=limit
+    )
 
-@router.get("/admin/recent", response_model=List[PatientResponse])
-async def get_recent_patients(
-    limit: int = 10,
-    current_user: Admin = Depends(require_admin_user),
-    repo_factory: RepositoryFactory = Depends(get_repository_factory)
-):
     """
     Get recently created patients (admin only).
 
@@ -536,12 +587,11 @@ async def get_recent_patients(
             name=patient.name,
             species=patient.species,
             breed=patient.breed,
-            age=patient.age,
+            birthdate=patient.birthdate,
             sex=patient.sex,
             weight=patient.weight,
             owner_info=patient.owner_info,
             medical_history=patient.medical_history,
-            diagnostic_summary=patient.diagnostic_summary,
             created_by=patient.created_by,
             assigned_to=patient.assigned_to,
             created_at=patient.created_at,

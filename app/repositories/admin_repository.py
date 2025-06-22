@@ -76,7 +76,7 @@ class AdminRepository:
     async def get_by_id(self, admin_id: str) -> Admin | None:
         """Get admin by admin_id"""
         try:
-            doc = await self.collection.find_one({"admin_id": admin_id})
+            doc = await self.collection.find_one({"_id": admin_id})
             return Admin(**doc) if doc else None
         except Exception as e:
             self.logger.error(f"Error getting admin by id: {e}")
@@ -134,7 +134,7 @@ class AdminRepository:
                 return False
 
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": update_data}
             )
 
@@ -150,7 +150,7 @@ class AdminRepository:
         """Update admin password"""
         try:
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": {"hashed_password": hashed_password}}
             )
 
@@ -166,7 +166,7 @@ class AdminRepository:
         """Update admin's last login timestamp"""
         try:
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": {"last_login": datetime.now(timezone.utc)}}
             )
 
@@ -181,7 +181,7 @@ class AdminRepository:
         """Update admin permissions"""
         try:
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": {"permissions": permissions}}
             )
 
@@ -197,7 +197,7 @@ class AdminRepository:
         """Deactivate an admin account"""
         try:
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": {"is_active": False}}
             )
 
@@ -213,7 +213,7 @@ class AdminRepository:
         """Reactivate an admin account"""
         try:
             result = await self.collection.update_one(
-                {"admin_id": admin_id},
+                {"_id": admin_id},
                 {"$set": {"is_active": True}}
             )
 
@@ -226,20 +226,13 @@ class AdminRepository:
             return False
 
     async def has_permission(self, admin_id: str, permission: str) -> bool:
-        """
-        Check if admin has a specific permission with human-readable ID.
-
-        Args:
-            admin_id: Admin ID (e.g., ADM-001)
-            permission: Permission to check
-        """
+        """Check if admin has a specific permission"""
         try:
-            doc = await self.collection.find_one(
-                {"admin_id": admin_id, "permissions": permission, "is_active": True}
-            )
+            admin = await self.get_by_id(admin_id)
+            if not admin:
+                return False
 
-            return doc is not None
-
+            return permission in admin.permissions
         except Exception as e:
-            self.logger.error(f"Error checking admin permissions: {e}")
+            self.logger.error(f"Error checking admin permission: {e}")
             return False

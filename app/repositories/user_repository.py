@@ -118,7 +118,7 @@ class UserRepository:
             User | None: User object if found, None otherwise
         """
         try:
-            doc = await self.collection.find_one({"user_id": user_id})
+            doc = await self.collection.find_one({"_id": user_id})
             return User(**doc) if doc else None
 
         except Exception as e:

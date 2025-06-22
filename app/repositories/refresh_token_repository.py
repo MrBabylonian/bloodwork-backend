@@ -60,7 +60,7 @@ class RefreshTokenRepository:
     async def get_by_token_id(self, token_id: str) -> RefreshToken | None:
         """Get refresh token by token_id"""
         try:
-            doc = await self.collection.find_one({"token_id": token_id})
+            doc = await self.collection.find_one({"_id": token_id})
             return RefreshToken(**doc) if doc else None
 
         except Exception as e:
@@ -95,7 +95,7 @@ class RefreshTokenRepository:
         """Invalidate a refresh token by setting is_active to False"""
         try:
             result = await self.collection.update_one(
-                {"token_id": token_id},
+                {"_id": token_id},
                 {"$set": {"is_active": False}}
             )
 

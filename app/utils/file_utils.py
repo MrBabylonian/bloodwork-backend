@@ -14,7 +14,6 @@ from pathlib import Path
 from typing import List
 
 import fitz  # PyMuPDF
-
 from app.utils.logger_utils import ApplicationLogger
 
 
@@ -234,9 +233,6 @@ class FileProcessor:
             self._logger.exception(f"{error_msg} - Error: {error}")
             raise RuntimeError(error_msg) from error
 
-
-# Backward compatibility class
-class FileConverter:
     """
     Legacy file converter class for backward compatibility.
 
