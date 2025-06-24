@@ -58,18 +58,18 @@ class UserRepository:
         counter_id = f"{role.value}_seq"
 
         # Get or create sequence counter
-        counter = await self.db_service.sequence_counters.find_one_and_update(
+        counter = await self.db_service.counters.find_one_and_update(
             {"_id": counter_id},
-            {"$inc": {"current_value": 1}},
+            {"$inc": {"seq": 1}},
             upsert=True,
             return_document=True
         )
 
         if not counter:
             # Fallback for first time
-            counter = {"current_value": 1}
+            counter = {"seq": 1}
 
-        sequence_number = counter["current_value"]
+        sequence_number = counter["seq"]
         return f"{prefix}-{sequence_number:03d}"
 
     async def create(self, user: User) -> User | None:

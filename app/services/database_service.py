@@ -180,9 +180,58 @@ class DatabaseService:
         return self.get_collection("refresh_tokens")
 
     @property
-    def sequence_counters(self):
-        """Get sequence_counters collection"""
-        return self.get_collection("sequence_counters")
+    def counters(self):
+        """Get counters collection for ID generation"""
+        return self.get_collection("counters")
+
+    async def get_next_sequential_id(self, entity_type: str) -> str:
+        """
+        Generate the next sequential ID for a given entity type using MongoDB's atomic operations.
+
+        This method uses MongoDB's findAndModify operation (find_one_and_update in PyMongo)
+        to atomically increment and retrieve the next sequence number, ensuring no duplicates
+        even under high concurrency.
+
+        Args:
+            entity_type: Type of entity (patient, veterinarian, technician, admin, diagnostic)
+
+        Returns:
+            str: Next ID in format PREFIX-XXX (e.g., PAT-001, VET-001)
+        """
+        # Define mapping of entity types to prefixes
+        prefix_map = {
+            "patient": "PAT",
+            "veterinarian": "VET",
+            "technician": "TEC",
+            "admin": "ADM",
+            "diagnostic": "DGN",
+            "token": "TKN"
+        }
+
+        # Get the prefix for this entity type
+        prefix = prefix_map.get(entity_type, "UNK")
+
+        try:
+            # Use MongoDB's findAndModify (find_one_and_update in PyMongo) for atomic operations
+            # This atomically increments and returns the updated counter
+            result = await self.counters.find_one_and_update(
+                {"_id": entity_type},
+                {"$inc": {"seq": 1}},
+                return_document=True,
+                upsert=True
+            )
+
+            # Format the ID with leading zeros (e.g., PAT-001)
+            next_id = f"{prefix}-{result['seq']:03d}"
+            self.logger.info(f"Generated next ID for {entity_type}: {next_id}")
+            return next_id
+
+        except Exception as e:
+            self.logger.error(f"Error generating sequential ID: {e}")
+            # Fallback to a timestamp-based ID in case of error
+            import time
+            timestamp = int(time.time())
+            return f"{prefix}-{timestamp}"
 
     async def store_pdf_file(self, file_data: bytes, filename: str) -> str:
         """

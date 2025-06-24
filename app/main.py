@@ -76,8 +76,8 @@ async def startup_db_client():
         await db_service.connect()
         await db_service.initialize_database()
 
-        # Initialize sequence counters
-        await repository_factory.sequence_counter_repository.initialize_counters()
+        # Initialize counters collection (no need to pre-initialize with the new approach)
+        logger.info("Using MongoDB atomic operations for ID generation")
 
         logger.info("Application startup completed")
     except Exception as e:

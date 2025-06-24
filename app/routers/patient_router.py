@@ -47,39 +47,40 @@ async def create_patient(
     repo_factory: RepositoryFactory = Depends(get_repository_factory)
 ):
     """
-    Create a new patient record.
+    Create a new patient record in the system.
 
-    This endpoint creates a new patient in the system with the provided data.
-    The patient is automatically assigned to the creating user and marked as active.
-    The patient_id will be auto-generated using the sequence counter.
+    This endpoint allows veterinarians and administrators to create new
+    patient records. The patient_id will be auto-generated using the sequence counter.
 
     Args:
-        patient_data (PatientCreate): Patient information to create
-        current_user (Union[Admin, User]): Authenticated user (vet or admin only)
+        patient_data (PatientCreate): Patient information
+        current_user (Union[Admin, User]): Authenticated user (must be veterinarian or admin)
         repo_factory (RepositoryFactory): Database repository factory
 
     Returns:
-        PatientResponse: Created patient data with generated ID
+        PatientResponse: Created patient details
 
     Raises:
-        HTTPException: 
-            - 400: If user ID missing or patient creation fails
+        HTTPException: If user is not authenticated or patient creation fails
 
     Example:
         POST /api/v1/patients/
-        {
+        Request body: {
             "name": "Max",
-            "species": "Dog", 
+            "species": "Dog",
             "breed": "Golden Retriever",
-            "age": 5,
-            "sex": "Male",
-            "weight": 30.5
+            ...
+        }
+        Response: {
+            "patient_id": "PAT-001",
+            "name": "Max",
+            "species": "Dog",
+            ...
         }
     """
-    logger.info(f"Creating patient '{patient_data.name}'")
+    logger.info(f"Patient creation request by user: {current_user.username}")
 
-    # Get user ID based on user type
-    from app.models.database_models import Admin
+    # Determine creator ID based on user type
     if isinstance(current_user, Admin):
         creator_id = current_user.admin_id
     else:
@@ -92,15 +93,11 @@ async def create_patient(
             detail="User ID is required"
         )
 
-    # Get a new patient ID from the sequence counter
-    seq_counter_repo = repo_factory.sequence_counter_repository
-    patient_id = await seq_counter_repo.get_next_id("patient")
-
     patient_repo = repo_factory.patient_repository
 
-    # Create patient with current user as creator and assignee
+    # Create patient without ID - repository will generate one
     patient = Patient(
-        _id=patient_id,
+        _id="",  # Empty ID will trigger generation in repository
         name=patient_data.name,
         species=patient_data.species,
         breed=patient_data.breed,
@@ -116,7 +113,7 @@ async def create_patient(
     created_patient = await patient_repo.create(patient)
 
     if not created_patient:
-        logger.error(f"Failed to create patient: {patient_id}")
+        logger.error("Failed to create patient")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Patient creation failed"

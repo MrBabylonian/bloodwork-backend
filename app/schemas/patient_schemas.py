@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class PatientCreate(BaseModel):
     name: str
     species: str
     breed: str
-    birthdate: date
+    birthdate: datetime
     sex: str
     weight: float | None = None
     owner_info: dict[str, str]
@@ -21,7 +21,7 @@ class PatientUpdate(BaseModel):
     name: str | None = None
     species: str | None = None
     breed: str | None = None
-    birthdate: date | None = None
+    birthdate: datetime | None = None
     sex: str | None = None
     weight: float | None = None
     owner_info: dict[str, str] | None = None
@@ -34,7 +34,7 @@ class PatientResponse(BaseModel):
     name: str
     species: str
     breed: str
-    birthdate: date
+    birthdate: datetime
     sex: str
     weight: float | None
     owner_info: dict[str, str]

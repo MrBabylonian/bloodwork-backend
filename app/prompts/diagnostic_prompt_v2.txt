@@ -53,8 +53,7 @@ Verifica se i pattern sono compatibili con:
 Scrivi un breve riassunto tecnico (massimo 8–10 righe) che descriva in modo sintetico:
 - le principali alterazioni riscontrate  
 - i pattern clinici o ematologici di rilievo  
-- le ipotesi diagnostiche più probabili  
-- e la priorità clinica stimata  
+- le ipotesi diagnostiche più probabili
 Questa sezione serve per una lettura rapida da parte del medico curante o per uso in reportistica automatizzata.
 
 5. **Integrazione con citologia/istologia**  
@@ -144,7 +143,7 @@ Non interrompere l'analisi. Procedi con ciò che è disponibile e aggiungi in fo
       "patologie_infettive_immunomediate": ""
     }
   },
-  "sintesi_diagnostica": "Riassunto tecnico sintetico dell’analisi diagnostica. Includere le alterazioni più rilevanti, pattern clinici compatibili, possibili diagnosi e priorità clinica. Max 8–10 righe.",
+  "sintesi_diagnostica": "Riassunto tecnico sintetico dell’analisi diagnostica. Includere le alterazioni più rilevanti, pattern clinici compatibili. Max 8–10 righe.",
   "referto_citologico": "",
   "classificazione_urgenza": {
     "livello": "",

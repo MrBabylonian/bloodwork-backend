@@ -24,7 +24,7 @@ Last updated: 2025-06-20
 Author: Bedirhan Gilgiler
 """
 
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
 
@@ -44,22 +44,6 @@ class ApprovalStatus(str, Enum):
     REJECTED = "rejected"
 
 
-class SequenceCounter(BaseModel):
-    """
-    Sequence counter model for generating sequential IDs.
-
-    This model manages the generation of human-readable sequential IDs
-    for different entity types with appropriate prefixes.
-    """
-    counter_id: str = Field(
-        alias="_id")  # e.g., "patient_seq", "veterinarian_seq"
-    current_value: int = 0
-    prefix: str  # e.g., "PAT", "VET", "TEC", "ADM", "DGN"
-
-    class Config:
-        populate_by_name = True
-
-
 class Patient(BaseModel):
     """
     Patient model representing veterinary patients in the system.
@@ -72,7 +56,7 @@ class Patient(BaseModel):
     name: str
     species: str  # e.g., "Canine", "Feline"
     breed: str
-    birthdate: date
+    birthdate: datetime
     sex: str
     weight: float | None = None
     owner_info: dict[str, str]
@@ -102,6 +86,7 @@ class AiDiagnostic(BaseModel):
     patient_id: str
     sequence_number: int  # Order of tests for this patient (1, 2, 3...)
     test_date: datetime
+    diagnostic_summary: dict[str, Any] = {}  # Summary of diagnostic results
 
     # Full OpenAI Analysis (stored as native JSON document)
     ai_diagnostic: dict[str, Any] = {}  # JSON document from OpenAI API

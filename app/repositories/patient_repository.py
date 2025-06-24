@@ -14,11 +14,40 @@ class PatientRepository:
         self.collection = database_service.patients
         self.logger = ApplicationLogger.get_logger(__name__)
 
+    async def _generate_patient_id(self) -> str:
+        """
+        Generate a sequential human-readable patient ID using MongoDB's atomic operations.
+
+        Returns:
+            str: Generated patient ID in PAT-XXX format
+        """
+        return await self.db_service.get_next_sequential_id("patient")
+
     async def create(self, patient: Patient) -> Patient | None:
         """Create a new patient"""
         try:
+            # Check if we need to generate a patient_id
+            if not patient.patient_id:
+                # Generate new ID
+                patient_id = await self._generate_patient_id()
+
+                # Create a new patient with the generated ID
+                patient_dict = patient.model_dump()
+                patient = Patient(_id=patient_id, **patient_dict)
+
             patient.created_at = datetime.now(timezone.utc)
             patient.updated_at = datetime.now(timezone.utc)
+
+            # Debug: Check if patient ID already exists before attempting insert
+            existing = await self.collection.find_one({"_id": patient.patient_id})
+            if existing:
+                self.logger.error(
+                    f"DEBUG: Patient ID {patient.patient_id} already exists in database!")
+                self.logger.error(
+                    f"DEBUG: Existing patient: {existing.get('name', 'Unknown')}")
+            else:
+                self.logger.info(
+                    f"DEBUG: Patient ID {patient.patient_id} is available for creation")
 
             await self.collection.insert_one(patient.model_dump(by_alias=True))
             self.logger.info(f"Created patient: {patient.patient_id}")

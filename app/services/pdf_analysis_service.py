@@ -110,9 +110,11 @@ class BloodworkPdfAnalysisService:
             filename = uploaded_file.filename or "unknown.pdf"
             gridfs_id = await self._db_service.store_pdf_file(pdf_data, filename)
 
-            # Generate a new diagnostic ID using sequence counter
-            seq_counter_repo = self._repo_factory.sequence_counter_repository
-            diagnostic_id = await seq_counter_repo.get_next_id("diagnostic")
+            # Get AI diagnostic repository
+            ai_repo = self._repo_factory.ai_diagnostic_repository
+
+            # Get next sequence number for this patient
+            sequence_number = await ai_repo.get_next_sequence_number(patient_id)
 
             # Get user ID based on user type
             from app.models.database_models import Admin
@@ -121,13 +123,9 @@ class BloodworkPdfAnalysisService:
             else:
                 creator_id = current_user.user_id
 
-            # Get next sequence number for this patient
-            ai_repo = self._repo_factory.ai_diagnostic_repository
-            sequence_number = await ai_repo.get_next_sequence_number(patient_id)
-
             # Create diagnostic record linked to the patient
             diagnostic = AiDiagnostic(
-                _id=diagnostic_id,
+                _id="placeholder",  # Will be replaced by repository
                 patient_id=patient_id,
                 sequence_number=sequence_number,
                 test_date=datetime.now(timezone.utc),
@@ -142,7 +140,6 @@ class BloodworkPdfAnalysisService:
             )
 
             # Save diagnostic to database
-            ai_repo = self._repo_factory.ai_diagnostic_repository
             created_diagnostic = await ai_repo.create(diagnostic)
 
             if not created_diagnostic:

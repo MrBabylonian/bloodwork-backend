@@ -29,11 +29,8 @@ async def create_test_patient():
         # Create repository factory
         repo_factory = RepositoryFactory(db_service)
 
-        # Initialize sequence counters if needed
-        await repo_factory.sequence_counter_repository.initialize_counters()
-
-        # Generate patient ID
-        patient_id = await repo_factory.sequence_counter_repository.get_next_id("patient")
+        # Generate patient ID using MongoDB's atomic operations
+        patient_id = await db_service.get_next_sequential_id("patient")
 
         # Use datetime for birthdate since MongoDB can't handle Python date objects
         birthdate = datetime.datetime(

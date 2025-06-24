@@ -13,9 +13,27 @@ class AiDiagnosticRepository:
         self.collection = database_service.ai_diagnostics
         self.logger = ApplicationLogger.get_logger(__name__)
 
+    async def _generate_diagnostic_id(self) -> str:
+        """
+        Generate a sequential human-readable diagnostic ID using MongoDB's atomic operations.
+
+        Returns:
+            str: Generated diagnostic ID in DGN-XXX format
+        """
+        return await self.db_service.get_next_sequential_id("diagnostic")
+
     async def create(self, diagnostic: AiDiagnostic) -> AiDiagnostic | None:
         """Create a new diagnostic record"""
         try:
+            # Check if we need to generate a diagnostic_id
+            if not diagnostic.diagnostic_id or diagnostic.diagnostic_id == "placeholder":
+                # Generate new ID
+                diagnostic_id = await self._generate_diagnostic_id()
+
+                # Create a new diagnostic with the generated ID
+                diagnostic_dict = diagnostic.model_dump()
+                diagnostic = AiDiagnostic(_id=diagnostic_id, **diagnostic_dict)
+
             diagnostic.created_at = datetime.now(timezone.utc)
 
             await self.collection.insert_one(diagnostic.model_dump(by_alias=True))

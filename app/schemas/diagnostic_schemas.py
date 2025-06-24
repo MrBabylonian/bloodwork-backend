@@ -142,6 +142,7 @@ class DiagnosticResponse(BaseModel):
     patient_id: str
     sequence_number: int
     test_date: datetime
+    diagnostic_summary: dict
     ai_diagnostic: dict
     pdf_metadata: dict
     processing_info: dict
