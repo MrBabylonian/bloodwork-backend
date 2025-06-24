@@ -24,6 +24,10 @@ from app.utils.file_utils import PdfImageConverter
 from app.utils.logger_utils import ApplicationLogger
 from fastapi import BackgroundTasks, HTTPException, UploadFile
 
+# In-memory dictionary to track pending analysis requests
+# Key: patient_id, Value: timestamp of request
+PENDING_ANALYSIS_REQUESTS = {}
+
 
 class PdfAnalysisConfiguration:
     """
@@ -59,6 +63,40 @@ class BloodworkPdfAnalysisService:
         self._last_processing_time_ms = 0
         self._model_version = "gpt-4o"
         self._confidence_score = 0.0
+
+    @staticmethod
+    def add_pending_analysis(patient_id: str) -> None:
+        """
+        Add a patient to the pending analysis tracking dictionary.
+
+        Args:
+            patient_id (str): The patient ID to track
+        """
+        PENDING_ANALYSIS_REQUESTS[patient_id] = datetime.now(timezone.utc)
+
+    @staticmethod
+    def remove_pending_analysis(patient_id: str) -> None:
+        """
+        Remove a patient from the pending analysis tracking dictionary.
+
+        Args:
+            patient_id (str): The patient ID to remove
+        """
+        if patient_id in PENDING_ANALYSIS_REQUESTS:
+            del PENDING_ANALYSIS_REQUESTS[patient_id]
+
+    @staticmethod
+    def has_pending_analysis(patient_id: str) -> bool:
+        """
+        Check if a patient has a pending analysis request.
+
+        Args:
+            patient_id (str): The patient ID to check
+
+        Returns:
+            bool: True if there's a pending analysis, False otherwise
+        """
+        return patient_id in PENDING_ANALYSIS_REQUESTS
 
     async def process_uploaded_pdf_in_background(
         self,
@@ -148,11 +186,15 @@ class BloodworkPdfAnalysisService:
                     detail="Failed to create diagnostic record"
                 )
 
+            # Add patient to pending analysis tracking
+            self.add_pending_analysis(patient_id)
+
             # Schedule AI analysis in background
             background_tasks.add_task(
                 self._perform_ai_analysis_and_save_results,
                 created_diagnostic.diagnostic_id,
-                gridfs_id
+                gridfs_id,
+                patient_id  # Pass patient_id to remove from pending when complete
             )
 
             return {
@@ -228,7 +270,8 @@ class BloodworkPdfAnalysisService:
     async def _perform_ai_analysis_and_save_results(
         self,
         diagnostic_id: str,
-        gridfs_id: str
+        gridfs_id: str,
+        patient_id: str  # Added patient_id parameter
     ) -> None:
         """
         Execute AI analysis on PDF and save results to database.
@@ -239,6 +282,7 @@ class BloodworkPdfAnalysisService:
         Args:
             diagnostic_id (str): The diagnostic ID
             gridfs_id (str): The GridFS file ID for the PDF
+            patient_id (str): The patient ID for tracking
         """
         self._logger.info(
             f"Starting AI analysis for diagnostic: {diagnostic_id}")
@@ -265,6 +309,8 @@ class BloodworkPdfAnalysisService:
                         f"Failed to extract images from PDF: {diagnostic_id}")
                     await self._save_error_to_diagnostic(
                         diagnostic_id, "Failed to extract images from PDF")
+                    # Remove from pending analysis since it failed
+                    self.remove_pending_analysis(patient_id)
                     return
 
                 # Track processing start time
@@ -282,16 +328,23 @@ class BloodworkPdfAnalysisService:
                         f"Failed to analyze bloodwork: {diagnostic_id}")
                     await self._save_error_to_diagnostic(
                         diagnostic_id, "AI analysis failed")
+                    # Remove from pending analysis since it failed
+                    self.remove_pending_analysis(patient_id)
                     return
 
                 # Save analysis results to database
                 await self._save_analysis_to_database(diagnostic_id, analysis_result)
+
+                # Remove from pending analysis since it's complete
+                self.remove_pending_analysis(patient_id)
 
         except Exception as error:
             error_msg = f"Error during AI analysis for diagnostic {diagnostic_id}: {error}"
             self._logger.exception(error_msg)
             await self._save_error_to_diagnostic(
                 diagnostic_id, f"Analysis error: {error}")
+            # Remove from pending analysis since it failed
+            self.remove_pending_analysis(patient_id)
 
     def _convert_pdf_to_images_temp(
         self,

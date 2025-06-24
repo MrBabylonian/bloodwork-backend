@@ -18,12 +18,45 @@ from app.dependencies.auth_dependencies import (
 from app.models.database_models import Admin, User
 from app.repositories import RepositoryFactory
 from app.schemas.diagnostic_schemas import DiagnosticListResponse, DiagnosticResponse
+from app.services.pdf_analysis_service import PENDING_ANALYSIS_REQUESTS
 from app.utils.logger_utils import ApplicationLogger
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 
 # Initialize router and logger
 router = APIRouter(prefix="/api/v1/diagnostics", tags=["Diagnostics"])
 logger = ApplicationLogger.get_logger("diagnostic_router")
+
+
+@router.get("/patient/{patient_id}/pending", response_model=dict)
+async def check_pending_analysis(
+    patient_id: str = Path(...,
+                           description="Patient ID to check for pending analysis"),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
+):
+    """
+    Check if a patient has a pending analysis request.
+
+    This endpoint returns whether there's a pending analysis request for the specified patient.
+
+    Args:
+        patient_id (str): Patient ID to check
+        current_user (Union[Admin, User]): Authenticated user
+
+    Returns:
+        dict: Dictionary with has_pending_analysis boolean
+
+    Example:
+        GET /api/v1/diagnostics/patient/PAT-001/pending
+        Response: {"has_pending_analysis": true}
+    """
+    logger.info(f"Checking pending analysis for patient: {patient_id}")
+
+    has_pending = patient_id in PENDING_ANALYSIS_REQUESTS
+
+    return {
+        "has_pending_analysis": has_pending,
+        "timestamp": PENDING_ANALYSIS_REQUESTS.get(patient_id, None)
+    }
 
 
 @router.get("/patient/{patient_id}/latest", response_model=DiagnosticResponse)

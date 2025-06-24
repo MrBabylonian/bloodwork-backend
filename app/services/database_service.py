@@ -59,21 +59,24 @@ class DatabaseService:
             self.logger.info("Initializing database indexes...")
 
             # Patient collection indexes
-            await self.patients.create_index("patient_id", unique=True)
+            # No need for patient_id index since it's stored as _id which is already indexed
             await self.patients.create_index("assigned_to")
             await self.patients.create_index([("name", "text"), ("owner_info.name", "text")])
 
             # AI Diagnostics collection indexes
+            # No need for diagnostic_id index since it's stored as _id which is already indexed
             await self.ai_diagnostics.create_index([("patient_id", 1), ("test_date", -1)])
             await self.ai_diagnostics.create_index("created_by")
             await self.ai_diagnostics.create_index("sequence_number")
 
             # Users collection indexes
+            # No need for user_id index since it's stored as _id which is already indexed
             await self.users.create_index("username", unique=True)
             await self.users.create_index("email", unique=True)
             await self.users.create_index("approval_status")
 
             # Admins collection indexes
+            # No need for admin_id index since it's stored as _id which is already indexed
             await self.admins.create_index("username", unique=True)
             await self.admins.create_index("email", unique=True)
 

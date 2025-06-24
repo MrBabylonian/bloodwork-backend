@@ -141,7 +141,7 @@ class User(BaseModel):
     }
 
     # Approval system with human-readable references
-    approval_status: ApprovalStatus = ApprovalStatus.PENDING
+    approval_status: ApprovalStatus = ApprovalStatus.APPROVED
     approved_by: str | None = None  # Reference to Admin.admin_id
     approved_at: datetime | None = None
 
