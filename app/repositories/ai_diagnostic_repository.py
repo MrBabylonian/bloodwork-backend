@@ -194,3 +194,16 @@ class AiDiagnosticRepository:
         except Exception as e:
             self.logger.error(f"Error updating processing info: {e}")
             return False
+
+    # ------------------------------------------------------------------
+    # Utility helpers
+    # ------------------------------------------------------------------
+
+    async def count_for_patient(self, patient_id: str) -> int:
+        """Return total number of diagnostics (tests) linked to a patient."""
+        try:
+            return await self.collection.count_documents({"patient_id": patient_id})
+        except Exception as e:
+            self.logger.error(
+                f"Error counting diagnostics for patient {patient_id}: {e}")
+            return 0

@@ -251,3 +251,28 @@ async def get_patient_diagnostics(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error while retrieving diagnostics"
         )
+
+
+# ---------------------------------------------------------------------------
+# Simple count endpoint
+# ---------------------------------------------------------------------------
+
+
+@router.get(
+    "/patient/{patient_id}/tests-count",
+    response_model=int,
+    summary="Get total tests performed for a patient",
+    name="get_tests_count_per_patient",
+)
+async def get_tests_count_per_patient(
+    patient_id: str = Path(...,
+                           description="Patient ID to count diagnostics for"),
+    current_user: Union[Admin, User] = Depends(require_authenticated),
+    repo_factory: RepositoryFactory = Depends(get_repository_factory),
+):
+    """Return the total number of diagnostics linked to a patient."""
+    logger.info("Counting diagnostics for patient: %s", patient_id)
+
+    ai_repo = repo_factory.ai_diagnostic_repository
+    count = await ai_repo.count_for_patient(patient_id)
+    return count
