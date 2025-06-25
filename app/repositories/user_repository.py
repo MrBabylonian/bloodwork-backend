@@ -196,7 +196,10 @@ class UserRepository:
 
             # Add profile fields if any remain
             if profile_data:
-                update_data["profile"] = profile_data
+                # Update individual profile fields instead of replacing the whole profile
+                profile_updates = {
+                    f"profile.{key}": value for key, value in profile_data.items()}
+                update_data.update(profile_updates)
 
             # Add email if present
             if email:
@@ -206,15 +209,21 @@ class UserRepository:
             if not update_data:
                 return False
 
+            self.logger.info(
+                f"Updating profile for user: {user_id} with data: {update_data}")
+
             result = await self.collection.update_one(
-                {"user_id": user_id},
+                {"_id": user_id},  # Use _id instead of user_id
                 {"$set": update_data}
             )
 
-            if result.modified_count > 0:
+            if result.matched_count > 0:
                 self.logger.info(f"Updated profile for user: {user_id}")
                 return True
-            return False
+            else:
+                self.logger.warning(
+                    f"User not found for profile update: {user_id}")
+                return False
 
         except Exception as e:
             self.logger.error(f"Error updating user profile: {e}")
@@ -223,15 +232,20 @@ class UserRepository:
     async def update_password(self, user_id: str, hashed_password: str) -> bool:
         """Update user password"""
         try:
+            self.logger.info(f"Updating password for user: {user_id}")
+
             result = await self.collection.update_one(
-                {"user_id": user_id},
+                {"_id": user_id},  # Use _id instead of user_id
                 {"$set": {"hashed_password": hashed_password}}
             )
 
-            if result.modified_count > 0:
+            if result.matched_count > 0:
                 self.logger.info(f"Updated password for user: {user_id}")
                 return True
-            return False
+            else:
+                self.logger.warning(
+                    f"User not found for password update: {user_id}")
+                return False
         except Exception as e:
             self.logger.error(f"Error updating user password: {e}")
             return False

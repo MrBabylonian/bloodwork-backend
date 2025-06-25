@@ -123,7 +123,10 @@ class AdminRepository:
 
             # Add profile fields if any remain
             if profile_data:
-                update_data["profile"] = profile_data
+                # Update individual profile fields instead of replacing the whole profile
+                profile_updates = {
+                    f"profile.{key}": value for key, value in profile_data.items()}
+                update_data.update(profile_updates)
 
             # Add email if present
             if email:
@@ -133,15 +136,21 @@ class AdminRepository:
             if not update_data:
                 return False
 
+            self.logger.info(
+                f"Updating profile for admin: {admin_id} with data: {update_data}")
+
             result = await self.collection.update_one(
                 {"_id": admin_id},
                 {"$set": update_data}
             )
 
-            if result.modified_count > 0:
+            if result.matched_count > 0:
                 self.logger.info(f"Updated profile for admin: {admin_id}")
                 return True
-            return False
+            else:
+                self.logger.warning(
+                    f"Admin not found for profile update: {admin_id}")
+                return False
         except Exception as e:
             self.logger.error(f"Error updating admin profile: {e}")
             return False
@@ -149,15 +158,20 @@ class AdminRepository:
     async def update_password(self, admin_id: str, hashed_password: str) -> bool:
         """Update admin password"""
         try:
+            self.logger.info(f"Updating password for admin: {admin_id}")
+
             result = await self.collection.update_one(
                 {"_id": admin_id},
                 {"$set": {"hashed_password": hashed_password}}
             )
 
-            if result.modified_count > 0:
+            if result.matched_count > 0:
                 self.logger.info(f"Updated password for admin: {admin_id}")
                 return True
-            return False
+            else:
+                self.logger.warning(
+                    f"Admin not found for password update: {admin_id}")
+                return False
         except Exception as e:
             self.logger.error(f"Error updating admin password: {e}")
             return False
