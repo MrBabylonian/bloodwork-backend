@@ -210,4 +210,4 @@ curl -X POST http://localhost:8000/analysis/pdf_analysis \
 
 ## 📄 License
 
-Proprietary software. All rights reserved.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
