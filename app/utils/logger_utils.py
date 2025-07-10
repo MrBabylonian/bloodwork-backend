@@ -105,7 +105,3 @@ class ApplicationLogger:
         # Type guard to ensure _logger is not None
         assert cls._logger is not None, "Logger should be initialized"
         return cls._logger.getChild(module_name)
-
-
-# Backward compatibility alias
-Logger = ApplicationLogger

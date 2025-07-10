@@ -136,7 +136,7 @@ async def login(
     device_info = request.headers.get("user-agent", "Unknown")
     ip_address = request.client.host if request.client else None
 
-    logger.debug(f"Login from device: {device_info}, IP: {ip_address}")
+    logger.info(f"Login from device: {device_info}, IP: {ip_address}")
 
     tokens = await auth_service.login(
         username=user_data.username,

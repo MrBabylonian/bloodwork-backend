@@ -86,12 +86,12 @@ async def get_current_authenticated_user(
     Raises:
         HTTPException: 401 if authentication fails
     """
-    if not credentials:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header required",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    # if not credentials:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED,
+    #         detail="Authorization header required",
+    #         headers={"WWW-Authenticate": "Bearer"},
+    #     )
 
     user = await auth_service.get_authenticated_user(credentials.credentials)
 

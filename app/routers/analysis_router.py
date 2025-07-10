@@ -95,7 +95,7 @@ class AnalysisRouter:
 
         try:
             # Validate file type
-            self._validate_pdf_file(file)
+            self._pdf_analysis_service._validate_uploaded_file(file)
 
             # Process the PDF file
             result = await self._pdf_analysis_service.process_uploaded_pdf_in_background(
@@ -121,23 +121,23 @@ class AnalysisRouter:
                 detail=f"Internal server error: {str(error)}"
             ) from error
 
-    def _validate_pdf_file(self, file: UploadFile) -> None:
-        """
-        Validate the uploaded file is a PDF.
+    # def _validate_pdf_file(self, file: UploadFile) -> None:
+    #     """
+    #     Validate the uploaded file is a PDF.
 
-        Args:
-            file (UploadFile): File to validate
+    #     Args:
+    #         file (UploadFile): File to validate
 
-        Raises:
-            HTTPException: If file is not a valid PDF
-        """
-        if file.content_type != "application/pdf":
-            error_msg = f"Rejected upload: unsupported content type: {file.content_type}"
-            self._logger.error(error_msg)
-            raise HTTPException(
-                status_code=400,
-                detail="Only PDF files are accepted."
-            )
+    #     Raises:
+    #         HTTPException: If file is not a valid PDF
+    #     """
+    #     if file.content_type != "application/pdf":
+    #         error_msg = f"Rejected upload: unsupported content type: {file.content_type}"
+    #         self._logger.error(error_msg)
+    #         raise HTTPException(
+    #             status_code=400,
+    #             detail="Only PDF files are accepted."
+    #         )
 
     def get_router(self) -> APIRouter:
         """

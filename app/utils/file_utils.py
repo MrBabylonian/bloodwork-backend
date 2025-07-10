@@ -138,7 +138,8 @@ class PdfImageConverter:
             scaling_matrix = fitz.Matrix(zoom_factor, zoom_factor)
 
             # Render page to pixmap (bitmap)
-            page_pixmap = pdf_page.get_pixmap(matrix=scaling_matrix)
+            page_pixmap = pdf_page.get_pixmap(  # type: ignore
+                matrix=scaling_matrix)
 
             # Generate unique filename for this page
             image_filename = f"{filename_prefix}_page_{page_index + 1}.png"
@@ -232,36 +233,3 @@ class FileProcessor:
             error_msg = f"Failed to encode image: {image_path}"
             self._logger.exception(f"{error_msg} - Error: {error}")
             raise RuntimeError(error_msg) from error
-
-    """
-    Legacy file converter class for backward compatibility.
-
-    This class provides static methods that delegate to the new OOP classes.
-    It maintains compatibility while encouraging migration to the new structure.
-    """
-
-    @staticmethod
-    def convert_pdf_to_image_list(
-        full_pdf_file_path: Path,
-        output_folder: Path,
-        base_filename_prefix: str
-    ) -> List[Path]:
-        """Legacy method - use PdfImageConverter class instead."""
-        converter = PdfImageConverter()
-        return converter.convert_pdf_to_image_list(
-            full_pdf_file_path,
-            output_folder,
-            base_filename_prefix
-        )
-
-    @staticmethod
-    def load_prompt_from_file(prompt_path: Path) -> str:
-        """Legacy method - use FileProcessor class instead."""
-        processor = FileProcessor()
-        return processor.load_text_file(prompt_path)
-
-    @staticmethod
-    def image_to_base64(image_path: Path) -> str:
-        """Legacy method - use FileProcessor class instead."""
-        processor = FileProcessor()
-        return processor.encode_image_to_base64(image_path)
