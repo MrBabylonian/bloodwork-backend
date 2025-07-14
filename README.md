@@ -198,16 +198,3 @@ curl -X POST http://localhost:8000/analysis/pdf_analysis \
 - **BackgroundTasks** – built-in FastAPI background runner; swap with Celery if throughput grows.
 
 ---
-
-## 🤝 Contributing
-
-1. Fork & create a feature branch.
-2. Follow **PEP-8** and include type hints.
-3. Write docstrings and add logging.
-4. Submit a PR with a clear description.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
